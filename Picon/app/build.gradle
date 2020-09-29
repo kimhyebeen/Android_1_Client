@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.khb.picon"
+        applicationId "com.yapp.picon"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -34,4 +34,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // 네이버 지도 SDK
+    implementation 'com.naver.maps:map-sdk:3.9.1'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 }

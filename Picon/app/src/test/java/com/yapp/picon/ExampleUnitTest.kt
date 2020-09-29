@@ -1,4 +1,4 @@
-package com.khb.picon
+package com.yapp.picon
 
 import org.junit.Test
 
