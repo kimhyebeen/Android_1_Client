@@ -1,18 +1,20 @@
 package com.yapp.picon
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
+import com.yapp.picon.databinding.ActivityMainBinding
 
-abstract class BaseMapActivity(
-    @LayoutRes private val layoutId: Int = R.layout.activity_main
-): AppCompatActivity(), OnMapReadyCallback {
+abstract class BaseMapActivity: AppCompatActivity(), OnMapReadyCallback {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutId)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.activity = this
 
         setUpMap()
     }
