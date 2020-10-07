@@ -2,11 +2,9 @@
 <layout>
 
     <data>
-
         <variable
             name="activity"
             type="com.yapp.picon.BaseMapActivity" />
-
     </data>
 
     <FrameLayout
@@ -19,9 +17,7 @@
         <FrameLayout
             android:id="@+id/mapFrame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-        </FrameLayout>
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

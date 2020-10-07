@@ -7,10 +7,10 @@ class MainActivity : BaseMapActivity() {
 
     override fun onMapReady(naverMap: NaverMap) {
         this.map = naverMap
-        settingNaverMap()
+        settingOptionToMap()
     }
 
-    private fun settingNaverMap() {
+    private fun settingOptionToMap() {
         map.apply {
             mapType = NaverMap.MapType.Navi
             isNightModeEnabled = true
