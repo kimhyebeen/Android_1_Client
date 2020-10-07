@@ -7,8 +7,9 @@ import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.yapp.picon.databinding.ActivityMainBinding
 
-abstract class BaseMapActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main), OnMapReadyCallback {
-    private val mapFrameId = R.id.mapFrame
+abstract class BaseMapActivity(
+    private val mapFrameId: Int
+): BaseActivity<ActivityMainBinding>(R.layout.activity_main), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
