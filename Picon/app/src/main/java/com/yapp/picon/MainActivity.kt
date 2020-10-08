@@ -2,7 +2,7 @@ package com.yapp.picon
 
 import com.naver.maps.map.*
 
-class MainActivity : BaseMapActivity(R.id.mapFrame) {
+class MainActivity : BaseMapActivity(R.layout.activity_main, R.id.mapFrame) {
     private lateinit var map: NaverMap
 
     override fun onMapReady(naverMap: NaverMap) {

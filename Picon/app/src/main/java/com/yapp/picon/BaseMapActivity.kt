@@ -1,15 +1,15 @@
 package com.yapp.picon
 
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.yapp.picon.databinding.ActivityMainBinding
 
 abstract class BaseMapActivity(
+    activityId: Int,
     private val mapFrameId: Int
-): BaseActivity<ActivityMainBinding>(R.layout.activity_main), OnMapReadyCallback {
+): BaseActivity<ActivityMainBinding>(activityId), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
