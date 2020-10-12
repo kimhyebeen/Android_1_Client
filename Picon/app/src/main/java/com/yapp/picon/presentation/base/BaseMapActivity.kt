@@ -1,16 +1,18 @@
 package com.yapp.picon.presentation.base
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
+import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.ViewModel
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMapSdk
 import com.naver.maps.map.OnMapReadyCallback
 import com.yapp.picon.SecretKeySet
-import com.yapp.picon.databinding.ActivityMainBinding
 
-abstract class BaseMapActivity(
-    activityId: Int,
+abstract class BaseMapActivity<T : ViewDataBinding, VM : ViewModel>(
+    @LayoutRes private val layoutId: Int,
     private val mapFrameId: Int
-): BaseActivity<ActivityMainBinding>(activityId), OnMapReadyCallback {
+) : BaseActivity<T, VM>(layoutId), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

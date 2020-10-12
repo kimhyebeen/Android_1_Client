@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -27,6 +28,15 @@ android {
         dataBinding = true
         viewBinding = true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -42,4 +52,7 @@ dependencies {
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.9.1'
     implementation 'com.google.android.gms:play-services-location:17.1.0'
+
+    //Fragment KTX module : ViewModel 한 줄 결합을 위해 사용
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
 }
