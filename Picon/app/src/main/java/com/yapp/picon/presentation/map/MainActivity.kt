@@ -1,8 +1,13 @@
-package com.yapp.picon
+package com.yapp.picon.presentation.map
 
 import com.naver.maps.map.*
+import com.yapp.picon.R
+import com.yapp.picon.presentation.base.BaseMapActivity
 
-class MainActivity : BaseMapActivity(R.layout.activity_main, R.id.mapFrame) {
+class MainActivity : BaseMapActivity(
+    R.layout.activity_main,
+    R.id.mapFrame
+) {
     private lateinit var map: NaverMap
 
     override fun onMapReady(naverMap: NaverMap) {

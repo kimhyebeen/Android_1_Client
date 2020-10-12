@@ -1,4 +1,4 @@
-package com.yapp.picon
+package com.yapp.picon.presentation.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
