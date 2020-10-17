@@ -17,33 +17,33 @@ class LocationHelper(private val context: Context) {
         return ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+        ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     fun locationPermissionResult(): Location? {
-        if (checkPermission()) { // permission denied
-            Toast.makeText(context, "권한이 거절되어 정상적인 사용이 어려움", Toast.LENGTH_SHORT).show()
-            return null
+        if (checkPermission()) {
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            return location
         }
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        return location
+        Toast.makeText(context, "권한이 거절되어 정상적인 사용이 어려움", Toast.LENGTH_SHORT).show()
+        return null
     }
 
     fun requestLocationPermissions(): Location? {
-        if (checkPermission()) { // request permissions: 권한이 허용되어 있지 않은 경우 권한 요청
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), RequestCodeSet.LOCATION_REQUEST_CODE.code
-            )
-        } else { // get data
+        if (checkPermission()) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            return location
         }
+        ActivityCompat.requestPermissions(
+            context as Activity,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), RequestCodeSet.LOCATION_REQUEST_CODE.code
+        )
         return location
     }
 }
