@@ -23,6 +23,15 @@ class LocationHelper(private val context: Context) {
         ) != PackageManager.PERMISSION_GRANTED
     }
 
+    fun locationPermissionResult(): Location? {
+        if (checkPermission()) { // permission denied
+            Toast.makeText(context, "권한이 거절되어 정상적인 사용이 어려움", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        return location
+    }
+
     fun requestLocationPermissions(): Location? {
         if (checkPermission()) { // request permissions: 권한이 허용되어 있지 않은 경우 권한 요청
             ActivityCompat.requestPermissions(
