@@ -6,21 +6,25 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 
 class LocationHelper(private val context: Context) {
     private var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     private var location: Location? = null
 
+    private fun checkPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    }
+
     fun requestLocationPermissions(): Location? {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) { // request permissions: 권한이 허용되어 있지 않은 경우 권한 요청
+        if (checkPermission()) { // request permissions: 권한이 허용되어 있지 않은 경우 권한 요청
             ActivityCompat.requestPermissions(
                 context as Activity,
                 arrayOf(
