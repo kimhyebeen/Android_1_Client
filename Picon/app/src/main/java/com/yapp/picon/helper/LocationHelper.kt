@@ -5,6 +5,5 @@ import android.location.LocationManager
 
 class LocationHelper(context: Context) {
     private var locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    private val LOCATION_REQUEST_CODE = 200
 
 }
