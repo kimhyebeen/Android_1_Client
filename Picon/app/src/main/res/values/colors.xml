@@ -3,4 +3,22 @@
     <color name="colorPrimary">#586ACD</color>
     <color name="colorPrimaryDark">#424D87</color>
     <color name="colorAccent">#03DAC5</color>
+    
+    <color name="white">#ffffff</color>
+    <color name="very_light_pink">#f2f2f2</color>
+    <color name="very_light_pink_two">#cdcdcd</color>
+    <color name="brown_grey">#b2b2b2</color>
+    <color name="brown_grey_two">#999999</color>
+    <color name="brownish_grey">#777777</color>
+    <color name="greyish_brown">#494949</color>
+    <color name="black">#333333</color>
+    <color name="black_two">#2b2b2b</color>
+    <color name="dark_grey">#151516</color>
+    <color name="soft_blue">#8187da</color>
+    <color name="cornflower">#6699fc</color>
+    <color name="bluegrey">#79aed0</color>
+    <color name="very_light_brown">#e6af75</color>
+    <color name="warm_grey">#9a948b</color>
+    <color name="cornflower_blue">#4f78c9</color>
+    <color name="brownish_pink">#d46c6c</color>
 </resources>
