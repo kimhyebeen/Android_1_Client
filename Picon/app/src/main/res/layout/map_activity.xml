@@ -58,12 +58,13 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="19dp"
-                android:layout_marginBottom="21dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/ic_map_location"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/map_btn_add"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
+                android:id="@+id/map_btn_add"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_marginEnd="18dp"
