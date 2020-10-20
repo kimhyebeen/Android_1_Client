@@ -43,49 +43,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/map_btn_menu"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/ic_map_menu"
-                    visibleOrInvisible="@{mapVM.isButtonShown}" />
+                <ImageButton
+                    android:id="@+id/map_ib_menu"
+                    visibleOrInvisible="@{mapVM.isButtonShown}"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:padding="18dp"
+                    android:src="@drawable/ic_map_menu" />
 
             </androidx.appcompat.widget.Toolbar>
 
-            <Button
-                android:id="@+id/map_btn_search"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/ic_map_search"
+            <ImageButton
+                android:id="@+id/map_ib_search"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:padding="18dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_map_search"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                visibleOrInvisible="@{mapVM.isButtonShown}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/map_btn_current_location"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="19dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/ic_map_location"
+            <ImageButton
+                android:id="@+id/map_ib_current_location"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:padding="18dp"
+                android:src="@drawable/ic_map_location"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/map_btn_add"
-                visibleOrInvisible="@{mapVM.isButtonShown}" />
+                app:layout_constraintTop_toTopOf="@id/map_ib_add" />
 
-            <Button
-                android:id="@+id/map_btn_add"
+            <ImageButton
+                android:id="@+id/map_ib_add"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_marginEnd="18dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/ic_map_add"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_map_add"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                visibleOrInvisible="@{mapVM.isButtonShown}" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

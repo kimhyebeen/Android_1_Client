@@ -37,7 +37,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     }
 
     private fun setOnClickListeners() {
-        binding.mapBtnMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
+        binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
