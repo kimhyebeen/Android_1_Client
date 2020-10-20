@@ -1,10 +1,10 @@
 package com.yapp.picon.presentation.map
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
-import com.naver.maps.map.*
+import com.naver.maps.map.NaverMap
+import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MapActivityBinding
 import com.yapp.picon.presentation.base.BaseMapActivity
@@ -22,8 +22,13 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initViewModel()
         setToolBar()
         setOnClickListeners()
+    }
+
+    private fun initViewModel() {
+        binding.setVariable(BR.mapVM, vm)
     }
 
     private fun setToolBar() {
@@ -37,6 +42,11 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
 
     override fun onMapReady(naverMap: NaverMap) {
         this.map = naverMap
+
+        this.map.setOnMapClickListener { _, _ ->
+            vm.toggleButtonShown()
+        }
+
         settingOptionToMap()
     }
 
