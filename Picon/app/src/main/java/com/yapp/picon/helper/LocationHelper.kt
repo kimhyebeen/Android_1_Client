@@ -28,7 +28,7 @@ class LocationHelper(private val context: Context) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             return location
         }
-        Toast.makeText(context, "권한이 거절되어 정상적인 사용이 어려움", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "권한이 거절되어 현재 위치 찾기가 불가합니다.", Toast.LENGTH_SHORT).show()
         return null
     }
 
