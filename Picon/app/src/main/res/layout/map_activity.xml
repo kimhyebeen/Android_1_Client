@@ -71,11 +71,13 @@
                 visibleOrInvisible="@{mapVM.isButtonShown}"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="24dp"
                 android:background="@android:color/transparent"
                 android:padding="18dp"
                 android:src="@drawable/ic_map_location"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/map_ib_add" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
                 android:id="@+id/map_ib_add"
