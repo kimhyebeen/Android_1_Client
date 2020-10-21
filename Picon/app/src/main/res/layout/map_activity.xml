@@ -1,17 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="mapVM"
+            type="com.yapp.picon.presentation.map.MapViewModel" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/map_drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.map.MapActivity">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/mapFrame"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-    </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".presentation.map.MapActivity">
 
+                <FrameLayout
+                    android:id="@+id/mapFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </FrameLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/map_tool_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:contentInsetStart="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageButton
+                    android:id="@+id/map_ib_menu"
+                    visibleOrInvisible="@{mapVM.isButtonShown}"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@android:color/transparent"
+                    android:padding="18dp"
+                    android:src="@drawable/ic_map_menu" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <ImageButton
+                android:id="@+id/map_ib_search"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@android:color/transparent"
+                android:padding="18dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_map_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/map_ib_current_location"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="24dp"
+                android:background="@android:color/transparent"
+                android:padding="18dp"
+                android:src="@drawable/ic_map_location"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageButton
+                android:id="@+id/map_ib_add"
+                visibleOrInvisible="@{mapVM.isButtonShown}"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_map_add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="262dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/dark_grey"
+            android:fitsSystemWindows="true"
+            android:paddingStart="20dp"
+            app:headerLayout="@layout/map_nav_head"
+            app:itemShapeInsetStart="30dp"
+            app:itemTextColor="@color/very_light_pink"
+            app:menu="@menu/map_nav_menu" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

@@ -55,4 +55,7 @@ dependencies {
 
     //Fragment KTX module : ViewModel 한 줄 결합을 위해 사용
     implementation "androidx.fragment:fragment-ktx:1.2.5"
+
+    //Material Components for Android
+    implementation 'com.google.android.material:material:1.2.1'
 }
