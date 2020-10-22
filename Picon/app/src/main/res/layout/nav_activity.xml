@@ -15,13 +15,6 @@
         android:layout_height="match_parent"
         android:background="@color/dark_grey">
 
-        <include
-            android:id="@+id/appBarInclude"
-            layout="@layout/app_bar_basic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <FrameLayout
             android:id="@+id/settingFrame"
             android:layout_width="match_parent"
@@ -29,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarInclude"
+            app:layout_constraintTop_toTopOf="parent"
             tools:context=".presentation.nav.NavActivity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
