@@ -5,10 +5,10 @@ import androidx.activity.viewModels
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.presentation.base.BaseActivity
-import com.yapp.picon.databinding.SettingActivityBinding
+import com.yapp.picon.databinding.NavActivityBinding
 
-class SettingActivity: BaseActivity<SettingActivityBinding, SettingViewModel>(
-    R.layout.setting_activity
+class SettingActivity: BaseActivity<NavActivityBinding, SettingViewModel>(
+    R.layout.nav_activity
 ) {
     override val vm: SettingViewModel by viewModels()
 
