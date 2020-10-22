@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.setting.NavActivity"
+        <activity android:name=".presentation.nav.NavActivity"
             android:parentActivityName=".presentation.map.MapActivity"/>
     </application>
 

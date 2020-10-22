@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.setting
+package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +24,7 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
         fragment = intent.getStringExtra("type")
             ?.let {
                 when(it) {
+                    NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
                     NavTypeStringSet.Setting.type -> SettingFragment()
                     else -> null
                 }

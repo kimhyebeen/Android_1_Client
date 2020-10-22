@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.setting
+package com.yapp.picon.presentation.nav
 
 enum class NavTypeStringSet(val type: String) {
     CustomEmotion("custom"),

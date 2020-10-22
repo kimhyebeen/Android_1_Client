@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.setting
+package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.yapp.picon.R
 
-class SettingFragment: Fragment() {
+class CustomEmotionFragment: Fragment() {
     private lateinit var rootView: View
 
     override fun onCreateView(
@@ -15,8 +15,7 @@ class SettingFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        rootView = inflater.inflate(R.layout.setting_fragment, container, false)
-
+        rootView = inflater.inflate(R.layout.nav_custom_emotion_fragment, container, false)
 
         return rootView
     }
