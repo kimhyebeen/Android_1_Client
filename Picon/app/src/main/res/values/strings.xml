@@ -6,4 +6,11 @@
     <string name="map_menu_share_map">지도 공유하기</string>
     <string name="map_menu_view_travel_statistic">여행통계 보기</string>
     <string name="map_menu_setting">설정</string>
+
+    <string name="nav_setting_data">데이터 관리</string>
+    <string name="nav_setting_reset">모두 지우기</string>
+    <string name="nav_setting_about">About </string>
+    <string name="nav_setting_picon">PiCON</string>
+    <string name="nav_setting_app_info">앱 정보</string>
+    <string name="nav_setting_app_review">앱 리뷰 남기기</string>
 </resources>
