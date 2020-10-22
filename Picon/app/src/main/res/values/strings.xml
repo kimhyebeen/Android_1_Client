@@ -13,4 +13,12 @@
     <string name="nav_setting_picon">PiCON</string>
     <string name="nav_setting_app_info">앱 정보</string>
     <string name="nav_setting_app_review">앱 리뷰 남기기</string>
+
+    <string name="nav_custom_title">감정 커스텀하기</string>
+    <string name="nav_custom_save">저장</string>
+    <string name="nav_custom_text_soft_blue">새벽 3시</string>
+    <string name="nav_custom_text_cornflower">구름없는 하늘</string>
+    <string name="nav_custom_text_blue_grey">아침 이슬</string>
+    <string name="nav_custom_text_very_light_brown">창문 너머 노을</string>
+    <string name="nav_custom_text_warm_grey">잔잔한 밤</string>
 </resources>
