@@ -38,4 +38,9 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     private fun initViewModel() {
         binding.setVariable(BR.settingVM, vm)
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 }
