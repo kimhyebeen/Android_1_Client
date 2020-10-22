@@ -13,7 +13,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.setting.SettingActivity">
+        android:background="@color/dark_grey">
+
+        <include
+            android:id="@+id/appBarInclude"
+            layout="@layout/app_bar_basic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/settingFrame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarInclude"
+            tools:context=".presentation.setting.SettingActivity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
