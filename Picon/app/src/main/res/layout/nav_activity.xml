@@ -7,7 +7,7 @@
     <data>
         <variable
             name="settingVM"
-            type="com.yapp.picon.presentation.setting.SettingViewModel" />
+            type="com.yapp.picon.presentation.setting.NavViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +30,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarInclude"
-            tools:context=".presentation.setting.SettingActivity" />
+            tools:context=".presentation.setting.NavActivity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
