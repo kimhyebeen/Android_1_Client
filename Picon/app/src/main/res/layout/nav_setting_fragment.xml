@@ -11,17 +11,37 @@
         android:layout_width="match_parent"
         android:layout_height="74dp"
         android:background="#00ffffff"
-        android:gravity="bottom"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="18dp"
-            android:src="@drawable/ic_back" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="18dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_menu_setting"
+                android:textColor="@color/very_light_pink"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -43,7 +63,7 @@
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
         android:text="@string/nav_setting_reset"
-        android:textColor="@color/white"
+        android:textColor="@color/pale_grey"
         app:layout_constraintStart_toStartOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -76,7 +96,7 @@
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
         android:text="@string/nav_setting_app_info"
-        android:textColor="@color/white"
+        android:textColor="@color/pale_grey"
         app:layout_constraintStart_toStartOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -87,8 +107,19 @@
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
         android:text="@string/nav_setting_app_review"
-        android:textColor="@color/white"
+        android:textColor="@color/pale_grey"
         app:layout_constraintStart_toStartOf="@+id/appInfoButton"
         app:layout_constraintTop_toBottomOf="@+id/appInfoButton" />
+
+    <TextView
+        android:id="@+id/appVersionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="38dp"
+        android:text="@string/nav_setting_app_version"
+        android:textColor="@color/pale_grey"
+        app:layout_constraintBottom_toBottomOf="@+id/appInfoButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
