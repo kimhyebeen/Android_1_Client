@@ -2,9 +2,9 @@ package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
-import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.databinding.NavActivityBinding
@@ -19,11 +19,15 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val finishActivity: (View) -> Unit = {
+            finish()
+        }
+
         fragment = intent.getStringExtra("type")
             ?.let {
                 when(it) {
                     NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
-                    NavTypeStringSet.Setting.type -> SettingFragment()
+                    NavTypeStringSet.Setting.type -> SettingFragment(finishActivity)
                     else -> null
                 }
         }

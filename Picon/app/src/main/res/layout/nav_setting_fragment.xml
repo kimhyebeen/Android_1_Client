@@ -33,6 +33,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="18dp"
+                    android:onClick="@{setting::finish}"
                     android:src="@drawable/ic_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
