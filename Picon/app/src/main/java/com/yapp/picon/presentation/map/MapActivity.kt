@@ -38,6 +38,14 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
 
     private fun setOnClickListeners() {
         binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
+
+        binding.mapIbSearch.setOnClickListener {
+            vm.requestPost()
+        }
+
+        binding.mapIbAdd.setOnClickListener {
+
+        }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
