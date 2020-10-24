@@ -19,8 +19,6 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initViewModel()
-
         fragment = intent.getStringExtra("type")
             ?.let {
                 when(it) {
@@ -33,10 +31,6 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
         fragment?.let {
             transaction.replace(R.id.settingFrame, it).addToBackStack(null).commit()
         } ?: Log.d("NavActivity", "fragment type이 제대로 전달되지 않았습니다.")
-    }
-
-    private fun initViewModel() {
-        binding.setVariable(BR.settingVM, vm)
     }
 
     override fun onBackPressed() {

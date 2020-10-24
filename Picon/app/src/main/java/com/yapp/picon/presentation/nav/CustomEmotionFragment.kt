@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.custom_emotion_item.view.*
 import kotlinx.android.synthetic.main.nav_custom_emotion_fragment.view.*
 
 class CustomEmotionFragment: Fragment() {
+    // TODO ("BaseFragment로 바꾸기")
     private lateinit var rootView: View
 
     override fun onCreateView(
