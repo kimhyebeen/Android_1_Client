@@ -3,7 +3,6 @@ package com.yapp.picon.presentation.customview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.Color
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
@@ -55,7 +54,7 @@ open class CustomEmotionItem: ConstraintLayout {
         }
 
         setCircleColor(view)
-        view.emotionTextView.text = emotionText
+        view.emotion_item_tv.text = emotionText
     }
 
     private fun setCircleColor(view: View) {
@@ -73,7 +72,7 @@ open class CustomEmotionItem: ConstraintLayout {
     }
 
     private fun setCircle(view: View, id: Int) {
-        view.colorCircleImageView.setImageResource(id)
+        view.emotion_item_color_iv.setImageResource(id)
     }
 
     private fun setLongClickItem(view: View) {

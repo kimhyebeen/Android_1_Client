@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/colorCircleImageView"
+        android:id="@+id/emotion_item_color_iv"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="38dp"
@@ -16,13 +16,13 @@
         app:srcCompat="@drawable/ic_custom_circle_soft_blue" />
 
     <TextView
-        android:id="@+id/emotionTextView"
+        android:id="@+id/emotion_item_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/nav_custom_text_soft_blue"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/colorCircleImageView"
+        app:layout_constraintStart_toEndOf="@+id/emotion_item_color_iv"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

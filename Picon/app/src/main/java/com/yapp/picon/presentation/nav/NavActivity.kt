@@ -33,7 +33,7 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
         }
 
         fragment?.let {
-            transaction.replace(R.id.settingFrame, it).addToBackStack(null).commit()
+            transaction.replace(R.id.nav_setting_frame, it).addToBackStack(null).commit()
         } ?: Log.d("NavActivity", "fragment type이 제대로 전달되지 않았습니다.")
     }
 
