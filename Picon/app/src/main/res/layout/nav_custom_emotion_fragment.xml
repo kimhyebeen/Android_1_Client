@@ -2,6 +2,9 @@
 <layout>
 
     <data>
+        <variable
+            name="navVM"
+            type="com.yapp.picon.presentation.nav.NavViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +33,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="18dp"
+                    android:onClick="@{navVM::clickFinishButton}"
                     android:src="@drawable/ic_delete_w"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

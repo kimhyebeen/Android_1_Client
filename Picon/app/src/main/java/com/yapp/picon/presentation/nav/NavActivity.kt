@@ -19,15 +19,13 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val finishActivity: (View) -> Unit = {
-            finish()
-        }
+        val finishFunc = { finish() }
 
         fragment = intent.getStringExtra("type")
             ?.let {
                 when(it) {
-                    NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
-                    NavTypeStringSet.Setting.type -> SettingFragment(finishActivity)
+                    NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment(finishFunc)
+                    NavTypeStringSet.Setting.type -> SettingFragment(finishFunc)
                     else -> null
                 }
         }
