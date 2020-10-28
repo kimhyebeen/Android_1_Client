@@ -1,25 +1,17 @@
 package com.yapp.picon.presentation.nav
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.yapp.picon.BR
 import com.yapp.picon.R
-import kotlinx.android.synthetic.main.custom_emotion_item.view.*
-import kotlinx.android.synthetic.main.nav_custom_emotion_fragment.view.*
+import com.yapp.picon.databinding.NavCustomEmotionFragmentBinding
+import com.yapp.picon.presentation.base.BaseFragment
 
-class CustomEmotionFragment: Fragment() {
-    // TODO ("BaseFragment로 바꾸기")
-    private lateinit var rootView: View
+class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
+    R.layout.nav_custom_emotion_fragment
+) {
+    override val vm: NavViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        rootView = inflater.inflate(R.layout.nav_custom_emotion_fragment, container, false)
-
-        return rootView
+    override fun initBinding() {
+        binding.setVariable(BR.setting, this)
     }
 }
