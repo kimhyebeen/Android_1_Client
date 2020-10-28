@@ -16,7 +16,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel>(
     @LayoutRes private val layoutId: Int
 ) : Fragment() {
     protected lateinit var binding: T
-    protected lateinit var rootView: View
 
     abstract val vm: VM
     abstract fun initBinding()
@@ -27,10 +26,9 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel>(
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
-        rootView = binding.root
 
         initBinding()
 
-        return rootView
+        return binding.root
     }
 }
