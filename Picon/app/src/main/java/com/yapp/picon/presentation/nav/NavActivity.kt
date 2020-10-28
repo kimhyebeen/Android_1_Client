@@ -9,9 +9,10 @@ import com.yapp.picon.R
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.databinding.NavActivityBinding
 
-class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
-    R.layout.nav_activity
-) {
+class NavActivity:
+    BaseActivity<NavActivityBinding, NavViewModel>(R.layout.nav_activity),
+    NavActivityObserver
+{
     override val vm: NavViewModel by viewModels()
     private val transaction = supportFragmentManager.beginTransaction()
     private var fragment: Fragment? = null
@@ -19,13 +20,11 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val finishFunc = { finish() }
-
         fragment = intent.getStringExtra("type")
             ?.let {
                 when(it) {
-                    NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment(finishFunc)
-                    NavTypeStringSet.Setting.type -> SettingFragment(finishFunc)
+                    NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
+                    NavTypeStringSet.Setting.type -> SettingFragment()
                     else -> null
                 }
         }
@@ -38,5 +37,13 @@ class NavActivity: BaseActivity<NavActivityBinding, NavViewModel>(
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    override fun finishNavActivity() {
+        finish()
+    }
+
+    override fun getNavViewModel(): NavViewModel {
+        return vm
     }
 }
