@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
-import com.yapp.picon.R
 
 abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel>(
     @LayoutRes private val layoutId: Int
@@ -19,7 +17,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel>(
 
     abstract val vm: VM
     abstract fun initBinding()
-    abstract fun finishFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +26,6 @@ abstract class BaseFragment<T : ViewDataBinding, VM : ViewModel>(
         binding = DataBindingUtil.inflate(inflater, layoutId, container, false)
 
         initBinding()
-        finishFragment()
 
         return binding.root
     }
