@@ -6,4 +6,22 @@
     <string name="map_menu_share_map">지도 공유하기</string>
     <string name="map_menu_view_travel_statistic">여행통계 보기</string>
     <string name="map_menu_setting">설정</string>
+
+    <string name="nav_setting_data">데이터 관리</string>
+    <string name="nav_setting_reset">모두 지우기</string>
+    <string name="nav_setting_about">About </string>
+    <string name="nav_setting_picon">PiCON</string>
+    <string name="nav_setting_app_info">버전 정보</string>
+    <string name="nav_setting_app_version">v 1.0.0</string>
+    <string name="nav_setting_app_review">앱 리뷰 남기기</string>
+
+    <string name="nav_custom_title">감정 커스텀하기</string>
+    <string name="nav_custom_save">저장</string>
+    <string name="nav_custom_text_soft_blue">새벽 3시</string>
+    <string name="nav_custom_text_cornflower">구름없는 하늘</string>
+    <string name="nav_custom_text_blue_grey">아침 이슬</string>
+    <string name="nav_custom_text_very_light_brown">창문 너머 노을</string>
+    <string name="nav_custom_text_warm_grey">잔잔한 밤</string>
+
+    <string name="image_description">이미지</string>
 </resources>
