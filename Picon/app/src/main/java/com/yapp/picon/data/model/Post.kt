@@ -1,8 +1,10 @@
 package com.yapp.picon.data.model
 
 data class Post(
-    val address: Address,
+    val id: Int,
     val coordinate: Coordinate,
-    val createDate: String,
-    val id: Int
+    val address: Address,
+    val emotion: String,
+    val memo: String,
+    val createDate: String?
 )
