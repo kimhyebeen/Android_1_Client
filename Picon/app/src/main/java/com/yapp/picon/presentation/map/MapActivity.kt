@@ -1,8 +1,10 @@
 package com.yapp.picon.presentation.map
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import com.naver.maps.map.NaverMap
 import com.yapp.picon.BR
 import com.yapp.picon.R
@@ -27,8 +29,18 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         setOnClickListeners()
     }
 
+    private fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
     private fun initViewModel() {
         binding.setVariable(BR.mapVM, vm)
+
+        val toastMsgObserver = Observer<String> {
+            showToast(it)
+        }
+
+        vm.toastMsg.observe(this, toastMsgObserver)
     }
 
     private fun setToolBar() {
@@ -44,7 +56,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         }
 
         binding.mapIbAdd.setOnClickListener {
-
+            vm.createPost()
         }
     }
 
