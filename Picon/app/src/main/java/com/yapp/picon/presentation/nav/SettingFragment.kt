@@ -1,6 +1,8 @@
 package com.yapp.picon.presentation.nav
 
 import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -45,10 +47,19 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     private fun setReviewButton() {
         vm.settingReviewFlag.observe(this, {
             if (it) {
-                // TODO("앱 리뷰 - 구글 스토어 띄우기")
-                println("리뷰 눌렀다~~")
+                // TODO("앱 배포 이후에 아래 주석을 해제하면 됩니다.")
+                // startAppStore()
             }
         })
+    }
+
+    private fun startAppStore() {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(
+                "https://play.google.com/store/apps/details?id=com.yapp.picon")
+            setPackage("com.android.vending")
+        }
+        startActivity(intent)
     }
 
     private fun setRemoveDataDialog() {
