@@ -22,6 +22,11 @@
     <string name="nav_custom_text_blue_grey">아침 이슬</string>
     <string name="nav_custom_text_very_light_brown">창문 너머 노을</string>
     <string name="nav_custom_text_warm_grey">잔잔한 밤</string>
+    
+    <string name="dialog_remove_all_data_title">데이터를 모두 삭제하시겠습니까?</string>
+    <string name="dialog_remove_all_data_description">핀이 모두 삭제되며 되돌릴 수 없습니다</string>
 
     <string name="image_description">이미지</string>
+    <string name="remove">삭제</string>
+    <string name="cancel">취소</string>
 </resources>
