@@ -72,6 +72,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         dialogBinding.setVariable(BR.settingRepo, vm.settingRepository)
         builder = AlertDialog.Builder(context)
         builder.setView(dialogBinding.root)
+        builder.setCancelable(false)
         dialog = builder.create()
 
         observeRemoveAllData()
