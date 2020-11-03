@@ -103,11 +103,10 @@
             app:layout_constraintStart_toEndOf="@+id/about_tv"
             app:layout_constraintTop_toTopOf="@+id/about_tv" />
 
-        <Button
-            android:id="@+id/nav_setting_version_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+        <TextView
+            android:id="@+id/nav_setting_version_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:gravity="start|center_vertical"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"
@@ -128,8 +127,8 @@
             android:text="@string/nav_setting_app_review"
             android:textColor="@color/pale_grey"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@+id/nav_setting_version_button"
-            app:layout_constraintTop_toBottomOf="@+id/nav_setting_version_button" />
+            app:layout_constraintStart_toStartOf="@+id/nav_setting_version_text"
+            app:layout_constraintTop_toBottomOf="@+id/nav_setting_version_text" />
 
         <TextView
             android:id="@+id/nav_setting_version_tv"
@@ -138,7 +137,7 @@
             android:layout_marginEnd="38dp"
             android:text="@string/nav_setting_app_version"
             android:textColor="@color/pale_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/nav_setting_version_button"
+            app:layout_constraintBottom_toBottomOf="@+id/nav_setting_version_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/about_tv" />
 
