@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="settingRepo"
+            type="com.yapp.picon.presentation.nav.repository.SettingRepository" />
+        <variable
             name="navVM"
             type="com.yapp.picon.presentation.nav.NavViewModel" />
     </data>
@@ -77,6 +80,7 @@
             android:text="@string/nav_setting_reset"
             android:textColor="@color/pale_grey"
             android:textSize="14sp"
+            android:onClick="@{settingRepo::clickRemoveAllData}"
             app:layout_constraintStart_toStartOf="@+id/manage_data_tv"
             app:layout_constraintTop_toBottomOf="@+id/manage_data_tv" />
 
@@ -127,6 +131,7 @@
             android:text="@string/nav_setting_app_review"
             android:textColor="@color/pale_grey"
             android:textSize="14sp"
+            android:onClick="@{settingRepo::clickReview}"
             app:layout_constraintStart_toStartOf="@+id/nav_setting_version_text"
             app:layout_constraintTop_toBottomOf="@+id/nav_setting_version_text" />
 
