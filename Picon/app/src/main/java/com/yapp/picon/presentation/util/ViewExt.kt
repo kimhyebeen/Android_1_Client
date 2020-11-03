@@ -10,3 +10,10 @@ fun View.visibleOrInvisible(value: Boolean) {
         false -> View.INVISIBLE
     }
 }
+
+@BindingAdapter("onLongClick")
+fun View.onLongClick(value: (View) -> Boolean) {
+    this.setOnLongClickListener {
+        value(it)
+    }
+}

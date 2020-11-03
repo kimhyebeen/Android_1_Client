@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="customRepo"
+            type="com.yapp.picon.presentation.nav.repository.CustomEmotionRepository" />
+        <variable
             name="navVM"
             type="com.yapp.picon.presentation.nav.NavViewModel" />
     </data>

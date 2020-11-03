@@ -21,5 +21,6 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
 
     override fun initBinding() {
         binding.setVariable(BR.navVM, vm)
+        binding.setVariable(BR.customRepo, vm.customRepository)
     }
 }

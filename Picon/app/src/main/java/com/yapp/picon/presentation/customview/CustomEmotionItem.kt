@@ -74,10 +74,4 @@ open class CustomEmotionItem: ConstraintLayout {
     private fun setCircle(view: View, id: Int) {
         view.emotion_item_color_iv.setImageResource(id)
     }
-
-    private fun setLongClickItem(view: View) {
-        view.setOnLongClickListener {
-            TODO("아이템 길게 누르면 dialog 뜨도록 구현하기")
-        }
-    }
 }
