@@ -1,32 +1,34 @@
 package com.yapp.picon.presentation.nav
 
 import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yapp.picon.R
 import com.yapp.picon.databinding.CustomEmotionViewBinding
 import com.yapp.picon.presentation.CustomEmotion
+import kotlinx.android.synthetic.main.dialog_custom_emotion.view.*
 
 class CustomEmotionAdapter(
-    private val dialog: AlertDialog
+    private var items: List<CustomEmotion>
 ): RecyclerView.Adapter<CustomEmotionAdapter.ItemViewHolder>() {
-    private var items = listOf(
-        CustomEmotion(R.drawable.ic_custom_circle_soft_blue, "새벽 3시"),
-        CustomEmotion(R.drawable.ic_custom_circle_cornflower, "구름없는 하늘"),
-        CustomEmotion(R.drawable.ic_custom_circle_bluegrey, "아침 이슬"),
-        CustomEmotion(R.drawable.ic_custom_circle_very_light_brown, "창문 너머 노을"),
-        CustomEmotion(R.drawable.ic_custom_circle_warm_grey, "잔잔한 밤")
-    )
+    private lateinit var context: Context
+    private lateinit var builder: AlertDialog.Builder
+    private lateinit var dialog: Dialog
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+        context = parent.context
+
         LayoutInflater.from(parent.context).let {
             val binding = CustomEmotionViewBinding.inflate(it, parent, false)
             return ItemViewHolder(binding)
         }
     }
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.onBind(items[position])
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.onBind(position)
 
     override fun getItemCount(): Int = items.size
 
@@ -38,12 +40,37 @@ class CustomEmotionAdapter(
     inner class ItemViewHolder(
         private var itemBinding: CustomEmotionViewBinding
     ): RecyclerView.ViewHolder(itemBinding.root) {
-        fun onBind(item: CustomEmotion) {
-            itemBinding.ce = item
 
-            // TODO("아이템을 길게 클릭했을 때 dialog를 띄우고, 기능 구현")
+        fun onBind(index: Int) {
+            itemView.id = index
+            itemBinding.ce = items[index]
+
             itemView.setOnLongClickListener {
+                setDialog(itemView.id)
+                dialog.show()
                 true
+            }
+        }
+
+        private fun setDialog(index: Int) {
+            val dialogView: View = LayoutInflater.from(context)
+                .inflate(R.layout.dialog_custom_emotion, null, false)
+            builder = AlertDialog.Builder(context)
+            builder.setView(dialogView)
+            dialog = builder.create()
+
+            dialogView.dialog_custom_emotion_color_iv.setImageResource(items[index].background)
+            dialogView.dialog_custom_emotion_et.setText(items[index].text)
+
+            dialogView.dialog_custom_emotion_confirm_button.setOnClickListener {
+                val value: String = dialogView.dialog_custom_emotion_et.text.toString()
+                items[index].text = value
+                notifyItemChanged(index)
+                dialog.dismiss()
+            }
+
+            dialogView.dialog_custom_emotion_cancel_button.setOnClickListener {
+                dialog.dismiss()
             }
         }
     }
