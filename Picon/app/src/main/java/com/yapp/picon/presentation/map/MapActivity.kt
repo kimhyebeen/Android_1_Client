@@ -2,6 +2,10 @@ package com.yapp.picon.presentation.map
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -34,8 +38,18 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         binding.navView.setNavigationItemSelectedListener(this)
     }
 
+    private fun showToast(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
     private fun initViewModel() {
         binding.setVariable(BR.mapVM, vm)
+
+        val toastMsgObserver = Observer<String> {
+            showToast(it)
+        }
+
+        vm.toastMsg.observe(this, toastMsgObserver)
     }
 
     private fun setToolBar() {
@@ -45,6 +59,14 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
 
     private fun setOnClickListeners() {
         binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
+
+        binding.mapIbSearch.setOnClickListener {
+            vm.requestPost()
+        }
+
+        binding.mapIbAdd.setOnClickListener {
+            vm.createPost()
+        }
     }
 
     override fun onMapReady(naverMap: NaverMap) {
