@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.util
 
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("visibleOrInvisible")
@@ -11,9 +12,7 @@ fun View.visibleOrInvisible(value: Boolean) {
     }
 }
 
-@BindingAdapter("onLongClick")
-fun View.onLongClick(value: (View) -> Boolean) {
-    this.setOnLongClickListener {
-        value(it)
-    }
+@BindingAdapter("imgLoad")
+fun ImageView.imgLoad(value: Int) {
+    this.setImageResource(value)
 }

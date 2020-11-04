@@ -5,9 +5,6 @@
 
     <data>
         <variable
-            name="customRepo"
-            type="com.yapp.picon.presentation.nav.repository.CustomEmotionRepository" />
-        <variable
             name="navVM"
             type="com.yapp.picon.presentation.nav.NavViewModel" />
     </data>
@@ -72,70 +69,15 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <com.yapp.picon.presentation.customview.CustomEmotionItem
-            android:id="@+id/nav_emotion_soft_blue_item"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nav_emotion_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="9dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:circleColor="@color/soft_blue"
-            app:emotionText="@string/nav_custom_text_soft_blue"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_emotion_toolbar" />
-
-        <com.yapp.picon.presentation.customview.CustomEmotionItem
-            android:id="@+id/nav_emotion_cornflower_item"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:circleColor="@color/cornflower"
-            app:emotionText="@string/nav_custom_text_cornflower"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_emotion_soft_blue_item" />
-
-        <com.yapp.picon.presentation.customview.CustomEmotionItem
-            android:id="@+id/nav_emotion_blue_grey_item"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:circleColor="@color/bluegrey"
-            app:emotionText="@string/nav_custom_text_blue_grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_emotion_cornflower_item" />
-
-        <com.yapp.picon.presentation.customview.CustomEmotionItem
-            android:id="@+id/nav_emotion_very_light_brown_item"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:circleColor="@color/very_light_brown"
-            app:emotionText="@string/nav_custom_text_very_light_brown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_emotion_blue_grey_item" />
-
-        <com.yapp.picon.presentation.customview.CustomEmotionItem
-            android:id="@+id/nav_emotion_warm_grey_item"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="14dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            app:circleColor="@color/warm_grey"
-            app:emotionText="@string/nav_custom_text_warm_grey"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_emotion_very_light_brown_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
