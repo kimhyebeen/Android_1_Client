@@ -13,7 +13,8 @@ import com.yapp.picon.presentation.CustomEmotion
 import kotlinx.android.synthetic.main.dialog_custom_emotion.view.*
 
 class CustomEmotionAdapter(
-    private var items: List<CustomEmotion>
+    private var items: List<CustomEmotion>,
+    private var setRepoItem: (Int, String) -> Unit
 ): RecyclerView.Adapter<CustomEmotionAdapter.ItemViewHolder>() {
     private lateinit var context: Context
     private lateinit var builder: AlertDialog.Builder
@@ -30,7 +31,7 @@ class CustomEmotionAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.onBind(position)
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = 5
 
     fun setContents(data: List<CustomEmotion>) {
         items = data
@@ -64,6 +65,7 @@ class CustomEmotionAdapter(
 
             dialogView.dialog_custom_emotion_confirm_button.setOnClickListener {
                 val value: String = dialogView.dialog_custom_emotion_et.text.toString()
+                setRepoItem(index, value)
                 items[index].text = value
                 notifyItemChanged(index)
                 dialog.dismiss()
