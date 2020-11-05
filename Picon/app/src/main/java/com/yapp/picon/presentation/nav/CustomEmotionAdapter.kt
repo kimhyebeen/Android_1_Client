@@ -3,9 +3,12 @@ package com.yapp.picon.presentation.nav
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yapp.picon.R
 import com.yapp.picon.databinding.CustomEmotionViewBinding
@@ -59,6 +62,10 @@ class CustomEmotionAdapter(
             builder = AlertDialog.Builder(context)
             builder.setView(dialogView)
             dialog = builder.create()
+            dialog.setCancelable(false)
+            dialog.window?.apply {
+                setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            }
 
             dialogView.dialog_custom_emotion_color_iv.setImageResource(items[index].background)
             dialogView.dialog_custom_emotion_et.setText(items[index].text)

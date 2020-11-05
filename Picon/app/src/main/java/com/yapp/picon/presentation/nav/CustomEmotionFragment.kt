@@ -3,8 +3,11 @@ package com.yapp.picon.presentation.nav
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.view.LayoutInflater
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -55,7 +58,12 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         dialogFinishView.setVariable(BR.customRepo, vm.customRepository)
         finishBuilder = AlertDialog.Builder(context)
         finishBuilder.setView(dialogFinishView.root)
+
         finishDialog = finishBuilder.create()
+        finishDialog.setCancelable(false)
+        finishDialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
     }
 
     private fun observeButton() {

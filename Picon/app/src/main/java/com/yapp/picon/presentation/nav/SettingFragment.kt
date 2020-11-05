@@ -2,11 +2,11 @@ package com.yapp.picon.presentation.nav
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -56,7 +56,8 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     private fun startAppStore() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.yapp.picon")
+                "https://play.google.com/store/apps/details?id=com.yapp.picon"
+            )
             setPackage("com.android.vending")
         }
         startActivity(intent)
@@ -72,8 +73,12 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         dialogBinding.setVariable(BR.settingRepo, vm.settingRepository)
         builder = AlertDialog.Builder(context)
         builder.setView(dialogBinding.root)
-        builder.setCancelable(false)
         dialog = builder.create()
+
+        dialog.setCancelable(false)
+        dialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
 
         observeRemoveAllData()
         observeDialogCancel()
