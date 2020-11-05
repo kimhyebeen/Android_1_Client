@@ -59,7 +59,7 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
     }
 
     private fun observeButton() {
-        vm.customFinishFlag.observe(this, {
+        vm.customRepository.customFinishFlag.observe(this, {
             if (it) {
                 finishDialog.show()
             }
@@ -69,7 +69,7 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
             if (it) {
                 finishDialog.dismiss()
                 vm.customRepository.initFinishDialogFlag()
-                vm.changeCustomFinishFlag()
+                vm.customRepository.changeCustomFinishFlag()
             }
         })
 
@@ -80,7 +80,7 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
             }
         })
 
-        vm.customSaveFlag.observe(this, {
+        vm.customRepository.customSaveFlag.observe(this, {
             if (it) {
                 // TODO("custom repository의 items를 서버에 저장")
                 Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show()

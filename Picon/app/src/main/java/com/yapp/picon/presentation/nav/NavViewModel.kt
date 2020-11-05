@@ -12,12 +12,8 @@ class NavViewModel: BaseViewModel() {
     val customRepository = CustomEmotionRepository()
 
     private val _finishFlag = MutableLiveData<Boolean>()
-    private val _customFinishFlag = MutableLiveData<Boolean>()
-    private val _customSaveFlag = MutableLiveData<Boolean>()
 
     val finishFlag: LiveData<Boolean> get() = _finishFlag
-    val customFinishFlag: LiveData<Boolean> get() = _customFinishFlag
-    val customSaveFlag: LiveData<Boolean> get() = _customSaveFlag
 
     val settingRemoveAllDataFlag: LiveData<Boolean> get() = settingRepository.removeAllDataFlag
     val settingReviewFlag: LiveData<Boolean> get() = settingRepository.reviewFlag
@@ -26,8 +22,6 @@ class NavViewModel: BaseViewModel() {
 
     init {
         _finishFlag.value = false
-        _customFinishFlag.value = false
-        _customSaveFlag.value = false
     }
 
     fun clickFinishButton(view: View) {
@@ -41,19 +35,11 @@ class NavViewModel: BaseViewModel() {
     }
 
     fun clickCustomFinishButton(view: View) {
-        changeCustomFinishFlag()
-    }
-
-    fun changeCustomFinishFlag() {
-        _customFinishFlag.value = _customFinishFlag.value?.let {
-            !it
-        }
+        customRepository.changeCustomFinishFlag()
     }
 
     fun clickCustomSaveButton(view: View) {
-        _customSaveFlag.value = _customSaveFlag.value?.let {
-            !it
-        }
+        customRepository.changeCustomSaveFlag()
         _finishFlag.value = _finishFlag.value?.let {
             !it
         }

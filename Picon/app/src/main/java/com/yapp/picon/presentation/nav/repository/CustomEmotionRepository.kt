@@ -10,13 +10,18 @@ class CustomEmotionRepository {
     private var _items = MutableLiveData<List<CustomEmotion>>()
     private val _dialogFinishCancelFlag = MutableLiveData<Boolean>()
     private val _dialogFinishConfirmFlag = MutableLiveData<Boolean>()
+    private val _customFinishFlag = MutableLiveData<Boolean>()
+    private val _customSaveFlag = MutableLiveData<Boolean>()
 
     val items: LiveData<List<CustomEmotion>> = _items
     val dialogFinishCancelFlag: LiveData<Boolean> = _dialogFinishCancelFlag
     val dialogFinishConfirmFlag: LiveData<Boolean> = _dialogFinishConfirmFlag
+    val customFinishFlag: LiveData<Boolean> get() = _customFinishFlag
+    val customSaveFlag: LiveData<Boolean> get() = _customSaveFlag
 
     init {
         initFinishDialogFlag()
+        initBarButton()
 
         // TODO("서버에서 item 내용 가져오기")
         _items.value = listOf(
@@ -31,6 +36,23 @@ class CustomEmotionRepository {
     fun initFinishDialogFlag() {
         _dialogFinishCancelFlag.value = false
         _dialogFinishConfirmFlag.value = false
+    }
+
+    fun initBarButton() {
+        _customFinishFlag.value = false
+        _customSaveFlag.value = false
+    }
+
+    fun changeCustomFinishFlag() {
+        _customFinishFlag.value = _customFinishFlag.value?.let {
+            !it
+        }
+    }
+
+    fun changeCustomSaveFlag() {
+        _customSaveFlag.value = _customSaveFlag.value?.let {
+            !it
+        }
     }
 
     fun setItems(index: Int, value: String) {
