@@ -11,6 +11,7 @@ class CustomEmotionRepository {
     val items: LiveData<List<CustomEmotion>> = _items
 
     init {
+        // TODO("서버에서 item 내용 가져오기")
         _items.value = listOf(
             CustomEmotion(R.drawable.ic_custom_circle_soft_blue, "새벽 3시"),
             CustomEmotion(R.drawable.ic_custom_circle_cornflower, "구름없는 하늘"),
