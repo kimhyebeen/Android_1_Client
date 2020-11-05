@@ -15,11 +15,6 @@ class NavViewModel: BaseViewModel() {
 
     val finishFlag: LiveData<Boolean> get() = _finishFlag
 
-    val settingRemoveAllDataFlag: LiveData<Boolean> get() = settingRepository.removeAllDataFlag
-    val settingReviewFlag: LiveData<Boolean> get() = settingRepository.reviewFlag
-    val settingDialogDismissFlag: LiveData<Boolean> get() = settingRepository.dialogDismissFlag
-    val settingDialogRemoveFlag: LiveData<Boolean> get() = settingRepository.dialogRemoveFlag
-
     init {
         _finishFlag.value = false
     }

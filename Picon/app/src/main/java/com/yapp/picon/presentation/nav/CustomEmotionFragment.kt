@@ -46,7 +46,11 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         super.onStart()
 
         setFinishDialog()
-        observeButton()
+
+        observeFinishButton()
+        observeFinishDialogCancelButton()
+        observeFinishDialogConfirmButton()
+        observeSaveButton()
 
         setRecyclerView()
     }
@@ -67,14 +71,16 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         }
     }
 
-    private fun observeButton() {
+    private fun observeFinishButton() {
         vm.customRepository.customFinishFlag.observe(this, {
             if (it) {
                 finishDialog.show()
                 setDialogSize()
             }
         })
+    }
 
+    private fun observeFinishDialogCancelButton() {
         vm.customRepository.dialogFinishCancelFlag.observe(this, {
             if (it) {
                 finishDialog.dismiss()
@@ -82,14 +88,18 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
                 vm.customRepository.changeCustomFinishFlag()
             }
         })
+    }
 
+    private fun observeFinishDialogConfirmButton() {
         vm.customRepository.dialogFinishConfirmFlag.observe(this, {
             if (it) {
                 finishDialog.dismiss()
                 vm.changeFinishFlag()
             }
         })
+    }
 
+    private fun observeSaveButton() {
         vm.customRepository.customSaveFlag.observe(this, {
             if (it) {
                 // TODO("custom repository의 items를 서버에 저장")

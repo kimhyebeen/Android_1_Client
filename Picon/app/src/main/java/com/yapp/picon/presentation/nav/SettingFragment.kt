@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -19,13 +18,13 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogRemoveAllDataBinding
 import com.yapp.picon.databinding.NavSettingFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
+import com.yapp.picon.presentation.nav.repository.SettingRepository
 
 class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     R.layout.nav_setting_fragment
 ) {
-    lateinit var dialogBinding: DialogRemoveAllDataBinding
-    lateinit var dialog: AlertDialog
-    lateinit var builder: AlertDialog.Builder
+    private lateinit var dialog: AlertDialog
+    private lateinit var repo: SettingRepository
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -42,12 +41,13 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
 
     override fun onStart() {
         super.onStart()
+        repo = vm.settingRepository
         setReviewButton()
         setRemoveDataDialog()
     }
 
     private fun setReviewButton() {
-        vm.settingReviewFlag.observe(this, {
+        repo.reviewFlag.observe(this, {
             if (it) {
                 // TODO("앱 배포 이후에 아래 주석을 해제하면 됩니다.")
                 // startAppStore()
@@ -66,14 +66,14 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     }
 
     private fun setRemoveDataDialog() {
-        dialogBinding = DataBindingUtil.inflate(
+        val dialogBinding: DialogRemoveAllDataBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
             R.layout.dialog_remove_all_data,
             null,
             false
         )
-        dialogBinding.setVariable(BR.settingRepo, vm.settingRepository)
-        builder = AlertDialog.Builder(context)
+        dialogBinding.setVariable(BR.settingRepo, repo)
+        val builder = AlertDialog.Builder(context)
         builder.setView(dialogBinding.root)
         dialog = builder.create()
 
@@ -88,7 +88,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     }
 
     private fun observeRemoveAllData() {
-        vm.settingRemoveAllDataFlag.observe(this, {
+        repo.removeAllDataFlag.observe(this, {
             if (it) {
                 dialog.show()
                 setDialogSize()
@@ -106,7 +106,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     }
 
     private fun observeDialogCancel() {
-        vm.settingDialogDismissFlag.observe(this, {
+        repo.dialogDismissFlag.observe(this, {
             if (it) {
                 dialog.dismiss()
                 vm.settingInitializeDialogFlag()
@@ -115,7 +115,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     }
 
     private fun observeDialogRemove() {
-        vm.settingDialogRemoveFlag.observe(this, {
+        repo.dialogRemoveFlag.observe(this, {
             if (it) {
                 // TODO("모든 데이터 삭제 - 비동기")
                 Toast.makeText(context, "모든 데이터가 삭제되었습니다.", Toast.LENGTH_SHORT).show()

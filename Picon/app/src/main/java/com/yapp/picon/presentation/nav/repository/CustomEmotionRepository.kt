@@ -4,7 +4,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.yapp.picon.R
-import com.yapp.picon.presentation.CustomEmotion
+import com.yapp.picon.presentation.model.CustomEmotion
 
 class CustomEmotionRepository {
     private var _items = MutableLiveData<List<CustomEmotion>>()
@@ -21,7 +21,9 @@ class CustomEmotionRepository {
 
     init {
         initFinishDialogFlag()
-        initBarButton()
+
+        _customFinishFlag.value = false
+        _customSaveFlag.value = false
 
         // TODO("서버에서 item 내용 가져오기")
         _items.value = listOf(
@@ -36,11 +38,6 @@ class CustomEmotionRepository {
     fun initFinishDialogFlag() {
         _dialogFinishCancelFlag.value = false
         _dialogFinishConfirmFlag.value = false
-    }
-
-    fun initBarButton() {
-        _customFinishFlag.value = false
-        _customSaveFlag.value = false
     }
 
     fun changeCustomFinishFlag() {
