@@ -2,10 +2,12 @@ package com.yapp.picon.presentation.nav
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.LayoutInflater
+import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -89,8 +91,18 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         vm.settingRemoveAllDataFlag.observe(this, {
             if (it) {
                 dialog.show()
+                setDialogSize()
             }
         })
+    }
+
+    private fun setDialogSize() {
+        val layoutParams = WindowManager.LayoutParams().apply {
+            copyFrom(dialog.window!!.attributes)
+            width = (274 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        dialog.window?.attributes = layoutParams
     }
 
     private fun observeDialogCancel() {

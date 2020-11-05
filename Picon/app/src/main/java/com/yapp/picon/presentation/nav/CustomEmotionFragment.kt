@@ -3,6 +3,7 @@ package com.yapp.picon.presentation.nav
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -70,6 +71,7 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         vm.customRepository.customFinishFlag.observe(this, {
             if (it) {
                 finishDialog.show()
+                setDialogSize()
             }
         })
 
@@ -94,6 +96,15 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
                 Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun setDialogSize() {
+        val layoutParams = WindowManager.LayoutParams().apply {
+            copyFrom(finishDialog.window!!.attributes)
+            width = (274 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        finishDialog.window?.attributes = layoutParams
     }
 
     private fun setRecyclerView() {

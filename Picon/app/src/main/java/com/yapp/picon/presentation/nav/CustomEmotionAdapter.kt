@@ -3,6 +3,7 @@ package com.yapp.picon.presentation.nav
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
@@ -52,6 +53,7 @@ class CustomEmotionAdapter(
             itemView.setOnLongClickListener {
                 setDialog(itemView.id)
                 dialog.show()
+                setDialogSize()
                 true
             }
         }
@@ -81,6 +83,15 @@ class CustomEmotionAdapter(
             dialogView.dialog_custom_emotion_cancel_button.setOnClickListener {
                 dialog.dismiss()
             }
+        }
+
+        private fun setDialogSize() {
+            val layoutParams = WindowManager.LayoutParams().apply {
+                copyFrom(dialog.window!!.attributes)
+                width = (274 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+                height = WindowManager.LayoutParams.WRAP_CONTENT
+            }
+            dialog.window?.attributes = layoutParams
         }
     }
 }
