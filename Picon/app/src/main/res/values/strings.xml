@@ -31,5 +31,5 @@
     <string name="image_description">이미지</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
-    <string name="cancel">취소</string>
+    <string name="cancellation">취소</string>
 </resources>
