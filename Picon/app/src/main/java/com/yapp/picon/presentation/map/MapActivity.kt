@@ -1,22 +1,25 @@
 package com.yapp.picon.presentation.map
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
-import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
+import com.naver.maps.geometry.Tm128
+import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MapActivityBinding
+import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
+import com.yapp.picon.presentation.search.SearchActivity
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     (
@@ -61,7 +64,11 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
 
         binding.mapIbSearch.setOnClickListener {
-            vm.requestPost()
+            vm.toggleButtonShown()
+            startActivityForResult(
+                Intent(this, SearchActivity::class.java),
+                RequestCodeSet.SEARCH_REQUEST_CODE.code
+            )
         }
 
         binding.mapIbAdd.setOnClickListener {
@@ -110,5 +117,25 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         grantResults: IntArray
     ) {
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                RequestCodeSet.SEARCH_REQUEST_CODE.code -> {
+                    vm.toggleButtonShown()
+                    data?.let {
+                        val mapX = it.getDoubleExtra("mapX", 0.0)
+                        val mapY = it.getDoubleExtra("mapY", 0.0)
+                        val tm128 = Tm128(mapX, mapY)
+                        val latLng = tm128.toLatLng()
+                        val cameraUpdate = CameraUpdate.scrollTo(latLng)
+                        map.moveCamera(cameraUpdate)
+                    }
+                }
+            }
+        }
     }
 }
