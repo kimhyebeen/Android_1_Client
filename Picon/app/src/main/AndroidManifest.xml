@@ -24,8 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".presentation.nav.NavActivity"
             android:parentActivityName=".presentation.map.MapActivity"/>
+
+        <activity
+            android:name="com.yapp.picon.presentation.search.SearchActivity"
+            android:theme="@style/SearchActivity" />
+
     </application>
 
 </manifest>

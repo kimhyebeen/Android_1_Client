@@ -24,4 +24,10 @@
     <string name="nav_custom_text_warm_grey">잔잔한 밤</string>
 
     <string name="image_description">이미지</string>
+
+    <string name="cancellation">취소</string>
+    <string name="X">X</string>
+
+    <string name="search_et_hint">핀을 추가할 위치를 검색하세요</string>
+    <string name="search_recently_search">최근 검색</string>
 </resources>
