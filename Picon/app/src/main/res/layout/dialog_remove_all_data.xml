@@ -57,7 +57,7 @@
             android:layout_width="74dp"
             android:layout_height="60dp"
             android:onClick="@{settingRepo::clickDialogDismiss}"
-            android:text="@string/cancel"
+            android:text="@string/cancellation"
             android:textColor="@color/very_light_pink"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/dialog_remove_all_data_remove_button"
