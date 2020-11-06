@@ -7,8 +7,6 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import com.naver.maps.map.NaverMap
 import com.yapp.picon.BR
