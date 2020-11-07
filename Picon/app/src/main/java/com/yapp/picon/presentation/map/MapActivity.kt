@@ -4,11 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
-import android.view.MenuItem
 import com.google.android.material.navigation.NavigationView
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.CameraUpdate
@@ -35,18 +33,13 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initViewModel()
         setToolBar()
         setOnClickListeners()
 
         binding.navView.setNavigationItemSelectedListener(this)
     }
 
-    private fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun initViewModel() {
+    override fun initViewModel() {
         binding.setVariable(BR.mapVM, vm)
 
         val toastMsgObserver = Observer<String> {
@@ -66,25 +59,30 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
 
         binding.mapIbSearch.setOnClickListener {
             vm.toggleButtonShown()
-            startActivityForResult(
-                Intent(this, SearchActivity::class.java),
-                RequestCodeSet.SEARCH_REQUEST_CODE.code
-            )
-        }
-
-        binding.mapIbAdd.setOnClickListener {
-            vm.createPost()
+            startSearchActivity()
         }
     }
 
-    override fun onMapReady(naverMap: NaverMap) {
-        this.map = naverMap
+    private fun startSearchActivity() {
+        startActivityForResult(
+            Intent(this, SearchActivity::class.java),
+            RequestCodeSet.SEARCH_REQUEST_CODE.code
+        )
+    }
 
-        this.map.setOnMapClickListener { _, _ ->
-            vm.toggleButtonShown()
+    private fun startNavActivity(type: String) {
+        startActivity(
+            Intent(this, NavActivity::class.java)
+                .putExtra("type", type)
+        )
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.map_nav_customize_emotion_name -> startNavActivity(NavTypeStringSet.CustomEmotion.type)
+            R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
         }
-
-        settingOptionToMap()
+        return true
     }
 
     private fun settingOptionToMap() {
@@ -97,19 +95,14 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         }
     }
 
-    private fun startNavActivity(type: String) {
-        startActivity(
-            Intent(this, NavActivity::class.java)
-                .putExtra("type", type)
-        )
-    }
+    override fun onMapReady(naverMap: NaverMap) {
+        this.map = naverMap
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.map_nav_customize_emotion_name -> startNavActivity(NavTypeStringSet.CustomEmotion.type)
-            R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
+        this.map.setOnMapClickListener { _, _ ->
+            vm.toggleButtonShown()
         }
-        return true
+
+        settingOptionToMap()
     }
 
     override fun onRequestPermissionsResult(
