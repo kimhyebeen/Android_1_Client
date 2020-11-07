@@ -12,6 +12,24 @@ fun View.visibleOrInvisible(value: Boolean) {
     }
 }
 
+@BindingAdapter("visibleOrGone")
+fun View.visibleOrGone(value: Boolean) {
+    this.visibility = when (value) {
+        true -> View.VISIBLE
+        false -> View.GONE
+    }
+}
+
+@BindingAdapter("visibleOrGoneStr")
+fun View.visibleOrGoneStr(value: String) {
+    this.visibility = when (value) {
+        "true" -> View.VISIBLE
+        "TRUE" -> View.VISIBLE
+        "false" -> View.GONE
+        "FALSE" -> View.GONE
+        else -> this.visibility
+    }
+  
 @BindingAdapter("imgLoad")
 fun ImageView.imgLoad(value: Int) {
     this.setImageResource(value)
