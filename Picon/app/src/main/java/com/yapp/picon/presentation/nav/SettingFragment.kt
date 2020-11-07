@@ -76,8 +76,6 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         val builder = AlertDialog.Builder(context)
         builder.setView(dialogBinding.root)
         dialog = builder.create()
-
-        dialog.setCancelable(false)
         dialog.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }

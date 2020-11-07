@@ -65,7 +65,6 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         finishBuilder.setView(dialogFinishView.root)
 
         finishDialog = finishBuilder.create()
-        finishDialog.setCancelable(false)
         finishDialog.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
