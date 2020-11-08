@@ -29,6 +29,7 @@ fun View.visibleOrGoneStr(value: String) {
         "FALSE" -> View.GONE
         else -> this.visibility
     }
+}
   
 @BindingAdapter("imgLoad")
 fun ImageView.imgLoad(value: Int) {
