@@ -11,12 +11,16 @@ import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.OverlayImage
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MapActivityBinding
+import com.yapp.picon.helper.LocationHelper
 import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
 import com.yapp.picon.presentation.nav.NavActivity
@@ -32,6 +36,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     override val vm: MapViewModel by viewModels()
 
     private lateinit var naverMap: NaverMap
+
+    private val currentLocationMarker = Marker()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +92,24 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             vm.toggleShowPostFormBtn()
             vm.toggleShowPostForm()
             vm.toggleButtonShown()
+        }
+
+        binding.mapIbCurrentLocation.setOnClickListener {
+            setCurrentLocation()
+        }
+    }
+
+    private fun setCurrentLocation() {
+        LocationHelper(this).requestLocationPermissions()?.let {
+            val cameraUpdate = CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude))
+            naverMap.moveCamera(cameraUpdate)
+
+            currentLocationMarker.map = null
+            currentLocationMarker.run {
+                icon = OverlayImage.fromResource(R.drawable.ic_map_now)
+                position = LatLng(it.latitude, it.longitude)
+                this.map = naverMap
+            }
         }
     }
 
