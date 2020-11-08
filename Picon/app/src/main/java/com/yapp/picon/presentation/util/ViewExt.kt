@@ -1,7 +1,6 @@
 package com.yapp.picon.presentation.util
 
 import android.view.View
-import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("visibleOrInvisible")
@@ -29,9 +28,4 @@ fun View.visibleOrGoneStr(value: String) {
         "FALSE" -> View.GONE
         else -> this.visibility
     }
-}
-  
-@BindingAdapter("imgLoad")
-fun ImageView.imgLoad(value: Int) {
-    this.setImageResource(value)
 }
