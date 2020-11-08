@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.yapp.picon.BR
@@ -100,7 +101,7 @@ class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>(
                             true
                         } else {
                             showToast("검색어를 입력해주세요.")
-                            false
+                            true
                         }
                     }
                 }
@@ -115,6 +116,15 @@ class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>(
 
     override fun onBackPressed() {
         closeSearch()
+    }
+
+    override fun showToast(msg: String) {
+        this@SearchActivity.currentFocus?.let {
+            val imm: InputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+        super.showToast(msg)
     }
 
 }
