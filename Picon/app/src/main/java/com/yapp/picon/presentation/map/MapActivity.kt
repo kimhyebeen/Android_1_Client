@@ -25,6 +25,7 @@ import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
+import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.search.SearchActivity
 
 
@@ -41,6 +42,15 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /*
+        todo
+            1. 시작 시 지도 카메라 한반도 전체 보여주기
+            2. 전체 포스트 조회 및 마커로 뿌려주기
+            3. 해당 마커는 클러스터링 라이브러리를 이용한다.
+            4. 마커 클릭 시 엑티비티 이동
+            5. 다시 화면으로 돌아왔을 경우 전체 포스트 다시 조회
+         */
 
         setToolBar()
         setOnListeners()
@@ -116,7 +126,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     private fun checkStoragePermission() {
         val storagePermissionListener: PermissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
-                //todo start postActivity
+                startPostActivity()
             }
 
             override fun onPermissionDenied(deniedPermissions: List<String>) {
@@ -137,6 +147,18 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     private fun startSearchActivity() {
         startActivityForResult(
             Intent(this, SearchActivity::class.java),
+            RequestCodeSet.SEARCH_REQUEST_CODE.code
+        )
+    }
+
+    private fun startPostActivity() {
+        //todo reverse geolocaion 을 이용해서 위치 넘겨주기
+        val intent = Intent(this@MapActivity, PostActivity::class.java)
+        intent.putExtra("lat", naverMap.cameraPosition.target.latitude)
+        intent.putExtra("lng", naverMap.cameraPosition.target.longitude)
+
+        startActivityForResult(
+            intent,
             RequestCodeSet.SEARCH_REQUEST_CODE.code
         )
     }

@@ -33,11 +33,17 @@
 
     <string name="search_et_hint">핀을 추가할 위치를 검색하세요</string>
     <string name="search_recently_search">최근 검색</string>
-  
+
+    <string name="post_this_emotion">이 곳의 감정</string>
+    <string name="post_et_hint">(선택) 메모를 작성해주세요.</string>
+
     <string name="X">X</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
     <string name="cancellation">취소</string>
     <string name="temp_save">임시저장</string>
     <string name="add_picture">사진 추가</string>
+    <string name="new_pin">새로운 핀</string>
+    <string name="save">저장</string>
+    <string name="location">위치</string>
 </resources>
