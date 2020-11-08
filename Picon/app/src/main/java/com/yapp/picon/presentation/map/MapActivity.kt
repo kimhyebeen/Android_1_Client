@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.map
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,8 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.naver.maps.geometry.Tm128
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
@@ -20,23 +23,21 @@ import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
 import com.yapp.picon.presentation.search.SearchActivity
 
-class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
-    (
+
+class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.layout.map_activity,
     R.id.map_frame
 ), NavigationView.OnNavigationItemSelectedListener {
 
     override val vm: MapViewModel by viewModels()
 
-    private lateinit var map: NaverMap
+    private lateinit var naverMap: NaverMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setToolBar()
-        setOnClickListeners()
-
-        binding.navView.setNavigationItemSelectedListener(this)
+        setOnListeners()
     }
 
     override fun initViewModel() {
@@ -54,13 +55,59 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    private fun setOnClickListeners() {
+    private fun setOnListeners() {
+        binding.navView.setNavigationItemSelectedListener(this)
+
         binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
 
         binding.mapIbSearch.setOnClickListener {
             vm.toggleButtonShown()
             startSearchActivity()
         }
+
+        binding.mapIbAdd.setOnClickListener {
+            vm.toggleShowPostForm()
+        }
+
+        binding.mapIbPostForm.setOnClickListener {
+            vm.toggleButtonShown()
+            vm.toggleShowPostFormBtn()
+        }
+
+        binding.mapTvPostFormTempSave.setOnClickListener {
+            //todo 위도 경우 만 전송
+        }
+
+        binding.mapTvPostFormAddPicture.setOnClickListener {
+            checkStoragePermission()
+        }
+
+        binding.mapIbPinClose.setOnClickListener {
+            vm.toggleShowPostFormBtn()
+            vm.toggleShowPostForm()
+            vm.toggleButtonShown()
+        }
+    }
+
+    private fun checkStoragePermission() {
+        val storagePermissionListener: PermissionListener = object : PermissionListener {
+            override fun onPermissionGranted() {
+                //todo start postActivity
+            }
+
+            override fun onPermissionDenied(deniedPermissions: List<String>) {
+                showToast("저장 권한을 거부하셨습니다. 해당 기능을 사용할 수 없습니다.")
+            }
+        }
+
+        TedPermission.with(this)
+            .setPermissionListener(storagePermissionListener)
+            .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+            .setPermissions(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            .check()
     }
 
     private fun startSearchActivity() {
@@ -86,7 +133,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     }
 
     private fun settingOptionToMap() {
-        map.apply {
+        naverMap.apply {
             mapType = NaverMap.MapType.Navi
             isNightModeEnabled = true
             uiSettings.isZoomControlEnabled = false
@@ -96,10 +143,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        this.map = naverMap
+        this.naverMap = naverMap
 
-        this.map.setOnMapClickListener { _, _ ->
-            vm.toggleButtonShown()
+        this.naverMap.setOnMapClickListener { _, _ ->
+            vm.isShownPostForm.value?.let { isShownPostForm ->
+                vm.isShownPostFormBtn.value?.let { isShownPostFormBtn ->
+                    if (!(isShownPostForm or isShownPostFormBtn)) {
+                        vm.toggleButtonShown()
+                    }
+                }
+            }
         }
 
         settingOptionToMap()
@@ -126,10 +179,32 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>
                         val tm128 = Tm128(mapX, mapY)
                         val latLng = tm128.toLatLng()
                         val cameraUpdate = CameraUpdate.scrollTo(latLng)
-                        map.moveCamera(cameraUpdate)
+                        naverMap.moveCamera(cameraUpdate)
                     }
                 }
             }
         }
     }
+
+    override fun onBackPressed() {
+        if (binding.mapDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.mapDrawerLayout.closeDrawer(GravityCompat.START)
+            return
+        }
+        vm.isShownPostFormBtn.value?.let {
+            if (it) {
+                vm.toggleButtonShown()
+                vm.toggleShowPostFormBtn()
+                return@onBackPressed
+            }
+        }
+        vm.isShownPostForm.value?.let {
+            if (it) {
+                vm.toggleShowPostForm()
+                return@onBackPressed
+            }
+        }
+        super.onBackPressed()
+    }
+
 }
