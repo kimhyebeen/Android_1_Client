@@ -29,6 +29,11 @@
     <string name="dialog_custom_finish_title">변경된 내용을 저장하지 않겠습니까?</string>
 
     <string name="image_description">이미지</string>
+
+    <string name="search_et_hint">핀을 추가할 위치를 검색하세요</string>
+    <string name="search_recently_search">최근 검색</string>
+  
+    <string name="X">X</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
     <string name="cancellation">취소</string>

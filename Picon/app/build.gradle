@@ -68,4 +68,14 @@ dependencies {
     //https://github.com/Kotlin/kotlinx.coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0-M1'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.0-M1"
+
+    //room
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
+    //stetho
+    //http://facebook.github.io/stetho/
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 }
