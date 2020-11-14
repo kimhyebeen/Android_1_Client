@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,7 +12,7 @@ import com.yapp.picon.presentation.base.BaseFragment
 class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
     R.layout.nav_statistic_fragment
 ) {
-    private val transaction = childFragmentManager.beginTransaction()
+    private lateinit var transaction: FragmentTransaction
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -28,5 +29,8 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // childFragmentManager를 사용해서 nav_statistic_content_view 붙이기
+        transaction = childFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment()).addToBackStack(null).commit()
+
     }
 }

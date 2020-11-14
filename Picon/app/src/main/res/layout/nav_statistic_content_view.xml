@@ -1,106 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/emotion_graph_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="22dp"
-        android:background="@drawable/bg_graph_view"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/nav_statistic_emotion_title"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/emotion_graph_layout"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/nav_statistic_emotion_title"
-            android:textColor="@color/very_light_pink_two"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/nav_statistic_pin_number_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/nav_statistic_pin"
-            android:textColor="@color/brown_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/nav_statistic_emotion_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nav_statistic_emotion_title" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/nav_statistic_emotion_graph_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="9dp"
-            android:layout_marginBottom="9dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_statistic_emotion_title" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/place_graph_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_graph_view"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="22dp"
-        android:paddingStart="22dp"
-        android:paddingEnd="22dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emotion_graph_layout">
-
-        <TextView
-            android:id="@+id/nav_statistic_place_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/nav_statistic_place_title"
-            android:textColor="@color/very_light_pink_two"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/nav_statistic_place_graph_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="22dp"
+            android:background="@drawable/bg_graph_view"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_statistic_place_title" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <GridView
-            android:id="@+id/nav_statistic_emotion_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="11dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            <TextView
+                android:id="@+id/nav_statistic_emotion_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/nav_statistic_emotion_title"
+                android:textColor="@color/very_light_pink_two"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nav_statistic_pin_number_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nav_statistic_pin"
+                android:textColor="@color/brown_grey"
+                app:layout_constraintBottom_toBottomOf="@+id/nav_statistic_emotion_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/nav_statistic_emotion_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nav_statistic_emotion_graph_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="9dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nav_statistic_emotion_title" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/place_graph_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_graph_view"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="22dp"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_statistic_place_graph_rv" />
+            app:layout_constraintTop_toBottomOf="@+id/emotion_graph_layout">
+
+            <TextView
+                android:id="@+id/nav_statistic_place_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/nav_statistic_place_title"
+                android:textColor="@color/very_light_pink_two"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nav_statistic_place_graph_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nav_statistic_place_title" />
+
+            <GridView
+                android:id="@+id/nav_statistic_emotion_grid"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="11dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nav_statistic_place_graph_rv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
