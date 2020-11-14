@@ -17,8 +17,16 @@ class MapViewModel : BaseViewModel() {
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> get() = _toastMsg
 
+    private val _isShownPostForm = MutableLiveData<Boolean>()
+    val isShownPostForm: LiveData<Boolean> get() = _isShownPostForm
+
+    private val _isShownPostFormBtn = MutableLiveData<Boolean>()
+    val isShownPostFormBtn: LiveData<Boolean> get() = _isShownPostFormBtn
+
     init {
         _isButtonShown.value = false
+        _isShownPostForm.value = false
+        _isShownPostFormBtn.value = false
     }
 
     private fun showToast(msg: String) {
@@ -27,6 +35,18 @@ class MapViewModel : BaseViewModel() {
 
     fun toggleButtonShown() {
         _isButtonShown.value = _isButtonShown.value?.let {
+            !it
+        }
+    }
+
+    fun toggleShowPostForm() {
+        _isShownPostForm.value = _isShownPostForm.value?.let {
+            !it
+        }
+    }
+
+    fun toggleShowPostFormBtn() {
+        _isShownPostFormBtn.value = _isShownPostFormBtn.value?.let {
             !it
         }
     }
