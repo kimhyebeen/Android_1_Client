@@ -5,9 +5,6 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single {
-        SimpleJoinUseCase(get())
-    }
-    single {
         GetLocalUseCase(get())
     }
     single {
@@ -18,5 +15,17 @@ val useCaseModule = module {
     }
     single {
         DeleteSearedUseCase(get())
+    }
+    single {
+        SimpleJoinUseCase(get())
+    }
+    single {
+        LoginUseCase(get())
+    }
+    single {
+        SaveAccessTokenUseCase(get())
+    }
+    single {
+        LoadAccessTokenUseCase(get())
     }
 }
