@@ -22,11 +22,6 @@
         tools:targetApi="m">
 
         <activity android:name="com.yapp.picon.presentation.map.MapActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -38,6 +33,16 @@
             android:theme="@style/SearchActivity" />
 
         <activity android:name=".presentation.post.PostActivity" />
+
+        <activity android:name=".presentation.login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".presentation.simplejoin.SimpleJoinActivity" />
 
     </application>
 
