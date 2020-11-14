@@ -58,7 +58,6 @@ class CustomEmotionAdapter(
             val builder = AlertDialog.Builder(context)
             builder.setView(dialogView)
             dialog = builder.create()
-            dialog.setCancelable(false)
             dialog.window?.apply {
                 setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             }
