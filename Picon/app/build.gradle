@@ -78,4 +78,16 @@ dependencies {
     //stetho
     //http://facebook.github.io/stetho/
     implementation 'com.facebook.stetho:stetho:1.5.1'
+
+    //FishBun
+    //https://github.com/sangcomz/FishBun
+    implementation 'com.sangcomz:FishBun:0.11.4'
+
+    //Glide
+    //https://github.com/bumptech/glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    //TedPermission
+    //https://github.com/ParkSangGwon/TedPermission
+    implementation 'gun0912.ted:tedpermission:2.2.3'
 }

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.yapp.picon.BR
@@ -13,8 +13,7 @@ import com.yapp.picon.databinding.SearchActivityBinding
 import com.yapp.picon.databinding.SearchItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
 
-class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>
-    (
+class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>(
     R.layout.search_activity
 ) {
 
@@ -57,18 +56,13 @@ class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initViewModel()
         setAdapter()
         setOnClickListeners()
 
         binding.searchEtSearchWord.requestFocus()
     }
 
-    private fun showToast(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun initViewModel() {
+    override fun initViewModel() {
         binding.setVariable(BR.searchVM, vm)
 
         val toastMsgObserver = Observer<String> {
@@ -107,7 +101,7 @@ class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>
                             true
                         } else {
                             showToast("검색어를 입력해주세요.")
-                            false
+                            true
                         }
                     }
                 }
@@ -122,6 +116,15 @@ class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>
 
     override fun onBackPressed() {
         closeSearch()
-//        super.onBackPressed()
     }
+
+    override fun showToast(msg: String) {
+        this@SearchActivity.currentFocus?.let {
+            val imm: InputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+        super.showToast(msg)
+    }
+
 }
