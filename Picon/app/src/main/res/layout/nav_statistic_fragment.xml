@@ -9,6 +9,7 @@
         android:background="@color/dark_grey">
 
         <include
+            android:id="@+id/nav_statistic_app_bar"
             layout="@layout/nav_statistic_app_bar" />
 
         <FrameLayout
@@ -23,10 +24,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="68dp"
-            android:background="@drawable/bg_dialog"
+            android:background="@drawable/bg_updown_list"
             android:orientation="vertical"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:visibility="invisible">
 
             <!--코드 상에서 동적으로 text view 추가해야 할 것 같음-->
 
