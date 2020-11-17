@@ -26,7 +26,7 @@
     <string name="nav_statistic_title">9월 여행 통계</string>
     <string name="nav_statistic_emotion_title">감정별</string>
     <string name="nav_statistic_place_title">장소 Top5</string>
-    <string name="nav_statistic_pin">42 핀</string>
+    <string name="nav_statistic_pin">핀</string>
     <string name="nav_statistic_place">서울 강남구</string>
     <string name="nav_statistic_month_title_4">2020년 4월</string>
     <string name="nav_statistic_month_title_5">2020년 5월</string>
