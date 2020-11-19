@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="emotionItem"
+            type="com.yapp.picon.presentation.model.StatisticEmotionGraphItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/emotion_graph_name_tv"
+            android:layout_width="97dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:maxLength="8"
+            android:text="@{emotionItem.color}"
+            android:textColor="@color/pale_grey"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.broooapps.lineargraphview2.LinearGraphView
+            android:id="@+id/emotion_graph_view"
+            android:layout_width="0dp"
+            android:layout_height="14dp"
+            android:layout_marginEnd="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/emotion_graph_name_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/emotion_graph_name_tv"
+            app:layout_constraintTop_toTopOf="@+id/emotion_graph_name_tv"
+            app:lgv_border_color="@color/transparent" />
+
+        <TextView
+            android:id="@+id/emotion_graph_count_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="@{Integer.toString(emotionItem.count)}"
+            android:textColor="@color/very_light_pink"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/emotion_graph_view"
+            app:layout_constraintStart_toEndOf="@+id/emotion_graph_view"
+            app:layout_constraintTop_toTopOf="@+id/emotion_graph_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
