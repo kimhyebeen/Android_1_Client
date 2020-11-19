@@ -3,6 +3,7 @@ package com.yapp.picon.presentation.nav.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.broooapps.lineargraphview2.DataModel
+import com.yapp.picon.presentation.model.ListItemForPlaceGraph
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
 
@@ -20,24 +21,30 @@ class StatisticRepository {
 
         // todo - placeList는 api에서 받아와요.
         _placeList.value = listOf(
-            StatisticPlaceGraphItem("서울 관악구", listOf(
-                DataModel("감정1", "#8187da", 10),
-                DataModel("공백", "#2b2b2b", 1),
-                DataModel("감정2", "#6699fc", 30),
-                DataModel("공백", "#2b2b2b", 1),
-                DataModel("감정3", "#79aed0", 20),
-                DataModel("공백", "#2b2b2b", 1),
-                DataModel("감정4", "#e6af75", 10),
-                DataModel("공백", "#2b2b2b", 1),
-                DataModel("감정5", "#9a948b", 30)
-            ), 104),
             StatisticPlaceGraphItem("서울 강남구", listOf(
-                DataModel("감정1", "#8187da", 10),
-                DataModel("감정2", "#6699fc", 20),
-                DataModel("감정3", "#79aed0", 30),
-                DataModel("감정4", "#e6af75", 40),
-                DataModel("감정5", "#9a948b", 10)
-            ), 110)
+                ListItemForPlaceGraph("soft_blue", 10),
+                ListItemForPlaceGraph("corn_flower", 6),
+                ListItemForPlaceGraph("very_light_brown", 4)
+            ), 19),
+            StatisticPlaceGraphItem("서울 용산구", listOf(
+                ListItemForPlaceGraph("soft_blue", 4),
+                ListItemForPlaceGraph("corn_flower", 3),
+                ListItemForPlaceGraph("blue_grey", 2),
+                ListItemForPlaceGraph("very_light_brown", 2)
+            ), 11),
+            StatisticPlaceGraphItem("서울 강남구", listOf(
+                ListItemForPlaceGraph("soft_blue", 3),
+                ListItemForPlaceGraph("corn_flower", 3),
+                ListItemForPlaceGraph("warm_grey", 2)
+            ), 8),
+            StatisticPlaceGraphItem("서울 강남구", listOf(
+                ListItemForPlaceGraph("corn_flower", 1),
+                ListItemForPlaceGraph("blue_grey", 1),
+                ListItemForPlaceGraph("very_light_brown", 1)
+            ), 3),
+            StatisticPlaceGraphItem("서울 강남구", listOf(
+                ListItemForPlaceGraph("soft_blue", 1)
+            ), 1)
         )
 
         // todo - emotionList는 api에서 받아와요.

@@ -17,6 +17,7 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
 ) {
     private lateinit var placeAdapter: PlaceGraphAdapter
     private lateinit var emotionAdapter: EmotionGraphAdapter
+    private lateinit var colorList: List<String>
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -29,24 +30,25 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
     override fun initBinding() {
     }
 
+    @SuppressLint("ResourceType")
     override fun onStart() {
         super.onStart()
+        colorList = listOf(
+            getString(R.color.soft_blue),
+            getString(R.color.cornflower),
+            getString(R.color.bluegrey),
+            getString(R.color.very_light_brown),
+            getString(R.color.warm_grey)
+        )
 
         setEmotionAdapter()
         setPlaceAdapter()
         observeGraphData()
     }
 
-    @SuppressLint("ResourceType")
     private fun setEmotionAdapter() {
         emotionAdapter = EmotionGraphAdapter(
-            listOf(
-                getString(R.color.soft_blue),
-                getString(R.color.cornflower),
-                getString(R.color.bluegrey),
-                getString(R.color.very_light_brown),
-                getString(R.color.warm_grey)
-            ),
+            colorList,
             R.layout.emotion_graph_item,
             BR.emotionItem
         )
@@ -58,7 +60,11 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
     }
 
     private fun setPlaceAdapter() {
-        placeAdapter = PlaceGraphAdapter(R.layout.place_graph_item, BR.item)
+        placeAdapter = PlaceGraphAdapter(
+            colorList,
+            R.layout.place_graph_item,
+            BR.placeItem
+        )
         binding.navStatisticPlaceGraphRv.apply {
             adapter = placeAdapter
             layoutManager = LinearLayoutManager(context)
