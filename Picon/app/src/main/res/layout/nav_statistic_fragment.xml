@@ -8,10 +8,6 @@
         android:layout_height="match_parent"
         android:background="@color/dark_grey">
 
-        <include
-            android:id="@+id/nav_statistic_app_bar"
-            layout="@layout/nav_statistic_app_bar" />
-
         <FrameLayout
             android:id="@+id/nav_statistic_frame"
             android:layout_width="match_parent"
@@ -77,6 +73,10 @@
                 android:layout_marginBottom="14dp"/>
 
         </LinearLayout>
+
+        <include
+            android:id="@+id/nav_statistic_app_bar"
+            layout="@layout/nav_statistic_app_bar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
