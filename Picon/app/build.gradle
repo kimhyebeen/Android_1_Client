@@ -90,4 +90,8 @@ dependencies {
     //TedPermission
     //https://github.com/ParkSangGwon/TedPermission
     implementation 'gun0912.ted:tedpermission:2.2.3'
+
+    // linear graph view
+    // https://github.com/swapnil1104/LinearGraphView?utm_source=android-arsenal.com&utm_medium=referral&utm_campaign=7928
+    implementation 'com.github.swapnil1104:LinearGraphView:0.0.1'
 }
