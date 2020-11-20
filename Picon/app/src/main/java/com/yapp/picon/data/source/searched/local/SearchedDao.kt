@@ -1,4 +1,4 @@
-package com.yapp.picon.data.source.dao
+package com.yapp.picon.data.source.searched.local
 
 import androidx.room.Dao
 import androidx.room.Insert

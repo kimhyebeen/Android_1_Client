@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'koin'
 
 android {
     compileSdkVersion 29
@@ -94,4 +95,17 @@ dependencies {
     // linear graph view
     // https://github.com/swapnil1104/LinearGraphView?utm_source=android-arsenal.com&utm_medium=referral&utm_campaign=7928
     implementation 'com.github.swapnil1104:LinearGraphView:0.0.1'
+    
+    // Koin
+    // https://github.com/InsertKoinIO/koin
+    // Koin for Kotlin
+    implementation "org.koin:koin-core:$koin_version"
+    // Koin for Unit tests
+    testImplementation "org.koin:koin-test:$koin_version"
+    // Koin AndroidX Scope features
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    // Koin AndroidX ViewModel features
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    // Koin AndroidX Fragment features
+    implementation "org.koin:koin-androidx-fragment:$koin_version"
 }
