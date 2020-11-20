@@ -6,10 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.nav.repository.CustomEmotionRepository
 import com.yapp.picon.presentation.nav.repository.SettingRepository
+import com.yapp.picon.presentation.nav.repository.StatisticRepository
 
 class NavViewModel: BaseViewModel() {
     val settingRepository = SettingRepository()
     val customRepository = CustomEmotionRepository()
+    val statisticRepository = StatisticRepository()
 
     private val _finishFlag = MutableLiveData<Boolean>()
 

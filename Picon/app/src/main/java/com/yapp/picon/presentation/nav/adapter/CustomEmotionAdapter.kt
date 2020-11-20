@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.nav
+package com.yapp.picon.presentation.nav.adapter
 
 import android.app.AlertDialog
 import android.app.Dialog
