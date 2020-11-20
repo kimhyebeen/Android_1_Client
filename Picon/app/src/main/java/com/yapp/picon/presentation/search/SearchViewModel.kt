@@ -1,20 +1,24 @@
 package com.yapp.picon.presentation.search
 
-import android.app.Application
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.data.di.NetworkModule
-import com.yapp.picon.data.source.local.SearchedDatabase
 import com.yapp.picon.domain.entity.SearchedEntity
-import com.yapp.picon.presentation.base.BaseAndroidViewModel
+import com.yapp.picon.domain.usecase.DeleteSearedUseCase
+import com.yapp.picon.domain.usecase.GetAllSearedUseCase
+import com.yapp.picon.domain.usecase.GetLocalUseCase
+import com.yapp.picon.domain.usecase.InsertSearedUseCase
+import com.yapp.picon.presentation.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application) : BaseAndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
-    private val database = SearchedDatabase.getInstance(context)
+class SearchViewModel(
+    private val getLocalUseCase: GetLocalUseCase,
+    private val getAllSearedUseCase: GetAllSearedUseCase,
+    private val insertSearedUseCase: InsertSearedUseCase,
+    private val deleteSearedUseCase: DeleteSearedUseCase
+) : BaseViewModel() {
 
     private val _items = MutableLiveData<List<Map<String, String>>>()
     val items: LiveData<List<Map<String, String>>> get() = _items
@@ -42,14 +46,14 @@ class SearchViewModel(application: Application) : BaseAndroidViewModel(applicati
 
     private fun loadSearchedWords() {
         viewModelScope.launch {
-            database?.searchedDao()?.selectAll()?.map {
+            getAllSearedUseCase().map {
                 mapOf(
                     "title" to it.title,
                     "mapX" to it.mapX,
                     "mapY" to it.mapY,
                     "isSearched" to "true"
                 )
-            }?.run {
+            }.run {
                 when {
                     size > 3 -> {
                         _items.value = subList(size - 3, size).reversed()
@@ -69,7 +73,7 @@ class SearchViewModel(application: Application) : BaseAndroidViewModel(applicati
     fun requestLocal() {
         viewModelScope.launch {
             searchWord.value?.let {
-                NetworkModule.naverApi.requestLocal(it).let { localResult ->
+                getLocalUseCase(it).let { localResult ->
                     if (localResult.display == 0) {
                         showToast("검색결과가 없습니다.")
                     } else {
@@ -104,8 +108,8 @@ class SearchViewModel(application: Application) : BaseAndroidViewModel(applicati
     fun insertSearched(item: Map<String, String>) {
         viewModelScope.launch(Dispatchers.IO) {
             itemToEntity(item)?.let {
-                database?.searchedDao()?.delete(it.title, it.mapX, it.mapY)
-                database?.searchedDao()?.insert(it)
+                deleteSearedUseCase(it.title, it.mapX, it.mapY)
+                insertSearedUseCase(it)
             }
         }
     }
@@ -113,7 +117,7 @@ class SearchViewModel(application: Application) : BaseAndroidViewModel(applicati
     fun deleteItem(item: Map<String, String>) {
         viewModelScope.launch(Dispatchers.IO) {
             itemToEntity(item)?.let {
-                database?.searchedDao()?.delete(it.title, it.mapX, it.mapY)
+                deleteSearedUseCase(it.title, it.mapX, it.mapY)
             }
         }
         loadSearchedWords()
