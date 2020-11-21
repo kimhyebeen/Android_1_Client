@@ -185,7 +185,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             isNightModeEnabled = true
             uiSettings.isZoomControlEnabled = false
             uiSettings.isZoomGesturesEnabled = true
-            setLayerGroupEnabled("LAYER_GROUP_BUILDING", true)
+
+            lightness = -0.5f
         }
     }
 
@@ -210,7 +211,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
