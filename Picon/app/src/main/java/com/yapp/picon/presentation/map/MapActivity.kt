@@ -174,6 +174,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         when (item.itemId) {
             R.id.map_nav_customize_emotion_name -> startNavActivity(NavTypeStringSet.CustomEmotion.type)
             R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
+            R.id.map_nav_view_travel_statistic -> startNavActivity(NavTypeStringSet.Statistic.type)
         }
         return true
     }
