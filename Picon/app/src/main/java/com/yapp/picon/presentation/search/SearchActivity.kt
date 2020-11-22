@@ -5,19 +5,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.SearchActivityBinding
 import com.yapp.picon.databinding.SearchItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : BaseActivity<SearchActivityBinding, SearchViewModel>(
     R.layout.search_activity
 ) {
 
-    override val vm: SearchViewModel by viewModels()
+    override val vm: SearchViewModel by viewModel()
 
     private val searchAdapter =
         object :
