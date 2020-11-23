@@ -5,12 +5,15 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Typeface.BOLD
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.core.view.marginEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
@@ -45,6 +48,15 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     override fun onStart() {
         super.onStart()
         repo = vm.settingRepository
+
+        val spannableString = SpannableString(getString(R.string.nav_setting_about))
+        spannableString.setSpan(
+            StyleSpan(BOLD),
+            6,
+            11,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        binding.aboutTv.text = spannableString
 
         setReviewButton()
         setWithdrawalButton()
