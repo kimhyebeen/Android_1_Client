@@ -50,6 +50,9 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
             setHasFixedSize(true)
         }
 
+        // todo - 오늘 날짜 가져와서 requestStatistic(year, month) 요청
+        vm.requestStatistic(2020, 11)
+
         setAnimationToMonthList()
         observeVM()
     }
@@ -103,7 +106,9 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
     private fun observeVM() {
         vm.statisticRepository.monthList.observe(this, {
             monthAdapter.setItems(it)
-            // todo - 감정별, 지역별 그래프 데이터도 바꿔주기
+            monthAdapter.notifyDataSetChanged()
+
+//          todo -  vm.requestStatistic(year, month)
         })
         vm.statisticRepository.title.observe(this, {
             binding.navStatisticAppBar.navStatisticTitleTv.text = it

@@ -4,6 +4,9 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.model.AddressCount
+import com.yapp.picon.data.model.EmotionCount
+import com.yapp.picon.data.model.Statistics
 import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
@@ -12,6 +15,7 @@ import com.yapp.picon.presentation.nav.repository.CustomEmotionRepository
 import com.yapp.picon.presentation.nav.repository.SettingRepository
 import com.yapp.picon.presentation.nav.repository.StatisticRepository
 import kotlinx.coroutines.launch
+import java.util.*
 
 class NavViewModel: BaseViewModel() {
     val settingRepository = SettingRepository()
@@ -19,10 +23,9 @@ class NavViewModel: BaseViewModel() {
     val statisticRepository = StatisticRepository()
 
     private val _finishFlag = MutableLiveData<Boolean>()
-
     private val _toastMsg = MutableLiveData<String>()
-    val toastMsg: LiveData<String> get() = _toastMsg
 
+    val toastMsg: LiveData<String> get() = _toastMsg
     val finishFlag: LiveData<Boolean> get() = _finishFlag
 
     init {
@@ -33,18 +36,8 @@ class NavViewModel: BaseViewModel() {
         viewModelScope.launch {
             try {
                 NetworkModule.yappApi.requestStatistics(year.toString(), month.toString()).let { statistic ->
-                    val emotionList = MutableList(5) {
-                        StatisticEmotionGraphItem("abc", 0)
-                    }
-
-                    // todo - 데이터베이스에서 감정이름 얻어와서 emotionList[getColorIndex(it.emotion)].color에 넣어주기
-
-                    statistic.emotionCounts.map {
-                        emotionList[getColorIndex(it.emotion)].color = it.emotion // todo - 데이터베이스 작업 이후 삭제
-                        emotionList[getColorIndex(it.emotion)].count = it.count
-                    }
-
-                    statisticRepository.setEmotionList(emotionList)
+                    setEmotionGraphList(statistic)
+                    setPlaceGraphList(statistic)
                     statisticRepository.setTotalPin(statistic.emotionTotal)
                 }
             } catch (e: Exception) {
@@ -52,6 +45,51 @@ class NavViewModel: BaseViewModel() {
                 showToast("통신 오류")
             }
         }
+    }
+
+    private fun setEmotionGraphList(statistic: Statistics) {
+        val emotionList = MutableList(5) {
+            StatisticEmotionGraphItem("abc", 0)
+        }
+
+        // todo - 데이터베이스에서 감정이름 얻어와서 emotionList[getColorIndex(it.emotion)].color에 넣어주기
+
+        statistic.emotionCounts.map {
+            emotionList[getColorIndex(it.emotion)].color = it.emotion // todo - 데이터베이스 작업 이후 삭제
+            emotionList[getColorIndex(it.emotion)].count = it.count
+        }
+
+        statisticRepository.setEmotionList(emotionList)
+    }
+
+    private fun setPlaceGraphList(statistic: Statistics) {
+        val placeList = MutableList(5) {
+            StatisticPlaceGraphItem("-", listOf(), 0)
+        }
+
+        statistic.addressCounts.let { item ->
+            for (i in item.indices) {
+                placeList[i] = StatisticPlaceGraphItem(
+                    "${item[i].addrCity} ${item[i].addrGu}",
+                    getSortedEmotionList(item[i]),
+                    item[i].total
+                )
+            }
+        }
+
+        statisticRepository.setPlaceList(placeList)
+    }
+
+    private fun getSortedEmotionList(item: AddressCount): List<EmotionCount> {
+        val emotionList = mutableListOf<EmotionCount>()
+        item.emotionCounts.map { emotionList.add(it) }
+
+        Collections.sort(emotionList, Comparator { o1: EmotionCount, o2: EmotionCount ->
+            if (getColorIndex(o1.emotion) < getColorIndex(o2.emotion)) return@Comparator -1
+            return@Comparator 1
+        })
+
+        return emotionList
     }
 
     private fun getColorIndex(color: String): Int {

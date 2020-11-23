@@ -2,7 +2,7 @@ package com.yapp.picon.presentation.nav.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.yapp.picon.presentation.model.ListItemForPlaceGraph
+import com.yapp.picon.data.model.EmotionCount
 import com.yapp.picon.presentation.model.StatisticDate
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
@@ -17,34 +17,6 @@ class StatisticRepository {
     init {
         _title.value = "11월 여행 통계"
         _totalPin.value = "0 핀"
-
-        // todo - placeList는 api에서 받아와요.
-        _placeList.value = listOf(
-            StatisticPlaceGraphItem("서울 강남구", listOf(
-                ListItemForPlaceGraph("soft_blue", 10),
-                ListItemForPlaceGraph("corn_flower", 6),
-                ListItemForPlaceGraph("very_light_brown", 4)
-            ), 19),
-            StatisticPlaceGraphItem("서울 용산구", listOf(
-                ListItemForPlaceGraph("soft_blue", 4),
-                ListItemForPlaceGraph("corn_flower", 3),
-                ListItemForPlaceGraph("blue_grey", 2),
-                ListItemForPlaceGraph("very_light_brown", 2)
-            ), 11),
-            StatisticPlaceGraphItem("서울 강남구", listOf(
-                ListItemForPlaceGraph("soft_blue", 3),
-                ListItemForPlaceGraph("corn_flower", 3),
-                ListItemForPlaceGraph("warm_grey", 2)
-            ), 8),
-            StatisticPlaceGraphItem("서울 강남구", listOf(
-                ListItemForPlaceGraph("corn_flower", 1),
-                ListItemForPlaceGraph("blue_grey", 1),
-                ListItemForPlaceGraph("very_light_brown", 1)
-            ), 3),
-            StatisticPlaceGraphItem("서울 강남구", listOf(
-                ListItemForPlaceGraph("soft_blue", 1)
-            ), 1)
-        )
 
         // todo - api 데이터에 따라 월별리스트를 설정해줘요.
         _monthList.value = listOf(

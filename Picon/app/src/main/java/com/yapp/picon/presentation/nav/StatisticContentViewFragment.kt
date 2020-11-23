@@ -44,8 +44,6 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
         setEmotionAdapter()
         setPlaceAdapter()
         observeGraphData()
-
-        vm.requestStatistic(2020, 11)
     }
 
     private fun setEmotionAdapter() {
@@ -78,6 +76,7 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
     private fun observeGraphData() {
         vm.statisticRepository.placeList.observe(this, {
             placeAdapter.setItems(it)
+            placeAdapter.notifyDataSetChanged()
         })
         vm.statisticRepository.emotionList.observe(this, {
             var max = 0
