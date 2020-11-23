@@ -8,13 +8,13 @@
     <string name="map_menu_setting">설정</string>
     <string name="map_post_form_info">지도를 움직여 위치를 설정해주세요</string>
 
-    <string name="nav_setting_data">데이터 관리</string>
-    <string name="nav_setting_reset">모두 지우기</string>
-    <string name="nav_setting_about">About </string>
-    <string name="nav_setting_picon">PiCON</string>
+    <string name="nav_setting_about">About PiCON</string>
     <string name="nav_setting_app_info">버전 정보</string>
     <string name="nav_setting_app_version">v 1.0.0</string>
     <string name="nav_setting_app_review">앱 리뷰 남기기</string>
+    <string name="nav_setting_account">계정</string>
+    <string name="nav_setting_withdrawal">계정탈퇴</string>
+    <string name="nav_setting_logout">로그아웃</string>
 
     <string name="nav_custom_title">감정 커스텀하기</string>
     <string name="nav_custom_save">저장</string>
