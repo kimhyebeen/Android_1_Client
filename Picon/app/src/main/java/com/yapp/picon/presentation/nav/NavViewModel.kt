@@ -41,43 +41,51 @@ class NavViewModel: BaseViewModel() {
                     statisticRepository.setTotalPin(statistic.emotionTotal)
                 }
             } catch (e: Exception) {
-                println("NavViewModel - ${e.message}")
-                showToast("통신 오류")
+                println("NavViewModel error - ${e.message}")
+                statisticRepository.initializeGraphData()
+                statisticRepository.setTotalPin(0)
+                showToast("데이터가 존재하지 않습니다.")
             }
         }
     }
 
     private fun setEmotionGraphList(statistic: Statistics) {
-        val emotionList = MutableList(5) {
-            StatisticEmotionGraphItem("abc", 0)
+        if (statistic.emotionCounts.isEmpty()) statisticRepository.initializeGraphData()
+        else {
+            val emotionList = MutableList(5) {
+                StatisticEmotionGraphItem("abc", 0)
+            }
+
+            // todo - 데이터베이스에서 감정이름 얻어와서 emotionList[getColorIndex(it.emotion)].color에 넣어주기
+
+            statistic.emotionCounts.map {
+                emotionList[getColorIndex(it.emotion)].color = it.emotion // todo - 데이터베이스 작업 이후 삭제
+                emotionList[getColorIndex(it.emotion)].count = it.count
+            }
+
+            statisticRepository.setEmotionList(emotionList)
         }
-
-        // todo - 데이터베이스에서 감정이름 얻어와서 emotionList[getColorIndex(it.emotion)].color에 넣어주기
-
-        statistic.emotionCounts.map {
-            emotionList[getColorIndex(it.emotion)].color = it.emotion // todo - 데이터베이스 작업 이후 삭제
-            emotionList[getColorIndex(it.emotion)].count = it.count
-        }
-
-        statisticRepository.setEmotionList(emotionList)
     }
 
     private fun setPlaceGraphList(statistic: Statistics) {
-        val placeList = MutableList(5) {
-            StatisticPlaceGraphItem("-", listOf(), 0)
-        }
-
-        statistic.addressCounts.let { item ->
-            for (i in item.indices) {
-                placeList[i] = StatisticPlaceGraphItem(
-                    "${item[i].addrCity} ${item[i].addrGu}",
-                    getSortedEmotionList(item[i]),
-                    item[i].total
-                )
+        if (statistic.addressCounts.isEmpty()) statisticRepository.initializeGraphData()
+        else {
+            val placeList = MutableList(5) {
+                StatisticPlaceGraphItem("-", listOf(), 0)
             }
-        }
 
-        statisticRepository.setPlaceList(placeList)
+            statistic.addressCounts.let { item ->
+                for (i in item.indices) {
+                    placeList[i] = StatisticPlaceGraphItem(
+                        "${item[i].addrCity} ${item[i].addrGu}",
+                        getSortedEmotionList(item[i]),
+                        item[i].total
+                    )
+                }
+            }
+
+            statisticRepository.setPlaceList(placeList)
+        }
     }
 
     private fun getSortedEmotionList(item: AddressCount): List<EmotionCount> {

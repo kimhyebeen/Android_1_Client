@@ -2,7 +2,6 @@ package com.yapp.picon.presentation.nav.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.yapp.picon.data.model.EmotionCount
 import com.yapp.picon.presentation.model.StatisticDate
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
@@ -17,14 +16,6 @@ class StatisticRepository {
     init {
         _title.value = "11월 여행 통계"
         _totalPin.value = "0 핀"
-
-        // todo - api 데이터에 따라 월별리스트를 설정해줘요.
-        _monthList.value = listOf(
-            StatisticDate(true, 2020, 9),
-            StatisticDate(false, 2020, 8),
-            StatisticDate(false, 2020, 7),
-            StatisticDate(false, 2020, 6)
-        )
     }
 
     val title: LiveData<String> get() = _title
@@ -32,6 +23,11 @@ class StatisticRepository {
     val emotionList: LiveData<List<StatisticEmotionGraphItem>> get() = _emotionList
     val totalPin: LiveData<String> get() = _totalPin
     val monthList: LiveData<List<StatisticDate>> get() = _monthList
+
+    fun initializeGraphData() {
+        _emotionList.value = mutableListOf()
+        _placeList.value = mutableListOf()
+    }
 
     fun setPlaceList(list: List<StatisticPlaceGraphItem>) {
         _placeList.value = list
