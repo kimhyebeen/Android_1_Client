@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.nav
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Resources
@@ -9,13 +10,14 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.view.marginEnd
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.yapp.picon.BR
 import com.yapp.picon.R
-import com.yapp.picon.databinding.DialogRemoveAllDataBinding
+import com.yapp.picon.databinding.DialogSettingBinding
 import com.yapp.picon.databinding.NavSettingFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.nav.repository.SettingRepository
@@ -25,6 +27,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
 ) {
     private lateinit var dialog: AlertDialog
     private lateinit var repo: SettingRepository
+    private lateinit var dialogBinding: DialogSettingBinding
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -42,8 +45,10 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     override fun onStart() {
         super.onStart()
         repo = vm.settingRepository
+
         setReviewButton()
-        setRemoveDataDialog()
+        setWithdrawalButton()
+        setLogoutButton()
     }
 
     private fun setReviewButton() {
@@ -65,33 +70,93 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         startActivity(intent)
     }
 
-    private fun setRemoveDataDialog() {
-        val dialogBinding: DialogRemoveAllDataBinding = DataBindingUtil.inflate(
+    private fun setWithdrawalButton() {
+        repo.withdrawalFlag.observe(this, {
+            if (it) {
+                setDialog()
+                setWithdrawalDialogView()
+                dialog.show()
+                setDialogSize()
+            }
+        })
+    }
+
+    @SuppressLint("ResourceType")
+    private fun setWithdrawalDialogView() {
+        dialogBinding.dialogSettingTitle.text = getString(R.string.nav_setting_dialog_withdrawal_title)
+        dialogBinding.dialogSettingContent.text = getString(R.string.nav_setting_dialog_withdrawal_content)
+        dialogBinding.dialogSettingLeftButton.apply {
+            text = getString(R.string.withdrawal)
+            setTextColor(Color.parseColor(getString(R.color.coral)))
+            setOnClickListener {
+                withdrawalTheAccount()
+                Toast.makeText(context, "계정이 탈퇴되었습니다.", Toast.LENGTH_SHORT).show()
+                dialogDismiss()
+            }
+        }
+        dialogBinding.dialogSettingRightButton.apply {
+            text = getString(R.string.cancellation)
+            setTextColor(Color.parseColor(getString(R.color.very_light_pink)))
+            setOnClickListener {
+                dialogDismiss()
+            }
+        }
+    }
+
+    private fun withdrawalTheAccount() {
+        // todo - 계정 탈퇴
+    }
+
+    private fun setLogoutButton() {
+        repo.logoutFlag.observe(this, {
+            if (it) {
+                setDialog()
+                setLogoutDialogView()
+                dialog.show()
+                setDialogSize()
+            }
+        })
+    }
+
+    @SuppressLint("ResourceType")
+    private fun setLogoutDialogView() {
+        dialogBinding.dialogSettingTitle.text = getString(R.string.nav_setting_dialog_logout_title)
+        dialogBinding.dialogSettingContent.text = ""
+        dialogBinding.dialogSettingLeftButton.apply {
+            text = getString(R.string.cancellation)
+            setTextColor(Color.parseColor(getString(R.color.very_light_pink)))
+            setOnClickListener {
+                dialogDismiss()
+            }
+        }
+        dialogBinding.dialogSettingRightButton.apply {
+            text = getString(R.string.nav_setting_logout)
+            setTextColor(Color.parseColor(getString(R.color.coral)))
+            setOnClickListener {
+                logoutAccount()
+                Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                dialogDismiss()
+            }
+        }
+    }
+
+    private fun logoutAccount() {
+        // todo - 계정 로그아웃
+    }
+
+    private fun setDialog() {
+        dialogBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.dialog_remove_all_data,
+            R.layout.dialog_setting,
             null,
             false
         )
-        dialogBinding.setVariable(BR.settingRepo, repo)
         val builder = AlertDialog.Builder(context)
         builder.setView(dialogBinding.root)
         dialog = builder.create()
         dialog.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
-
-        observeRemoveAllData()
-        observeDialogCancel()
-        observeDialogRemove()
-    }
-
-    private fun observeRemoveAllData() {
-        repo.removeAllDataFlag.observe(this, {
-            if (it) {
-                dialog.show()
-                setDialogSize()
-            }
-        })
     }
 
     private fun setDialogSize() {
@@ -103,23 +168,8 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
         dialog.window?.attributes = layoutParams
     }
 
-    private fun observeDialogCancel() {
-        repo.dialogDismissFlag.observe(this, {
-            if (it) {
-                dialog.dismiss()
-                vm.settingInitializeDialogFlag()
-            }
-        })
-    }
-
-    private fun observeDialogRemove() {
-        repo.dialogRemoveFlag.observe(this, {
-            if (it) {
-                // TODO("모든 데이터 삭제 - 비동기")
-                Toast.makeText(context, "모든 데이터가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-                vm.settingInitializeDialogFlag()
-            }
-        })
+    private fun dialogDismiss() {
+        dialog.dismiss()
+        vm.settingInitializeDialogFlag()
     }
 }
