@@ -1,6 +1,7 @@
 package com.yapp.picon.data.api
 
 import com.yapp.picon.data.model.Post
+import com.yapp.picon.data.model.Statistics
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -16,4 +17,10 @@ interface YappApi {
     suspend fun createPost(
         @Body post: Post
     ): Post
+
+    @GET("/display/statistics/{year}/{month}")
+    suspend fun requestStatistics(
+        @Path("year") year: String,
+        @Path("month") month: String
+    ): Statistics
 }

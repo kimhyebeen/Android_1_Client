@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -43,6 +44,10 @@ class NavActivity : BaseActivity<NavActivityBinding, NavViewModel>(
                     finish()
                 } else finish()
             }
+        }
+
+        vm.toastMsg.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 

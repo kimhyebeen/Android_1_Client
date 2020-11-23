@@ -12,9 +12,11 @@ class StatisticRepository {
     private val _placeList = MutableLiveData<List<StatisticPlaceGraphItem>>()
     private val _emotionList = MutableLiveData<List<StatisticEmotionGraphItem>>()
     private val _monthList = MutableLiveData<List<StatisticDate>>()
+    private val _totalPin = MutableLiveData<String>()
 
     init {
         _title.value = "11월 여행 통계"
+        _totalPin.value = "0 핀"
 
         // todo - placeList는 api에서 받아와요.
         _placeList.value = listOf(
@@ -44,15 +46,6 @@ class StatisticRepository {
             ), 1)
         )
 
-        // todo - emotionList는 api에서 받아와요.
-        _emotionList.value = listOf(
-            StatisticEmotionGraphItem("새벽 3시", 21),
-            StatisticEmotionGraphItem("구름없는 하늘", 11),
-            StatisticEmotionGraphItem("아침 이슬", 5),
-            StatisticEmotionGraphItem("창문 너머 노을", 4),
-            StatisticEmotionGraphItem("잔잔한 밤", 1)
-        )
-
         // todo - api 데이터에 따라 월별리스트를 설정해줘요.
         _monthList.value = listOf(
             StatisticDate(true, 2020, 9),
@@ -65,6 +58,7 @@ class StatisticRepository {
     val title: LiveData<String> get() = _title
     val placeList: LiveData<List<StatisticPlaceGraphItem>> get() = _placeList
     val emotionList: LiveData<List<StatisticEmotionGraphItem>> get() = _emotionList
+    val totalPin: LiveData<String> get() = _totalPin
     val monthList: LiveData<List<StatisticDate>> get() = _monthList
 
     fun setPlaceList(list: List<StatisticPlaceGraphItem>) {
@@ -77,6 +71,10 @@ class StatisticRepository {
 
     fun setMonthList(list: List<StatisticDate>) {
         _monthList.value = list
+    }
+
+    fun setTotalPin(value: Int) {
+        _totalPin.value = "$value 핀"
     }
 
     fun changeSelected(index: Int) {
