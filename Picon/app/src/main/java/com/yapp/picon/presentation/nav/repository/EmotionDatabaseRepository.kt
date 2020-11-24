@@ -16,4 +16,8 @@ class EmotionDatabaseRepository(application: Application) {
     fun insert(item: EmotionEntity) {
         return emotionDao.insert(item)
     }
+
+    fun deleteAll() {
+        return emotionDao.deleteAll()
+    }
 }
