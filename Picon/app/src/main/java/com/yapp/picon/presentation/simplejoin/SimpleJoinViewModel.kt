@@ -34,23 +34,45 @@ class SimpleJoinViewModel(
     //todo 유효성 검사 가입 완료 후
     fun joinMembership() {
         viewModelScope.launch {
-            id.value?.let { id ->
-                pw.value?.let { pw ->
-                    pwRe.value?.let {
-                        nic.value?.let { nic ->
-                            simpleJoinUseCase(id, pw, nic).let {
-                                Log.e("aa12", "joinMembership : $it")
-                                if (it.status == 200) {
-                                    showToast("회원가입이 완료되었습니다!")
-                                    _joinYN.value = true
-                                } else {
-                                    showToast(it.errorMessage)
-                                }
-                            }
-                        }
-                    }
+            val loginId = id.value
+            if (loginId.isNullOrEmpty()) {
+                showToast("아이디를 입력해주세요.")
+                return@launch
+            }
+
+            val loginPw = pw.value
+            if (loginPw.isNullOrEmpty()) {
+                showToast("비밀번호를 입력해주세요.")
+                return@launch
+            }
+
+            val loginPwRe = pwRe.value
+            if (loginPwRe.isNullOrEmpty()) {
+                showToast("비밀번호를 재입력해주세요.")
+                return@launch
+            }
+
+            if(loginPw != loginPwRe) {
+                showToast("비밀번호가 일치하지 않습니다.")
+                return@launch
+            }
+
+            val loginNic = pwRe.value
+            if (loginNic.isNullOrEmpty()) {
+                showToast("닉네임을 재입력해주세요.")
+                return@launch
+            }
+
+            simpleJoinUseCase(loginId, loginPw, loginNic).let {
+                Log.e("aa12", "joinMembership : $it")
+                if (it.status == 200) {
+                    showToast("회원가입이 완료되었습니다!")
+                    _joinYN.value = true
+                } else {
+                    showToast(it.errorMessage)
                 }
             }
         }
     }
+
 }

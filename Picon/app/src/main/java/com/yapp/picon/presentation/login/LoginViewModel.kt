@@ -36,28 +36,27 @@ class LoginViewModel(
 
     fun login() {
         viewModelScope.launch {
-            id.value?.let { id ->
-                if (id.isEmpty()) {
-                    showToast("아이디를 입력해주세요.")
+            val loginId = id.value
+            if(loginId.isNullOrEmpty()) {
+                showToast("아이디를 입력해주세요.")
+                return@launch
+            }
+
+            val loginPw = pw.value
+            if(loginPw.isNullOrEmpty()) {
+                showToast("비밀번호를 입력해주세요.")
+                return@launch
+            }
+
+            loginUseCase(loginId, loginPw).let {
+                if (it.status == 200) {
+                    saveAccessTokenUseCase(it.accessToken)
+                    showToast("로그인 되었습니다.")
+                    _loginYN.value = true
                 } else {
-                    pw.value?.let { pw ->
-                        if (pw.isEmpty()) {
-                            showToast("비밀번호를 입력해주세요.")
-                        } else {
-                            loginUseCase(id, pw).let {
-                                Log.e("aa12", "login() $it")
-                                if (it.status == 200) {
-                                    saveAccessTokenUseCase(it.accessToken)
-                                    showToast("로그인 되었습니다.")
-                                    _loginYN.value = true
-                                } else {
-                                    showToast(it.errorMessage)
-                                }
-                            }
-                        }
-                    } ?: showToast("비밀번호를 입력해주세요.")
+                    showToast(it.errorMessage)
                 }
-            } ?: showToast("아이디를 입력해주세요.")
+            }
         }
     }
 
