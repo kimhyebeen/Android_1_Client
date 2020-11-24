@@ -21,6 +21,7 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogCustomFinishBinding
 import com.yapp.picon.databinding.NavCustomEmotionFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
+import com.yapp.picon.presentation.nav.adapter.CustomEmotionAdapter
 
 class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
     R.layout.nav_custom_emotion_fragment

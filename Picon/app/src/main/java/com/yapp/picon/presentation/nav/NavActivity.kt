@@ -30,6 +30,7 @@ class NavActivity : BaseActivity<NavActivityBinding, NavViewModel>(
         return when (type) {
             NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
             NavTypeStringSet.Setting.type -> SettingFragment()
+            NavTypeStringSet.Statistic.type -> StatisticFragment()
             else -> null
         }
     }

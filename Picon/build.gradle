@@ -29,6 +29,10 @@ allprojects {
         maven {
             url 'https://navercorp.bintray.com/maps'
         }
+        // Linear Graph View
+        maven {
+            url 'https://jitpack.io'
+        }
     }
 }
 
