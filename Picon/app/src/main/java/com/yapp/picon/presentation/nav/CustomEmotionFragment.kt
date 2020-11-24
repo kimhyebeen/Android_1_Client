@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.nav
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.Application
 import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Color
@@ -21,14 +22,22 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogCustomFinishBinding
 import com.yapp.picon.databinding.NavCustomEmotionFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
+import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.nav.adapter.CustomEmotionAdapter
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
+class CustomEmotionFragment(
+    application: Application
+): BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
     R.layout.nav_custom_emotion_fragment
 ) {
     private lateinit var customAdapter: CustomEmotionAdapter
     private lateinit var finishDialog: Dialog
     private lateinit var finishBuilder: AlertDialog.Builder
+    private val emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -54,6 +63,8 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
         observeSaveButton()
 
         setRecyclerView()
+
+        observeAdapter()
     }
 
     @SuppressLint("InflateParams")
@@ -102,10 +113,40 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
     private fun observeSaveButton() {
         vm.customRepository.customSaveFlag.observe(this, {
             if (it) {
-                // TODO("custom repository의 items를 서버에 저장")
+                saveEmotionList()
+
                 Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun observeAdapter() {
+        emotionDatabaseRepository.getAll().observe(this, {
+            customAdapter.setItems(it)
+            customAdapter.notifyDataSetChanged()
+
+            if (it.isEmpty()) {
+                initDatabase()
+            }
+        })
+    }
+
+    private fun initDatabase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            emotionDatabaseRepository.insert(EmotionEntity(1, "SOFT_BLUE", "새벽 3시"))
+            emotionDatabaseRepository.insert(EmotionEntity(2, "CORN_FLOWER", "구름없는 하늘"))
+            emotionDatabaseRepository.insert(EmotionEntity(3, "BLUE_GRAY", "아침 이슬"))
+            emotionDatabaseRepository.insert(EmotionEntity(4, "VERY_LIGHT_BROWN", "창문 너머 노을"))
+            emotionDatabaseRepository.insert(EmotionEntity(5, "WARM_GRAY", "잔잔한 밤"))
+        }
+    }
+
+    private fun saveEmotionList() {
+        CoroutineScope(Dispatchers.IO).launch {
+            customAdapter.getItemList().map { entity ->
+                emotionDatabaseRepository.insert(entity)
+            }
+        }
     }
 
     private fun setDialogSize() {
@@ -118,10 +159,8 @@ class CustomEmotionFragment: BaseFragment<NavCustomEmotionFragmentBinding, NavVi
     }
 
     private fun setRecyclerView() {
-        customAdapter = CustomEmotionAdapter(vm.customRepository.items.value ?: listOf()
-        ) { index: Int, value: String ->
-            vm.customRepository.setItems(index, value)
-        }
+        context?.let { customAdapter = CustomEmotionAdapter(it, R.layout.custom_emotion_view, BR.emotionItem) }
+            ?: throw Exception("CustomEmotionFragment - setRecyclerView - context is null")
 
         binding.navEmotionRecyclerView.apply {
             adapter = customAdapter

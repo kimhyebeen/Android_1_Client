@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="ce"
-            type="com.yapp.picon.presentation.model.CustomEmotion" />
+            name="emotion"
+            type="com.yapp.picon.presentation.model.EmotionEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,6 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="38dp"
-            imgLoad="@{ce.background}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +29,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="@{ce.text}"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/emotion_item_color_iv"
