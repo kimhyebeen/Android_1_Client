@@ -108,6 +108,7 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
 
     private fun getSignUpDate(): StatisticDate {
         // todo - 회원가입 연도+월을 얻어와요.
+
         return StatisticDate(false, 2019, 10)
     }
 
@@ -137,6 +138,8 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
         }
 
         monthList[0].selected = true
+
+        vm.statisticRepository.setMonthList(monthList)
     }
 
     private fun monthListClickEvent(year: Int, month: Int, flag: Boolean) {
