@@ -103,18 +103,37 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
         }
     }
 
+    private fun getSignUpDate(): StatisticDate {
+        // todo - 회원가입 연도+월을 얻어와요.
+        return StatisticDate(false, 2019, 10)
+    }
+
     private fun setAllDatesInMonthList() {
-        // todo - 현재 연도+월 부터 회원가입 연도+월까지 vm.setMonthList하기
-        vm.statisticRepository.setMonthList(
-            listOf(
-                StatisticDate(true, 2020, 11),
-                StatisticDate(false, 2020, 10),
-                StatisticDate(false, 2020, 9),
-                StatisticDate(false, 2020, 8),
-                StatisticDate(false, 2020, 7),
-                StatisticDate(false, 2020, 6)
-            )
-        )
+        val todayDate = getTodayDate()
+        val signUpData = getSignUpDate()
+        val monthList: MutableList<StatisticDate> = mutableListOf()
+
+        for (year in todayDate.year downTo signUpData.year) {
+            when (year) {
+                todayDate.year -> {
+                    for (month in todayDate.month downTo 1) {
+                        monthList.add(StatisticDate(false, year, month))
+                    }
+                }
+                signUpData.year -> {
+                    for (month in 12 downTo signUpData.month) {
+                        monthList.add(StatisticDate(false, year, month))
+                    }
+                }
+                else -> {
+                    for (month in 12 downTo 1) {
+                        monthList.add(StatisticDate(false, year, month))
+                    }
+                }
+            }
+        }
+
+        monthList[0].selected = true
     }
 
     private fun monthListClickEvent(year: Int, month: Int, flag: Boolean) {
