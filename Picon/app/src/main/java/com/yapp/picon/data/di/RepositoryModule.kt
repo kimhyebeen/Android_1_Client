@@ -1,5 +1,7 @@
 package com.yapp.picon.data.di
 
+import com.yapp.picon.data.repository.user.UserRepository
+import com.yapp.picon.data.repository.user.UserRepositoryImpl
 import com.yapp.picon.data.source.searched.NaverRepository
 import com.yapp.picon.data.source.searched.NaverRepositoryImpl
 import com.yapp.picon.data.source.searched.SearchedRepository
@@ -15,6 +17,13 @@ val repositoryModule = module {
 
     single<SearchedRepository> {
         SearchedRepositoryImpl(
+            get()
+        )
+    }
+
+    single<UserRepository> {
+        UserRepositoryImpl(
+            get(),
             get()
         )
     }

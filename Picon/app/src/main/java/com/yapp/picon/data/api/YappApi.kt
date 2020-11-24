@@ -1,12 +1,23 @@
 package com.yapp.picon.data.api
 
-import com.yapp.picon.data.model.Post
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import com.yapp.picon.data.model.*
+import retrofit2.http.*
 
 interface YappApi {
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST("auth/signIn")
+    suspend fun simpleJoin(
+        @Body simpleJoinRequest: SimpleJoinRequest
+    ): SimpleJoinResponse
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST("auth/logIn")
+    suspend fun login(
+        @Body loginRequest: LoginRequest
+    ): LoginResponse
+
+
     @GET("displays/post/{id}")
     suspend fun requestPost(
         @Path("id") id: String

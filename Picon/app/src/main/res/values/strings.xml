@@ -50,6 +50,16 @@
     <string name="post_this_emotion">이 곳의 감정</string>
     <string name="post_et_hint">(선택) 메모를 작성해주세요.</string>
 
+    <string name="login_picon_start">PiCON 시작하기</string>
+    <string name="login_sns_login">SNS계정으로 로그인하기</string>
+    <string name="login_is_first">처음이신가요?&#160;</string>
+    <string name="login_simple_join">간편가입하기</string>
+
+    <string name="simple_join_input_id">아이디 입력</string>
+    <string name="simple_join_input_pw">비밀번호 입력 (6 – 14자리)</string>
+    <string name="simple_join_input_pw_re">비밀번호 재입력</string>
+    <string name="simple_join_input_nic">닉네임 입력</string>
+
     <string name="X">X</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
@@ -60,4 +70,8 @@
     <string name="new_pin">새로운 핀</string>
     <string name="save">저장</string>
     <string name="location">위치</string>
+    <string name="login">로그인</string>
+    <string name="id">아이디</string>
+    <string name="pw">비밀번호</string>
+    <string name="join_membership">회원가입</string>
 </resources>
