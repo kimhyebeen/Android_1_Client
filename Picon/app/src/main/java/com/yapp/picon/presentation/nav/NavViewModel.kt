@@ -32,6 +32,20 @@ class NavViewModel: BaseViewModel() {
         _finishFlag.value = false
     }
 
+    fun requestUserInfo() {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestUserInfo().let {
+                    val date = it.member.createdDate.split('.')
+                    statisticRepository.setSignUpDate(date[0].toInt(), date[1].toInt())
+                }
+            } catch (e: Exception) {
+                println("NavViewModel requestUserInfo error - ${e.message}")
+                showToast("유저 정보가 존재하지 않습니다.")
+            }
+        }
+    }
+
     fun requestStatistic(year: Int, month: Int) {
         viewModelScope.launch {
             try {

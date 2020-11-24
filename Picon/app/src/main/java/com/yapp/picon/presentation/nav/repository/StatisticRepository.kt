@@ -7,6 +7,7 @@ import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
 
 class StatisticRepository {
+    private val _signUpDate = MutableLiveData<StatisticDate>()
     private val _title = MutableLiveData<String>()
     private val _placeList = MutableLiveData<List<StatisticPlaceGraphItem>>()
     private val _emotionList = MutableLiveData<List<StatisticEmotionGraphItem>>()
@@ -23,6 +24,7 @@ class StatisticRepository {
     val emotionList: LiveData<List<StatisticEmotionGraphItem>> get() = _emotionList
     val totalPin: LiveData<String> get() = _totalPin
     val monthList: LiveData<List<StatisticDate>> get() = _monthList
+    val signUpDate: LiveData<StatisticDate> get() = _signUpDate
 
     fun initializeGraphData() {
         _emotionList.value = mutableListOf()
@@ -43,6 +45,10 @@ class StatisticRepository {
 
     fun setTotalPin(value: Int) {
         _totalPin.value = "$value 핀"
+    }
+
+    fun setSignUpDate(year: Int, month: Int) {
+        _signUpDate.value = StatisticDate(false, year, month)
     }
 
     fun changeSelected(index: Int) {
