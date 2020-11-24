@@ -29,7 +29,7 @@ class NavActivity : BaseActivity<NavActivityBinding, NavViewModel>(
 
     private fun getFragment(): Fragment? {
         return when (type) {
-            NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
+            NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment(application)
             NavTypeStringSet.Setting.type -> SettingFragment()
             NavTypeStringSet.Statistic.type -> StatisticFragment()
             else -> null
