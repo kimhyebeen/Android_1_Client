@@ -60,6 +60,9 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
         binding.navStatisticAppBar.navStatisticTitleLinearLayout.setOnClickListener {
             monthListClickEvent(0, 0, false)
         }
+        binding.navStatisticAppBar.navStatisticBackIv.setOnClickListener {
+            vm.clickFinishButton(it)
+        }
 
         getTodayDate().let { vm.requestStatistic(it.year, it.month) }
         observeVM()
