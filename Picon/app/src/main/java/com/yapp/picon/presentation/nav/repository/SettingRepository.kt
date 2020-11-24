@@ -5,30 +5,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 class SettingRepository {
-    private val _removeAllDataFlag = MutableLiveData<Boolean>()
+    private val _version = MutableLiveData<String>()
     private val _reviewFlag = MutableLiveData<Boolean>()
-    private val _dialogDismissFlag = MutableLiveData<Boolean>()
-    private val _dialogRemoveFlag = MutableLiveData<Boolean>()
-    val removeAllDataFlag: LiveData<Boolean> get() = _removeAllDataFlag
+    private val _withdrawalFlag = MutableLiveData<Boolean>()
+    private val _logoutFlag = MutableLiveData<Boolean>()
+
+    val version: LiveData<String> get() = _version
     val reviewFlag: LiveData<Boolean> get() = _reviewFlag
-    val dialogDismissFlag: LiveData<Boolean> get() = _dialogDismissFlag
-    val dialogRemoveFlag: LiveData<Boolean> get() = _dialogRemoveFlag
+    val withdrawalFlag: LiveData<Boolean> get() = _withdrawalFlag
+    val logoutFlag: LiveData<Boolean> get() = _logoutFlag
 
     init {
+        _version.value = "v 1.0.0"
         initializeSettingFlag()
     }
 
     fun initializeSettingFlag() {
-        _removeAllDataFlag.value = false
         _reviewFlag.value = false
-        _dialogDismissFlag.value = false
-        _dialogRemoveFlag.value = false
-    }
-
-    fun clickRemoveAllData(view: View) {
-        _removeAllDataFlag.value = _removeAllDataFlag.value?.let {
-            !it
-        }
+        _withdrawalFlag.value = false
+        _logoutFlag.value = false
     }
 
     fun clickReview(view: View) {
@@ -37,14 +32,14 @@ class SettingRepository {
         }
     }
 
-    fun clickDialogRemove(view: View) {
-        _dialogRemoveFlag.value = _dialogRemoveFlag.value?.let {
+    fun clickWithdrawal(view: View) {
+        _withdrawalFlag.value = _withdrawalFlag.value?.let {
             !it
         }
     }
 
-    fun clickDialogDismiss(view: View) {
-        _dialogDismissFlag.value = _dialogDismissFlag.value?.let {
+    fun clickLogout(view: View) {
+        _logoutFlag.value = _logoutFlag.value?.let {
             !it
         }
     }
