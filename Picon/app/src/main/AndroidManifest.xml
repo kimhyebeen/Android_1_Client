@@ -29,6 +29,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.yapp.picon.presentation.intro.IntroActivity" />
+
         <activity android:name="com.yapp.picon.presentation.map.MapActivity" />
 
         <activity
