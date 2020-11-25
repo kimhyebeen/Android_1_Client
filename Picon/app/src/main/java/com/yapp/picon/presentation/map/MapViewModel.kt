@@ -4,14 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.PostMarker
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-    private val loadAccessTokenUseCase: LoadAccessTokenUseCase,
     private val requestPostsUseCase: RequestPostsUseCase
 ) : BaseViewModel() {
     private val tag = "MapViewModel"
@@ -56,26 +54,24 @@ class MapViewModel(
 
     fun requestPosts() {
         viewModelScope.launch {
-            loadAccessTokenUseCase().let {
-                requestPostsUseCase(it).let { postsResponse ->
-                    Log.e(tag, "requestPosts FINISH")
-                    if (postsResponse.status == 200) {
-                        _postMarkers.value = postsResponse.posts.map { post ->
-                            PostMarker(
-                                post.id,
-                                post.coordinate,
-                                post.imageUrls,
-                                post.address,
-                                post.emotion,
-                                post.memo
-                            )
-                        }
-
-                        _postLoadYN.value = true
-
-                    } else {
-                        showToast("Error : ${postsResponse.errorMessage}")
+            requestPostsUseCase().let { postsResponse ->
+                Log.e(tag, "requestPosts FINISH")
+                if (postsResponse.status == 200) {
+                    _postMarkers.value = postsResponse.posts.map { post ->
+                        PostMarker(
+                            post.id,
+                            post.coordinate,
+                            post.imageUrls,
+                            post.address,
+                            post.emotion,
+                            post.memo
+                        )
                     }
+
+                    _postLoadYN.value = true
+
+                } else {
+                    showToast("Error : ${postsResponse.errorMessage}")
                 }
             }
         }
