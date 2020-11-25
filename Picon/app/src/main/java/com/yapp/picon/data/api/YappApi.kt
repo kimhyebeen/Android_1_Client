@@ -2,7 +2,6 @@ package com.yapp.picon.data.api
 
 import com.yapp.picon.data.model.*
 import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface YappApi {
@@ -24,14 +23,14 @@ interface YappApi {
     suspend fun uploadImage(
         @Header("AccessToken") accessToken: String,
         @Part parts: List<MultipartBody.Part>
-    ): ResponseBody
+    ): List<String>
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @POST("/display/post")
     suspend fun createPost(
         @Header("AccessToken") accessToken: String,
         @Body postRequest: PostRequest
-    ): ResponseBody
+    ): PostResponse
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @GET("display/post/")

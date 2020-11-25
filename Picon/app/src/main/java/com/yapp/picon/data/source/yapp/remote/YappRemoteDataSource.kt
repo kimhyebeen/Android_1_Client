@@ -4,7 +4,6 @@ import com.yapp.picon.data.api.YappApi
 import com.yapp.picon.data.model.*
 import com.yapp.picon.data.source.yapp.YappDataSource
 import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 
 class YappRemoteDataSource(
     private val retrofitService: YappApi
@@ -18,10 +17,10 @@ class YappRemoteDataSource(
     override suspend fun uploadImage(
         accessToken: String,
         parts: List<MultipartBody.Part>
-    ): ResponseBody =
+    ): List<String> =
         retrofitService.uploadImage(accessToken, parts)
 
-    override suspend fun createPost(accessToken: String, postRequest: PostRequest): ResponseBody =
+    override suspend fun createPost(accessToken: String, postRequest: PostRequest): PostResponse =
         retrofitService.createPost(accessToken, postRequest)
 
     override suspend fun requestPosts(accessToken: String): PostsResponse =
