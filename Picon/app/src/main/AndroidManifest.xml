@@ -21,8 +21,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
 
-        <activity android:name="com.yapp.picon.presentation.map.MapActivity">
+        <activity android:name=".presentation.splash.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <activity android:name="com.yapp.picon.presentation.map.MapActivity" />
 
         <activity
             android:name=".presentation.nav.NavActivity"
@@ -34,13 +41,7 @@
 
         <activity android:name=".presentation.post.PostActivity" />
 
-        <activity android:name=".presentation.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".presentation.login.LoginActivity" />
 
         <activity android:name=".presentation.simplejoin.SimpleJoinActivity" />
 
