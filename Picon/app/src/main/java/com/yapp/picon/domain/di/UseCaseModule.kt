@@ -46,4 +46,7 @@ val useCaseModule = module {
     single {
         SaveFirstUseCase(get())
     }
+    single {
+        GetRevGeoUseCase(get())
+    }
 }
