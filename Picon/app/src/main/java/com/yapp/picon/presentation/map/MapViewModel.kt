@@ -1,94 +1,88 @@
 package com.yapp.picon.presentation.map
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.data.model.Address
-import com.yapp.picon.data.model.Coordinate
-import com.yapp.picon.data.model.Post
-import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
+import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.PostMarker
 import kotlinx.coroutines.launch
 
-class MapViewModel : BaseViewModel() {
-    private val _isButtonShown = MutableLiveData<Boolean>()
-    val isButtonShown: LiveData<Boolean> get() = _isButtonShown
+class MapViewModel(
+    private val loadAccessTokenUseCase: LoadAccessTokenUseCase,
+    private val requestPostsUseCase: RequestPostsUseCase
+) : BaseViewModel() {
+    private val tag = "MapViewModel"
+
+    private val _showBtnYN = MutableLiveData<Boolean>()
+    val showBtnYN: LiveData<Boolean> get() = _showBtnYN
 
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> get() = _toastMsg
 
-    private val _isShownPostForm = MutableLiveData<Boolean>()
-    val isShownPostForm: LiveData<Boolean> get() = _isShownPostForm
+    private val _showPinYN = MutableLiveData<Boolean>()
+    val showPinYN: LiveData<Boolean> get() = _showPinYN
 
-    private val _isShownPostFormBtn = MutableLiveData<Boolean>()
-    val isShownPostFormBtn: LiveData<Boolean> get() = _isShownPostFormBtn
+    private val _postMarkers = MutableLiveData<List<PostMarker>>()
+    val postMarkers: LiveData<List<PostMarker>> get() = _postMarkers
+
+    private val _postLoadYN = MutableLiveData<Boolean>()
+    val postLoadYN: LiveData<Boolean> get() = _postLoadYN
 
     init {
-        _isButtonShown.value = false
-        _isShownPostForm.value = false
-        _isShownPostFormBtn.value = false
+        _showBtnYN.value = false
+        _showPinYN.value = false
+        _postMarkers.value = mutableListOf()
+        _postLoadYN.value = false
     }
 
     private fun showToast(msg: String) {
         _toastMsg.value = msg
     }
 
-    fun toggleButtonShown() {
-        _isButtonShown.value = _isButtonShown.value?.let {
+    fun toggleShowBtnYN() {
+        _showBtnYN.value = _showBtnYN.value?.let {
             !it
         }
     }
 
-    fun toggleShowPostForm() {
-        _isShownPostForm.value = _isShownPostForm.value?.let {
+    fun toggleShowPinYN() {
+        _showPinYN.value = _showPinYN.value?.let {
             !it
         }
     }
 
-    fun toggleShowPostFormBtn() {
-        _isShownPostFormBtn.value = _isShownPostFormBtn.value?.let {
-            !it
-        }
-    }
-
-    fun requestPost() {
+    fun requestPosts() {
         viewModelScope.launch {
-            try {
-                NetworkModule.yappApi.requestPost("1").let {
-                    showToast("감정 : ${it.emotion} 메모 : ${it.memo}")
+            loadAccessTokenUseCase().let {
+                requestPostsUseCase(it).let { postsResponse ->
+                    Log.e(tag, "requestPosts FINISH")
+                    if (postsResponse.status == 200) {
+                        _postMarkers.value = postsResponse.posts.map { post ->
+                            PostMarker(
+                                post.id,
+                                post.coordinate,
+                                post.imageUrls,
+                                post.address,
+                                post.emotion,
+                                post.memo
+                            )
+                        }
+
+                        _postLoadYN.value = true
+
+                    } else {
+                        showToast("Error : ${postsResponse.errorMessage}")
+                    }
                 }
-            } catch (e: Exception) {
-                showToast("통신 오류")
             }
         }
     }
 
-    fun createPost() {
-        viewModelScope.launch {
-            try {
-                NetworkModule.yappApi.createPost(
-                    Post(
-                        10,
-                        Coordinate(
-                            1.5,
-                            1.5
-                        ),
-                        Address(
-                            "null",
-                            "null",
-                            "null",
-                            "null"
-                        ),
-                        "1",
-                        "1",
-                        null
-                    )
-                ).let {
-                    showToast(it.toString())
-                }
-            } catch (e: Exception) {
-                showToast("통신 오류")
-            }
-        }
+    fun completeLoadPost() {
+        _postLoadYN.value = false
     }
+
 }

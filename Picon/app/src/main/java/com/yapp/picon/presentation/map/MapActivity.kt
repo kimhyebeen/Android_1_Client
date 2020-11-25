@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
@@ -13,6 +12,7 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.Tm128
+import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.overlay.Marker
@@ -23,10 +23,16 @@ import com.yapp.picon.databinding.MapActivityBinding
 import com.yapp.picon.helper.LocationHelper
 import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
+import com.yapp.picon.presentation.model.PostMarker
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
 import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.search.SearchActivity
+import com.yapp.picon.presentation.util.NaverCamera
+import com.yapp.picon.presentation.util.clusterMarker
+import com.yapp.picon.presentation.util.pinMarker
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ted.gun0912.clustering.naver.TedNaverClustering
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
@@ -34,7 +40,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.id.map_frame
 ), NavigationView.OnNavigationItemSelectedListener {
 
-    override val vm: MapViewModel by viewModels()
+    override val vm: MapViewModel by viewModel()
 
     private lateinit var naverMap: NaverMap
 
@@ -62,8 +68,15 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         val toastMsgObserver = Observer<String> {
             showToast(it)
         }
-
         vm.toastMsg.observe(this, toastMsgObserver)
+
+        val loadPostYNObserver = Observer<Boolean> {
+            if (it) {
+                showMarkers()
+                vm.completeLoadPost()
+            }
+        }
+        vm.postLoadYN.observe(this, loadPostYNObserver)
     }
 
     private fun setToolBar() {
@@ -77,31 +90,22 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         binding.mapIbMenu.setOnClickListener { binding.mapDrawerLayout.openDrawer(GravityCompat.START) }
 
         binding.mapIbSearch.setOnClickListener {
-            vm.toggleButtonShown()
+            vm.toggleShowBtnYN()
             startSearchActivity()
         }
 
         binding.mapIbAdd.setOnClickListener {
-            vm.toggleShowPostForm()
+            vm.toggleShowBtnYN()
+            vm.toggleShowPinYN()
         }
 
-        binding.mapIbPostForm.setOnClickListener {
-            vm.toggleButtonShown()
-            vm.toggleShowPostFormBtn()
-        }
-
-        binding.mapTvPostFormTempSave.setOnClickListener {
-            //todo 위도 경우 만 전송
-        }
-
-        binding.mapTvPostFormAddPicture.setOnClickListener {
+        binding.mapIbPostPin.setOnClickListener {
             checkStoragePermission()
         }
 
         binding.mapIbPinClose.setOnClickListener {
-            vm.toggleShowPostFormBtn()
-            vm.toggleShowPostForm()
-            vm.toggleButtonShown()
+            vm.toggleShowPinYN()
+            vm.toggleShowBtnYN()
         }
 
         binding.mapIbCurrentLocation.setOnClickListener {
@@ -111,7 +115,11 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     private fun setCurrentLocation() {
         LocationHelper(this).requestLocationPermissions()?.let {
-            val cameraUpdate = CameraUpdate.scrollTo(LatLng(it.latitude, it.longitude))
+            val cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                LatLng(it.latitude, it.longitude),
+                NaverCamera.defaultZoom
+            )
+                .animate(CameraAnimation.Fly, NaverCamera.defaultAnimateTime)
             naverMap.moveCamera(cameraUpdate)
 
             currentLocationMarker.map = null
@@ -187,6 +195,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             uiSettings.isZoomGesturesEnabled = true
 
             lightness = -0.5f
+            cameraPosition = NaverCamera.startPosition
         }
     }
 
@@ -194,24 +203,21 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         this.naverMap = naverMap
 
         this.naverMap.setOnMapClickListener { _, _ ->
-            vm.isShownPostForm.value?.let { isShownPostForm ->
-                vm.isShownPostFormBtn.value?.let { isShownPostFormBtn ->
-                    if (!(isShownPostForm or isShownPostFormBtn)) {
-                        vm.toggleButtonShown()
-                    }
-                }
+            vm.showBtnYN.value?.let {
+                vm.toggleShowBtnYN()
             }
         }
 
-        settingOptionToMap()
-    }
+        /* 카메라 로깅
+        this.naverMap.addOnCameraChangeListener { reason, animated ->
+            Log.e("NaverMap", "카메라 변경 - reson: $reason, animated: $animated")
+            Log.e("NaverMap", "카메라 : ${this.naverMap.cameraPosition}")
+        }
+         */
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        settingOptionToMap()
+
+        vm.requestPosts()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -220,13 +226,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 RequestCodeSet.SEARCH_REQUEST_CODE.code -> {
-                    vm.toggleButtonShown()
+                    vm.toggleShowBtnYN()
                     data?.let {
                         val mapX = it.getDoubleExtra("mapX", 0.0)
                         val mapY = it.getDoubleExtra("mapY", 0.0)
                         val tm128 = Tm128(mapX, mapY)
                         val latLng = tm128.toLatLng()
-                        val cameraUpdate = CameraUpdate.scrollTo(latLng)
+                        val cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                            latLng,
+                            NaverCamera.defaultZoom
+                        ).animate(CameraAnimation.Fly, NaverCamera.defaultAnimateTime)
                         naverMap.moveCamera(cameraUpdate)
                     }
                 }
@@ -239,20 +248,36 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             binding.mapDrawerLayout.closeDrawer(GravityCompat.START)
             return
         }
-        vm.isShownPostFormBtn.value?.let {
+        vm.showPinYN.value?.let {
             if (it) {
-                vm.toggleButtonShown()
-                vm.toggleShowPostFormBtn()
-                return@onBackPressed
-            }
-        }
-        vm.isShownPostForm.value?.let {
-            if (it) {
-                vm.toggleShowPostForm()
+                vm.toggleShowPinYN()
+                vm.toggleShowBtnYN()
                 return@onBackPressed
             }
         }
         super.onBackPressed()
     }
 
+    //todo 디자인 수정 필요
+    private fun showMarkers() {
+        vm.postMarkers.value?.let { postMarkers ->
+            TedNaverClustering.with<PostMarker>(this, naverMap)
+                .customMarker { clusterItem ->
+                    pinMarker(
+                        clusterItem.position,
+                        this@MapActivity,
+                        clusterItem.imageUrls?.get(0),
+                        clusterItem.emotion
+                    )
+                }.customCluster {
+                    clusterMarker(
+                        this@MapActivity,
+                        it.items.random(),
+                        it.items.size
+                    )
+                }
+                .items(postMarkers)
+                .make()
+        }
+    }
 }
