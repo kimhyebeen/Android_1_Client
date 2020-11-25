@@ -48,7 +48,8 @@
     <string name="search_recently_search">최근 검색</string>
 
     <string name="post_this_emotion">이 곳의 감정</string>
-    <string name="post_et_hint">(선택) 메모를 작성해주세요.</string>
+    <string name="post_et_memo_hint">(선택) 메모를 작성해주세요.</string>
+    <string name="post_et_address_hint">(필수) 주소를 불러올 수 없습니다. 작성해주세요.</string>
 
     <string name="login_picon_start">PiCON 시작하기</string>
     <string name="login_sns_login">SNS계정으로 로그인하기</string>
