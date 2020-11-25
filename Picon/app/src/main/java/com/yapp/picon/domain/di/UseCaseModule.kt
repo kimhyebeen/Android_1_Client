@@ -32,10 +32,10 @@ val useCaseModule = module {
         LogoutUseCase(get())
     }
     single {
-        UploadImageUseCase(get())
+        UploadImageUseCase(get(), get())
     }
     single {
-        CreatePostUseCase(get())
+        CreatePostUseCase(get(), get())
     }
     single {
         RequestPostsUseCase(get(), get())
