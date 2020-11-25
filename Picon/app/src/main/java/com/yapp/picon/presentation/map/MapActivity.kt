@@ -164,6 +164,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         val intent = Intent(this@MapActivity, PostActivity::class.java)
         intent.putExtra("lat", naverMap.cameraPosition.target.latitude)
         intent.putExtra("lng", naverMap.cameraPosition.target.longitude)
+        intent.putExtra("address", vm.address.value)
 
         startActivityForResult(
             intent,
@@ -214,6 +215,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             Log.e("NaverMap", "카메라 : ${this.naverMap.cameraPosition}")
         }
          */
+
+        this.naverMap.addOnCameraIdleListener {
+            vm.showPinYN.value?.let {
+                if (it) {
+                    this.naverMap.cameraPosition.target.run {
+                        vm.setAddress(latitude, longitude)
+                    }
+                }
+            }
+        }
 
         settingOptionToMap()
 

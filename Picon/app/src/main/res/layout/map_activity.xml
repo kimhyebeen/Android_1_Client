@@ -49,9 +49,9 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
+                    android:contentDescription="@string/image_description"
                     android:padding="18dp"
-                    android:src="@drawable/ic_map_menu"
-                    android:contentDescription="@string/image_description" />
+                    android:src="@drawable/ic_map_menu" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -74,12 +74,12 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/image_description"
                 android:padding="18dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_map_search"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/image_description" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/map_ib_current_location"
@@ -87,12 +87,12 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/image_description"
                 android:padding="18dp"
                 android:src="@drawable/ic_map_location"
                 app:layout_constraintBottom_toTopOf="@id/map_ib_add"
                 app:layout_constraintEnd_toEndOf="@id/map_ib_add"
-                app:layout_constraintStart_toStartOf="@id/map_ib_add"
-                android:contentDescription="@string/image_description" />
+                app:layout_constraintStart_toStartOf="@id/map_ib_add" />
 
             <ImageButton
                 android:id="@+id/map_ib_add"
@@ -102,14 +102,14 @@
                 android:layout_marginEnd="18dp"
                 android:layout_marginBottom="20dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/image_description"
                 android:src="@drawable/ic_map_add"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:contentDescription="@string/image_description" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/map_tv_post_form_address"
-                visibleOrInvisible="@{mapVM.showPinYN}"
+                visibleOrInvisible="@{mapVM.showPinYN &amp;&amp; mapVM.showAddressYN}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
@@ -118,7 +118,7 @@
                 android:paddingTop="6dp"
                 android:paddingEnd="14dp"
                 android:paddingBottom="6dp"
-                android:text="서울특별시청"
+                android:text="@={mapVM.address}"
                 android:textColor="@color/pale_grey"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/map_ib_post_pin"

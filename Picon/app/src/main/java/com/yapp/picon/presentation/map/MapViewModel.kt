@@ -4,13 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.yapp.picon.domain.usecase.GetRevGeoUseCase
 import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.PostMarker
 import kotlinx.coroutines.launch
 
 class MapViewModel(
-    private val requestPostsUseCase: RequestPostsUseCase
+    private val requestPostsUseCase: RequestPostsUseCase,
+    private val getRevGeoUseCase: GetRevGeoUseCase
 ) : BaseViewModel() {
     private val tag = "MapViewModel"
 
@@ -29,11 +31,17 @@ class MapViewModel(
     private val _postLoadYN = MutableLiveData<Boolean>()
     val postLoadYN: LiveData<Boolean> get() = _postLoadYN
 
+    private val _showAddressYN = MutableLiveData<Boolean>()
+    val showAddressYN: LiveData<Boolean> get() = _showAddressYN
+
+    var address = MutableLiveData<String>()
+
     init {
         _showBtnYN.value = false
         _showPinYN.value = false
         _postMarkers.value = mutableListOf()
         _postLoadYN.value = false
+        _showAddressYN.value = false
     }
 
     private fun showToast(msg: String) {
@@ -81,4 +89,33 @@ class MapViewModel(
         _postLoadYN.value = false
     }
 
+    fun setAddress(lat: Double, lng: Double) {
+        viewModelScope.launch {
+            val coords = "$lng,$lat"
+
+            try {
+                getRevGeoUseCase(coords).let {
+                    // RevGeoResult 객체 사용 (RevGeoResult 객체가 반환됩니다.)
+                    Log.e(tag, it.toString())
+
+                    if (it.status.code == 0) {
+                        val area1 = it.results[0].region.area1.name
+                        val area2 = it.results[0].region.area2.name
+                        val area3 = it.results[0].region.area3.name
+                        val area4 = it.results[0].region.area4.name
+                        val addressText = "$area1 $area2 $area3 $area4"
+                        _showAddressYN.value = true
+                        address.value = addressText
+                    } else {
+                        _showAddressYN.value = false
+                        address.value = ""
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "Reverse Geo Error - ${e.message}")
+                _showAddressYN.value = false
+                address.value = ""
+            }
+        }
+    }
 }
