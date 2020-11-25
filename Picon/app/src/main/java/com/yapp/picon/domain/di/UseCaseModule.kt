@@ -40,4 +40,10 @@ val useCaseModule = module {
     single {
         RequestPostsUseCase(get())
     }
+    single {
+        LoadFirstUseCase(get())
+    }
+    single {
+        SaveFirstUseCase(get())
+    }
 }
