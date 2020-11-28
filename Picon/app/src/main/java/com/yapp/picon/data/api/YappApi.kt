@@ -1,12 +1,7 @@
 package com.yapp.picon.data.api
 
-import com.yapp.picon.data.model.Post
-import com.yapp.picon.data.model.Statistics
-import com.yapp.picon.data.model.UserResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import com.yapp.picon.data.model.*
+import retrofit2.http.*
 
 interface YappApi {
 
