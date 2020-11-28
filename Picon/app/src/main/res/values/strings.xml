@@ -32,13 +32,9 @@
     <string name="nav_statistic_place_title">장소 Top5</string>
     <string name="nav_statistic_pin">핀</string>
     <string name="nav_statistic_place">서울 강남구</string>
-    <string name="nav_statistic_month_title_4">2020년 4월</string>
-    <string name="nav_statistic_month_title_5">2020년 5월</string>
-    <string name="nav_statistic_month_title_6">2020년 6월</string>
-    <string name="nav_statistic_month_title_7">2020년 7월</string>
-    <string name="nav_statistic_month_title_8">2020년 8월</string>
-    <string name="nav_statistic_month_title_9">2020년 9월</string>
-
+    
+    <string name="dialog_remove_all_data_title">데이터를 모두 삭제하시겠습니까?</string>
+    <string name="dialog_remove_all_data_description">핀이 모두 삭제되며 되돌릴 수 없습니다</string>
     <string name="dialog_custom_emotion_title">색상에 어울리는 감정을 정해주세요.</string>
     <string name="dialog_custom_finish_title">변경된 내용을 저장하지 않겠습니까?</string>
 
