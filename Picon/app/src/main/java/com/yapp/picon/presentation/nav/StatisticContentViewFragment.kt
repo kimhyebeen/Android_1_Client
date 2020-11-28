@@ -11,6 +11,7 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.NavStatisticContentViewBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.nav.adapter.EmotionGraphAdapter
+import com.yapp.picon.presentation.nav.adapter.EmotionGridAdapter
 import com.yapp.picon.presentation.nav.adapter.EmotionTextAdapter
 import com.yapp.picon.presentation.nav.adapter.PlaceGraphAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
@@ -23,6 +24,7 @@ class StatisticContentViewFragment(
     private lateinit var placeAdapter: PlaceGraphAdapter
     private lateinit var emotionAdapter: EmotionGraphAdapter
     private lateinit var emotionTextAdapter: EmotionTextAdapter
+    private lateinit var emotionGridAdapter: EmotionGridAdapter
     private lateinit var colorList: List<String>
     private val emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
@@ -51,6 +53,7 @@ class StatisticContentViewFragment(
         setEmotionAdapter()
         setPlaceAdapter()
         setEmotionTextAdapter()
+        setEmotionGridAdapter()
         observeGraphData()
     }
 
@@ -92,6 +95,13 @@ class StatisticContentViewFragment(
         }
     }
 
+    private fun setEmotionGridAdapter() {
+        emotionGridAdapter = EmotionGridAdapter()
+        binding.navStatisticEmotionGrid.apply {
+            adapter = emotionGridAdapter
+        }
+    }
+
     @SuppressLint("SetTextI18n")
     private fun observeGraphData() {
         vm.statisticRepository.placeList.observe(this, {
@@ -115,6 +125,8 @@ class StatisticContentViewFragment(
         }
 
         emotionDatabaseRepository.getAll().observe(this, {
+            emotionGridAdapter.setItems(it)
+
             it.map { item ->
                 item.emotion
             }.let { list ->
