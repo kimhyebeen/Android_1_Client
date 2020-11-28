@@ -32,10 +32,10 @@ class NavViewModel: BaseViewModel() {
         _finishFlag.value = false
     }
 
-    fun requestUserInfo() {
+    fun requestUserInfo(token: String) {
         viewModelScope.launch {
             try {
-                NetworkModule.yappApi.requestUserInfo().let {
+                NetworkModule.yappApi.requestUserInfo(token).let {
                     val date = it.member.createdDate.split('.')
                     statisticRepository.setSignUpDate(date[0].toInt(), date[1].toInt())
                 }
@@ -46,10 +46,10 @@ class NavViewModel: BaseViewModel() {
         }
     }
 
-    fun requestStatistic(year: Int, month: Int) {
+    fun requestStatistic(token: String, year: Int, month: Int) {
         viewModelScope.launch {
             try {
-                NetworkModule.yappApi.requestStatistics(year.toString(), month.toString()).let { statistic ->
+                NetworkModule.yappApi.requestStatistics(token, year.toString(), month.toString()).let { statistic ->
                     setEmotionGraphList(statistic)
                     setPlaceGraphList(statistic)
                     statisticRepository.setTotalPin(statistic.emotionTotal)
@@ -70,10 +70,8 @@ class NavViewModel: BaseViewModel() {
                 StatisticEmotionGraphItem("abc", 0)
             }
 
-            // todo - 데이터베이스에서 감정이름 얻어와서 emotionList[getColorIndex(it.emotion)].color에 넣어주기
-
             statistic.emotionCounts.map {
-                emotionList[getColorIndex(it.emotion)].color = it.emotion // todo - 데이터베이스 작업 이후 삭제
+                emotionList[getColorIndex(it.emotion)].color = it.emotion
                 emotionList[getColorIndex(it.emotion)].count = it.count
             }
 
