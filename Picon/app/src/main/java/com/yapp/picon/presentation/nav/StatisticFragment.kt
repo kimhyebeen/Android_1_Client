@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.nav
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -23,7 +24,9 @@ import com.yapp.picon.presentation.nav.adapter.MonthListAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
+class StatisticFragment(
+    private val application: Application
+): BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
     R.layout.nav_statistic_fragment
 ) {
     private lateinit var transaction: FragmentTransaction
@@ -57,7 +60,7 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
     override fun onStart() {
         super.onStart()
         transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment()).addToBackStack(
+        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment(application)).addToBackStack(
             null
         ).commit()
 
