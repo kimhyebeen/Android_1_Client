@@ -17,7 +17,7 @@
             android:id="@+id/emotion_graph_view"
             android:layout_width="0dp"
             android:layout_height="14dp"
-            android:layout_marginEnd="48dp"
+            android:layout_marginEnd="29dp"
             app:layout_constraintBottom_toBottomOf="@+id/emotion_graph_count_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
