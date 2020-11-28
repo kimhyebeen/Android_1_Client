@@ -5,13 +5,14 @@ import android.app.Application
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.NavStatisticContentViewBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.nav.adapter.EmotionGraphAdapter
-import com.yapp.picon.presentation.nav.adapter.EmotionGridAdapter
+import com.yapp.picon.presentation.nav.adapter.EmotionViewAdapter
 import com.yapp.picon.presentation.nav.adapter.EmotionTextAdapter
 import com.yapp.picon.presentation.nav.adapter.PlaceGraphAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
@@ -24,7 +25,7 @@ class StatisticContentViewFragment(
     private lateinit var placeAdapter: PlaceGraphAdapter
     private lateinit var emotionAdapter: EmotionGraphAdapter
     private lateinit var emotionTextAdapter: EmotionTextAdapter
-    private lateinit var emotionGridAdapter: EmotionGridAdapter
+    private lateinit var emotionViewAdapter: EmotionViewAdapter
     private lateinit var colorList: List<String>
     private val emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
@@ -53,7 +54,8 @@ class StatisticContentViewFragment(
         setEmotionAdapter()
         setPlaceAdapter()
         setEmotionTextAdapter()
-        setEmotionGridAdapter()
+        setEmotionViewAdapter()
+
         observeGraphData()
     }
 
@@ -95,10 +97,15 @@ class StatisticContentViewFragment(
         }
     }
 
-    private fun setEmotionGridAdapter() {
-        emotionGridAdapter = EmotionGridAdapter()
-        binding.navStatisticEmotionGrid.apply {
-            adapter = emotionGridAdapter
+    private fun setEmotionViewAdapter() {
+        emotionViewAdapter = EmotionViewAdapter(
+            R.layout.statistic_emotion_view_item,
+            BR.emoItem
+        )
+        binding.navStatisticEmotionRv.apply {
+            adapter = emotionViewAdapter
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true)
         }
     }
 
@@ -125,7 +132,8 @@ class StatisticContentViewFragment(
         }
 
         emotionDatabaseRepository.getAll().observe(this, {
-            emotionGridAdapter.setItems(it)
+            emotionViewAdapter.setItems(it)
+            emotionViewAdapter.notifyDataSetChanged()
 
             it.map { item ->
                 item.emotion
