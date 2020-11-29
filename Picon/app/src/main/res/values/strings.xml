@@ -22,7 +22,7 @@
     <string name="nav_setting_dialog_withdrawal_title">정말로 탈퇴하시겠습니까?</string>
     <string name="nav_setting_dialog_withdrawal_content">계정의 모든 데이터가 삭제되며 되돌릴 수 없습니다.</string>
 
-    <string name="nav_custom_title">감정 커스텀하기</string>
+    <string name="nav_custom_title">감정 커스텀</string>
     <string name="nav_custom_save">저장</string>
     <string name="nav_custom_text_soft_blue">새벽 3시</string>
     <string name="nav_custom_text_cornflower">구름없는 하늘</string>
@@ -58,7 +58,6 @@
     <string name="simple_join_input_nic">닉네임 입력</string>
 
     <string name="X">X</string>
-    <string name="edit">편집</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
     <string name="withdrawal">탈퇴</string>
