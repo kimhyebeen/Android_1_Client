@@ -66,9 +66,9 @@
                 android:layout_marginTop="1dp"
                 android:layout_marginEnd="6dp"
                 android:paddingStart="12dp"
-                android:paddingTop="20dp"
+                android:paddingTop="16dp"
                 android:paddingEnd="12dp"
-                android:paddingBottom="4dp"
+                android:paddingBottom="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/nav_head_emotion_button"
                 app:layout_constraintTop_toBottomOf="@+id/nav_head_alarm_image"
                 app:srcCompat="@drawable/ic_editname_1" />
@@ -78,15 +78,15 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="66dp"
                 android:gravity="bottom"
-                android:paddingBottom="7dp"
+                android:paddingBottom="8dp"
                 android:text="@string/nav_custom_title"
                 android:textColor="@color/cornflower"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nav_head_circle_user_image" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
