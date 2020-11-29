@@ -60,23 +60,23 @@
             android:id="@+id/my_profile_user_image"
             android:layout_width="74dp"
             android:layout_height="74dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/my_profile_tool_bar"
-            app:srcCompat="@drawable/ic_custom_circle_very_light_brown" />
+            app:srcCompat="@drawable/profile_pic" />
 
         <ImageView
             android:id="@+id/my_profile_user_image_edit"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="42dp"
-            android:layout_marginTop="39dp"
-            android:padding="10dp"
+            android:layout_marginStart="49dp"
+            android:layout_marginTop="35dp"
             android:onClick="@{profileVM::clickChangeProfileImageButton}"
+            android:padding="9dp"
             app:layout_constraintStart_toStartOf="@+id/my_profile_user_image"
             app:layout_constraintTop_toTopOf="@+id/my_profile_user_image"
-            app:srcCompat="@drawable/ic_custom_circle_cornflower" />
+            app:srcCompat="@drawable/ic_camera" />
 
         <View
             android:id="@+id/divider"
@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{profileVM.following.toString()}"
-            android:textColor="@color/brown_grey"
+            android:textColor="@color/pale_grey"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/my_profile_following_text"
             app:layout_constraintStart_toEndOf="@+id/my_profile_following_text"
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{profileVM.follower.toString()}"
-            android:textColor="@color/brown_grey"
+            android:textColor="@color/pale_grey"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/my_profile_follower_text"
             app:layout_constraintStart_toEndOf="@+id/my_profile_follower_text"
