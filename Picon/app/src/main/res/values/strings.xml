@@ -8,6 +8,9 @@
     <string name="map_menu_setting">설정</string>
     <string name="map_post_form_info">지도를 움직여 위치를 설정해주세요</string>
 
+    <string name="my_profile_follower">팔로워</string>
+    <string name="my_profile_following">팔로잉</string>
+
     <string name="nav_setting_about">About PiCON</string>
     <string name="nav_setting_app_info">버전 정보</string>
     <string name="nav_setting_app_version">v 1.0.0</string>
@@ -19,7 +22,7 @@
     <string name="nav_setting_dialog_withdrawal_title">정말로 탈퇴하시겠습니까?</string>
     <string name="nav_setting_dialog_withdrawal_content">계정의 모든 데이터가 삭제되며 되돌릴 수 없습니다.</string>
 
-    <string name="nav_custom_title">감정 커스텀하기</string>
+    <string name="nav_custom_title">감정 커스텀</string>
     <string name="nav_custom_save">저장</string>
     <string name="nav_custom_text_soft_blue">새벽 3시</string>
     <string name="nav_custom_text_cornflower">구름없는 하늘</string>

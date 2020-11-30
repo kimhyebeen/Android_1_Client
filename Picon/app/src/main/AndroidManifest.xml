@@ -50,6 +50,8 @@
 
         <activity android:name=".presentation.simplejoin.SimpleJoinActivity" />
 
+        <activity android:name=".presentation.profile.MyProfileActivity" />
+
     </application>
 
 </manifest>
