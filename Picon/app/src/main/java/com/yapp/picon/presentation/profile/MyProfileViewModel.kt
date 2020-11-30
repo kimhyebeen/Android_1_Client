@@ -1,12 +1,17 @@
 package com.yapp.picon.presentation.profile
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.presentation.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 class MyProfileViewModel: BaseViewModel() {
     private val _backButton = MutableLiveData<Boolean>()
+    private val _profileImageUrl = MutableLiveData<String>()
     private val _changeProfileImageButton = MutableLiveData<Boolean>()
     private val _myProfileTitle = MutableLiveData<String>()
     private val _following = MutableLiveData<Int>()
@@ -21,6 +26,7 @@ class MyProfileViewModel: BaseViewModel() {
     }
 
     val backButton: LiveData<Boolean> = _backButton
+    val profileImageUrl: LiveData<String> = _profileImageUrl
     val changeProfileImageButton: LiveData<Boolean> = _changeProfileImageButton
     val myProfileTitle: LiveData<String> = _myProfileTitle
     val following: LiveData<Int> = _following
@@ -28,7 +34,21 @@ class MyProfileViewModel: BaseViewModel() {
 
     fun initFlags() {
         _backButton.value = false
+        _profileImageUrl.value = ""
         _changeProfileImageButton.value = false
+    }
+
+    fun requestUserInfo(token: String) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestUserInfo(token).let {
+                    _myProfileTitle.value = it.member.nickName
+                    _profileImageUrl.value = it.member.profileImageUrl
+                }
+            } catch (e: Exception) {
+                Log.e("MyProfileViewModel", "requestUserInfo Error - ${e.message}")
+            }
+        }
     }
 
     fun clickBackButton(view: View) {
