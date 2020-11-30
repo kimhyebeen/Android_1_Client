@@ -40,6 +40,9 @@ import com.yapp.picon.presentation.util.pinMarker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ted.gun0912.clustering.naver.TedNaverClustering
 import kotlinx.android.synthetic.main.map_nav_head.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
@@ -177,7 +180,21 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             origin.map { list.add(it) }
             headerEmotionAdapter.setItems(list)
             headerEmotionAdapter.notifyDataSetChanged()
+
+            if (origin.isEmpty()) {
+                initDatabase()
+            }
         })
+    }
+
+    private fun initDatabase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            emotionDatabaseRepository.insert(EmotionEntity(1, "SOFT_BLUE", "새벽 3시"))
+            emotionDatabaseRepository.insert(EmotionEntity(2, "CORN_FLOWER", "구름없는 하늘"))
+            emotionDatabaseRepository.insert(EmotionEntity(3, "BLUE_GRAY", "아침 이슬"))
+            emotionDatabaseRepository.insert(EmotionEntity(4, "VERY_LIGHT_BROWN", "창문 너머 노을"))
+            emotionDatabaseRepository.insert(EmotionEntity(5, "WARM_GRAY", "잔잔한 밤"))
+        }
     }
 
     private fun setCurrentLocation() {
