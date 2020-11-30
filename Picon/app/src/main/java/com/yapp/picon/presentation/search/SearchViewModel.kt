@@ -55,8 +55,8 @@ class SearchViewModel(
                 )
             }.run {
                 when {
-                    size > 3 -> {
-                        _items.value = subList(size - 3, size).reversed()
+                    size > 5 -> {
+                        _items.value = subList(size - 5, size).reversed()
                     }
                     size == 0 -> {
                         _isRecentlySearched.value = false

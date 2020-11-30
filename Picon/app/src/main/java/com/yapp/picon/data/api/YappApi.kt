@@ -1,6 +1,7 @@
 package com.yapp.picon.data.api
 
 import com.yapp.picon.data.model.*
+import okhttp3.MultipartBody
 import retrofit2.http.*
 
 interface YappApi {
@@ -17,15 +18,25 @@ interface YappApi {
         @Body loginRequest: LoginRequest
     ): LoginResponse
 
-    @GET("displays/post/{id}")
-    suspend fun requestPost(
-        @Path("id") id: String
-    ): Post
+    @Multipart
+    @POST("display/post/images")
+    suspend fun uploadImage(
+        @Header("AccessToken") accessToken: String,
+        @Part parts: List<MultipartBody.Part>
+    ): List<String>
 
-    @POST("displays/post")
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST("/display/post")
     suspend fun createPost(
-        @Body post: Post
-    ): Post
+        @Header("AccessToken") accessToken: String,
+        @Body postRequest: PostRequest
+    ): PostResponse
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @GET("display/post/")
+    suspend fun requestPosts(
+        @Header("AccessToken") accessToken: String
+    ): PostsResponse
 
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(

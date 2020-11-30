@@ -100,7 +100,7 @@
             android:gravity="center"
             android:letterSpacing="-0.02"
             android:text="@string/join_membership"
-            android:textColor="@color/white"
+            android:textColor="@color/pale_grey"
             android:textSize="15sp" />
 
     </LinearLayout>

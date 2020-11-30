@@ -45,7 +45,8 @@
     <string name="search_recently_search">최근 검색</string>
 
     <string name="post_this_emotion">이 곳의 감정</string>
-    <string name="post_et_hint">(선택) 메모를 작성해주세요.</string>
+    <string name="post_et_memo_hint">(선택) 메모를 작성해주세요.</string>
+    <string name="post_et_address_hint">(필수) 주소를 불러올 수 없습니다. 작성해주세요.</string>
 
     <string name="login_picon_start">PiCON 시작하기</string>
     <string name="login_sns_login">SNS계정으로 로그인하기</string>
@@ -56,6 +57,13 @@
     <string name="simple_join_input_pw">비밀번호 입력 (6 – 14자리)</string>
     <string name="simple_join_input_pw_re">비밀번호 재입력</string>
     <string name="simple_join_input_nic">닉네임 입력</string>
+
+    <string name="intro_fragment_1_title">추억을 지도 위에</string>
+    <string name="intro_fragment_1_sub">여행한 장소에 핀을 추가해서\n나만의 여행지도를 만들어보세요.</string>
+    <string name="intro_fragment_2_title">다섯가지 색상 핀</string>
+    <string name="intro_fragment_2_sub">색상의 이름을 원하는 감정으로 설정하고\n나만의 지도를 커스텀해보세요!</string>
+    <string name="intro_fragment_3_title">PiCON의 100% 활용법</string>
+    <string name="intro_fragment_3_sub">사진을 필터링해서 모아보고\n나만의 여행지도를 공유해보세요.</string>
 
     <string name="X">X</string>
     <string name="remove">삭제</string>

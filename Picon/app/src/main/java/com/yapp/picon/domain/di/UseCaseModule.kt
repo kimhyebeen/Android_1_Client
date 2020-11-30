@@ -28,4 +28,25 @@ val useCaseModule = module {
     single {
         LoadAccessTokenUseCase(get())
     }
+    single {
+        LogoutUseCase(get())
+    }
+    single {
+        UploadImageUseCase(get(), get())
+    }
+    single {
+        CreatePostUseCase(get(), get())
+    }
+    single {
+        RequestPostsUseCase(get(), get())
+    }
+    single {
+        LoadFirstUseCase(get())
+    }
+    single {
+        SaveFirstUseCase(get())
+    }
+    single {
+        GetRevGeoUseCase(get())
+    }
 }

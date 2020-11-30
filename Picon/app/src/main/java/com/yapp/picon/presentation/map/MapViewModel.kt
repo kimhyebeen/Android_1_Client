@@ -1,93 +1,120 @@
 package com.yapp.picon.presentation.map
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.data.model.Address
-import com.yapp.picon.data.model.Coordinate
-import com.yapp.picon.data.model.Post
-import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.GetRevGeoUseCase
+import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.PostMarker
 import kotlinx.coroutines.launch
 
-class MapViewModel : BaseViewModel() {
-    private val _isButtonShown = MutableLiveData<Boolean>()
-    val isButtonShown: LiveData<Boolean> get() = _isButtonShown
+class MapViewModel(
+    private val requestPostsUseCase: RequestPostsUseCase,
+    private val getRevGeoUseCase: GetRevGeoUseCase
+) : BaseViewModel() {
+    private val tag = "MapViewModel"
+
+    private val _showBtnYN = MutableLiveData<Boolean>()
+    val showBtnYN: LiveData<Boolean> get() = _showBtnYN
 
     private val _toastMsg = MutableLiveData<String>()
     val toastMsg: LiveData<String> get() = _toastMsg
 
-    private val _isShownPostForm = MutableLiveData<Boolean>()
-    val isShownPostForm: LiveData<Boolean> get() = _isShownPostForm
+    private val _showPinYN = MutableLiveData<Boolean>()
+    val showPinYN: LiveData<Boolean> get() = _showPinYN
 
-    private val _isShownPostFormBtn = MutableLiveData<Boolean>()
-    val isShownPostFormBtn: LiveData<Boolean> get() = _isShownPostFormBtn
+    private val _postMarkers = MutableLiveData<List<PostMarker>>()
+    val postMarkers: LiveData<List<PostMarker>> get() = _postMarkers
+
+    private val _postLoadYN = MutableLiveData<Boolean>()
+    val postLoadYN: LiveData<Boolean> get() = _postLoadYN
+
+    private val _showAddressYN = MutableLiveData<Boolean>()
+    val showAddressYN: LiveData<Boolean> get() = _showAddressYN
+
+    var address = MutableLiveData<String>()
 
     init {
-        _isButtonShown.value = false
-        _isShownPostForm.value = false
-        _isShownPostFormBtn.value = false
+        _showBtnYN.value = false
+        _showPinYN.value = false
+        _postMarkers.value = mutableListOf()
+        _postLoadYN.value = false
+        _showAddressYN.value = false
     }
 
     private fun showToast(msg: String) {
         _toastMsg.value = msg
     }
 
-    fun toggleButtonShown() {
-        _isButtonShown.value = _isButtonShown.value?.let {
+    fun toggleShowBtnYN() {
+        _showBtnYN.value = _showBtnYN.value?.let {
             !it
         }
     }
 
-    fun toggleShowPostForm() {
-        _isShownPostForm.value = _isShownPostForm.value?.let {
+    fun toggleShowPinYN() {
+        _showPinYN.value = _showPinYN.value?.let {
             !it
         }
     }
 
-    fun toggleShowPostFormBtn() {
-        _isShownPostFormBtn.value = _isShownPostFormBtn.value?.let {
-            !it
-        }
-    }
-
-    fun requestPost() {
+    fun requestPosts() {
         viewModelScope.launch {
-            try {
-                NetworkModule.yappApi.requestPost("1").let {
-                    showToast("감정 : ${it.emotion} 메모 : ${it.memo}")
+            requestPostsUseCase().let { postsResponse ->
+                Log.e(tag, "requestPosts FINISH")
+                if (postsResponse.status == 200) {
+                    _postMarkers.value = postsResponse.posts.map { post ->
+                        PostMarker(
+                            post.id,
+                            post.coordinate,
+                            post.imageUrls,
+                            post.address,
+                            post.emotion,
+                            post.memo
+                        )
+                    }
+
+                    _postLoadYN.value = true
+
+                } else {
+                    showToast("Error : ${postsResponse.errorMessage}")
                 }
-            } catch (e: Exception) {
-                showToast("통신 오류")
             }
         }
     }
 
-    fun createPost() {
+    fun completeLoadPost() {
+        _postLoadYN.value = false
+    }
+
+    fun setAddress(lat: Double, lng: Double) {
         viewModelScope.launch {
+            val coords = "$lng,$lat"
+
             try {
-                NetworkModule.yappApi.createPost(
-                    Post(
-                        10,
-                        Coordinate(
-                            1.5,
-                            1.5
-                        ),
-                        Address(
-                            "null",
-                            "null",
-                            "null",
-                            "null"
-                        ),
-                        "1",
-                        "1",
-                        null
-                    )
-                ).let {
-                    showToast(it.toString())
+                getRevGeoUseCase(coords).let {
+                    // RevGeoResult 객체 사용 (RevGeoResult 객체가 반환됩니다.)
+                    Log.e(tag, it.toString())
+
+                    if (it.status.code == 0) {
+                        val area1 = it.results[0].region.area1.name
+                        val area2 = it.results[0].region.area2.name
+                        val area3 = it.results[0].region.area3.name
+                        val area4 = it.results[0].region.area4.name
+                        val addressText = "$area1 $area2 $area3 $area4"
+                        _showAddressYN.value = true
+                        address.value = addressText
+                    } else {
+                        _showAddressYN.value = false
+                        address.value = ""
+                    }
                 }
             } catch (e: Exception) {
-                showToast("통신 오류")
+                Log.e(tag, "Reverse Geo Error - ${e.message}")
+                _showAddressYN.value = false
+                address.value = ""
             }
         }
     }

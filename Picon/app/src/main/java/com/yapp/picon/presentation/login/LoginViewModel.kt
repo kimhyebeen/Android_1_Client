@@ -8,7 +8,6 @@ import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.domain.usecase.LoginUseCase
 import com.yapp.picon.domain.usecase.SaveAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -62,7 +61,7 @@ class LoginViewModel(
 
     fun checkLogin() {
         viewModelScope.launch {
-            loadAccessTokenUseCase().collect {
+            loadAccessTokenUseCase().let {
                 if (it.isNotEmpty()) {
                     _loginYN.value = true
                     Log.e("aa12", "자동으로 로그인이 됩니다.")

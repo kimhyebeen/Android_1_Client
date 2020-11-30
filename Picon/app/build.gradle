@@ -112,4 +112,18 @@ dependencies {
     // Preferences DataStore
     // https://developer.android.com/jetpack/androidx/releases/datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha02"
+
+    // OkHttp3
+    // https://github.com/square/okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
+    // TedNaverMapClustering
+    // https://github.com/ParkSangGwon/TedNaverMapClustering
+    implementation 'gun0912.ted:tedclustering-naver:1.0.2'
+
+    // Glide Transformations
+    // https://github.com/wasabeef/glide-transformations
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
 }

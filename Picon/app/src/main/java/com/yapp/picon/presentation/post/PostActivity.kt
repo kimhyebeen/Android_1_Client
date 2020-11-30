@@ -5,10 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.get
 import androidx.lifecycle.Observer
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
@@ -20,14 +17,14 @@ import com.yapp.picon.databinding.PostActivityBinding
 import com.yapp.picon.databinding.PostEmotionItemBinding
 import com.yapp.picon.databinding.PostPictureItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
-import kotlinx.android.synthetic.main.post_picture_item.view.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
     R.layout.post_activity
 ) {
 
-    override val vm: PostViewModel by viewModels()
+    override val vm: PostViewModel by viewModel()
 
     private val postPictureClickAdapter =
         object :
@@ -55,10 +52,6 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         item?.let {
             it["color"]?.let { color ->
                 vm.setSelectedEmotion(color)
-                binding.postPictureRecyclerView[0].post_picture_item_iv.run {
-                    setPadding(16, 16, 16, 16)
-                    setBackgroundColor(ContextCompat.getColor(this@PostActivity, color.toInt()))
-                }
             }
         }
     }
@@ -70,7 +63,8 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         setOnClickListeners()
 
         //todo reverse geoloaction 으로 받은 주소 ui에 표시
-        setLatLng()
+        setData()
+        setContentResolver()
         startAlbum()
     }
 
@@ -84,16 +78,27 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
         binding.postTvSave.setOnClickListener {
             //todo 세이브 포스트
+            vm.uploadImage()
         }
     }
 
-    private fun setLatLng() {
+    private fun setData() {
         intent.run {
-            vm.setLatLng(
-                getDoubleExtra("lat", 0.0),
-                getDoubleExtra("lng", 0.0)
-            )
+            val lat = getDoubleExtra("lat", 0.0)
+            val lng = getDoubleExtra("lng", 0.0)
+            if ((lat == 0.0) or (lng == 0.0)) {
+                showToast("선택한 핀의 위치가 올바르지 않습니다.")
+                finish()
+            }
+            vm.setLatLng(lat, lng)
+
+            val address = getStringExtra("address")
+            vm.address.value = address
         }
+    }
+
+    private fun setContentResolver() {
+        vm.setContentResolver(contentResolver)
     }
 
     private fun startAlbum() {
@@ -115,8 +120,14 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         val toastMsgObserver = Observer<String> {
             showToast(it)
         }
-
         vm.toastMsg.observe(this, toastMsgObserver)
+
+        val finishYNObserver = Observer<Boolean> {
+            if (it) {
+                finish()
+            }
+        }
+        vm.finishYN.observe(this, finishYNObserver)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
