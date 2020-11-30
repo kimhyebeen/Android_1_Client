@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.nav
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -28,7 +29,7 @@ class NavActivity : BaseActivity<NavActivityBinding, NavViewModel>(
 
     private fun getFragment(): Fragment? {
         return when (type) {
-            NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment()
+            NavTypeStringSet.CustomEmotion.type -> CustomEmotionFragment(application)
             NavTypeStringSet.Setting.type -> SettingFragment()
             NavTypeStringSet.Statistic.type -> StatisticFragment()
             else -> null
@@ -39,10 +40,13 @@ class NavActivity : BaseActivity<NavActivityBinding, NavViewModel>(
         vm.finishFlag.observe(this) {
             if (it) {
                 if (type == NavTypeStringSet.CustomEmotion.type) {
-                    // TODO("다이얼로그 띄우기. 취소하면 finish 안하고, 확인하면 finish.")
                     finish()
                 } else finish()
             }
+        }
+
+        vm.toastMsg.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -27,4 +27,13 @@ interface YappApi {
     suspend fun createPost(
         @Body post: Post
     ): Post
+
+    @GET("/display/statistics/{year}/{month}")
+    suspend fun requestStatistics(
+        @Path("year") year: String,
+        @Path("month") month: String
+    ): Statistics
+
+    @GET("/display/member/")
+    suspend fun requestUserInfo(): UserResponse
 }
