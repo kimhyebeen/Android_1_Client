@@ -159,7 +159,7 @@ class CustomEmotionFragment(
     }
 
     private fun setRecyclerView() {
-        context?.let { customAdapter = CustomEmotionAdapter(it, R.layout.custom_emotion_view, BR.emotionItem) }
+        context?.let { customAdapter = CustomEmotionAdapter(it, R.layout.custom_emotion_view, BR.emotion) }
             ?: throw Exception("CustomEmotionFragment - setRecyclerView - context is null")
 
         binding.navEmotionRecyclerView.apply {

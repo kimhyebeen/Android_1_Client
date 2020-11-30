@@ -70,6 +70,10 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
         setToolBar()
         setOnListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         setNavHeader()
     }
