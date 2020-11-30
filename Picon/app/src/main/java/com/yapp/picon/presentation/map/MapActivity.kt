@@ -5,9 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -23,26 +26,34 @@ import com.yapp.picon.databinding.MapActivityBinding
 import com.yapp.picon.helper.LocationHelper
 import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
+import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
+import com.yapp.picon.presentation.nav.adapter.NavHeaderEmotionAdapter
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import com.yapp.picon.presentation.post.PostActivity
+import com.yapp.picon.presentation.profile.MyProfileActivity
 import com.yapp.picon.presentation.search.SearchActivity
+import kotlinx.android.synthetic.main.map_nav_head.view.*
+import kotlinx.android.synthetic.main.map_nav_head_emotion_item.view.*
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.layout.map_activity,
     R.id.map_frame
 ), NavigationView.OnNavigationItemSelectedListener {
-
     override val vm: MapViewModel by viewModels()
 
     private lateinit var naverMap: NaverMap
+    private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
+    private lateinit var headerEmotionAdapter: NavHeaderEmotionAdapter
 
     private val currentLocationMarker = Marker()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        emotionDatabaseRepository = EmotionDatabaseRepository(application)
+        headerEmotionAdapter = NavHeaderEmotionAdapter(R.layout.map_nav_head_emotion_item, BR.headEmoItem)
         /*
         todo
             1. 시작 시 지도 카메라 한반도 전체 보여주기
@@ -54,6 +65,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
         setToolBar()
         setOnListeners()
+
+        setNavHeader()
     }
 
     override fun initViewModel() {
@@ -107,6 +120,57 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         binding.mapIbCurrentLocation.setOnClickListener {
             setCurrentLocation()
         }
+    }
+
+    private fun setNavHeader() {
+        setUserCircleImage()
+        setUserNameText()
+        setAlarmImageEvent()
+        setEmotionActivityStart()
+        setHeadEmotionAdapter()
+    }
+
+    private fun setUserCircleImage() {
+        // todo - 유저 프로필 사진으로 변경
+        Glide.with(this)
+            .load(R.drawable.profile_pic)
+            .circleCrop()
+            .into(binding.navView.getHeaderView(0).nav_head_circle_user_image)
+
+        binding.navView.getHeaderView(0).nav_head_circle_user_image.setOnClickListener {
+            startActivity(
+                Intent(this, MyProfileActivity::class.java)
+            )
+        }
+    }
+
+    private fun setUserNameText() {
+        // todo - binding.navView.getHeaderView(0).nav_head_user_name_text에 '(닉네임)님' 적용
+    }
+
+    private fun setAlarmImageEvent() {
+        // todo - 알람 아이콘 맞는 걸로 변경
+        // todo - 알람 아이콘 기능 설정
+    }
+
+    private fun setEmotionActivityStart() {
+        binding.navView.getHeaderView(0).nav_head_emotion_button.setOnClickListener {
+            startNavActivity(NavTypeStringSet.CustomEmotion.type)
+        }
+    }
+
+    private fun setHeadEmotionAdapter() {
+        binding.navView.getHeaderView(0).nav_head_emotion_rv.apply {
+            adapter = headerEmotionAdapter
+            layoutManager = GridLayoutManager(context, 2)
+            setHasFixedSize(true)
+        }
+        emotionDatabaseRepository.getAll().observe(this, { origin ->
+            val list = mutableListOf<EmotionEntity>()
+            origin.map { list.add(it) }
+            headerEmotionAdapter.setItems(list)
+            headerEmotionAdapter.notifyDataSetChanged()
+        })
     }
 
     private fun setCurrentLocation() {
@@ -210,6 +274,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
     }
 
