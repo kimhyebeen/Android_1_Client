@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class UserInfoViewModel(
@@ -22,8 +21,10 @@ class UserInfoViewModel(
     fun requestUserInfo() {
         viewModelScope.launch {
             try {
-                loadAccessTokenUseCase().collect {
-                    _token.value = it
+                loadAccessTokenUseCase().let {
+                    if (it.isNotEmpty()) {
+                        _token.value = it
+                    }
                 }
             } catch (e: Exception) {
                 println("UserInfoViewModel requestUserInfo error - ${e.message}")

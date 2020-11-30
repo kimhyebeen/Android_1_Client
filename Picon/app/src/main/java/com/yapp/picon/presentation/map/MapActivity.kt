@@ -5,8 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ImageView
-import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,7 +40,6 @@ import com.yapp.picon.presentation.util.pinMarker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ted.gun0912.clustering.naver.TedNaverClustering
 import kotlinx.android.synthetic.main.map_nav_head.view.*
-import kotlinx.android.synthetic.main.map_nav_head_emotion_item.view.*
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
