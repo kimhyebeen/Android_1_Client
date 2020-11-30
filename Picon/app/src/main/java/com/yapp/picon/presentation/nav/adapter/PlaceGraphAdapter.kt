@@ -6,6 +6,7 @@ import com.yapp.picon.databinding.PlaceGraphItemBinding
 import com.yapp.picon.presentation.base.BaseRecyclerView
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
 import kotlinx.android.synthetic.main.place_graph_item.view.*
+import java.lang.Exception
 
 class PlaceGraphAdapter(
     private val colorList: List<String>,
@@ -23,11 +24,12 @@ class PlaceGraphAdapter(
         super.onBindViewHolder(baseViewHolder, position)
 
         val dataModelList = mutableListOf<DataModel>()
+
         items[position].graphItems.map { item ->
             dataModelList.add(
                 DataModel(
-                    item.color,
-                    getColorString(item.color),
+                    item.emotion,
+                    getColorString(item.emotion),
                     item.count
                 )
             )
@@ -42,11 +44,12 @@ class PlaceGraphAdapter(
 
     private fun getColorString(color: String): String {
         return when(color) {
-            "soft_blue" -> colorList[0]
-            "corn_flower" -> colorList[1]
-            "blue_grey" -> colorList[2]
-            "very_light_brown" -> colorList[3]
-            else -> colorList[4]
+            "SOFT_BLUE" -> colorList[0]
+            "CORN_FLOWER" -> colorList[1]
+            "BLUE_GRAY" -> colorList[2]
+            "VERY_LIGHT_BROWN" -> colorList[3]
+            "WARM_GRAY" -> colorList[4]
+            else -> throw Exception("PlaceGraphAdapter - getColorString - color type is wrong")
         }
     }
 }

@@ -76,20 +76,20 @@ class StatisticContentViewFragment: BaseFragment<NavStatisticContentViewBinding,
     private fun observeGraphData() {
         vm.statisticRepository.placeList.observe(this, {
             placeAdapter.setItems(it)
+            placeAdapter.notifyDataSetChanged()
         })
         vm.statisticRepository.emotionList.observe(this, {
-            emotionAdapter.setItems(it)
             var max = 0
-            it.map { item ->
-                if (max < item.count) max = item.count
-            }
-            emotionAdapter.setMaxCount(max)
+            it.map { item -> if (max < item.count) max = item.count }
 
-            var sum = 0
-            it.map { item ->
-                sum += item.count
+            emotionAdapter.apply {
+                setMaxCount(max)
+                setItems(it)
+                notifyDataSetChanged()
             }
-            binding.navStatisticPinNumberTv.text = "$sum 핀"
         })
+        vm.statisticRepository.totalPin.observe(this) {
+            binding.navStatisticPinNumberTv.text = it
+        }
     }
 }

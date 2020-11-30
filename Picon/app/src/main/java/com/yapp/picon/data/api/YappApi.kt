@@ -38,4 +38,12 @@ interface YappApi {
         @Header("AccessToken") accessToken: String
     ): PostsResponse
 
+    @GET("/display/statistics/{year}/{month}")
+    suspend fun requestStatistics(
+        @Path("year") year: String,
+        @Path("month") month: String
+    ): Statistics
+
+    @GET("/display/member/")
+    suspend fun requestUserInfo(): UserResponse
 }

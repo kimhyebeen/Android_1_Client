@@ -12,7 +12,7 @@ class MonthListAdapter(
     private val textColor: List<String>,
     private val changeTitle: (String) -> Unit,
     private val changeViewModelMonthData: (Int, Int) -> Unit,
-    private val clickEvent: () -> Unit,
+    private val clickEvent: (Int, Int, Boolean) -> Unit,
     @LayoutRes private val layoutRes: Int,
     bindingVariabledId: Int
 ) : BaseRecyclerView.BaseAdapter<StatisticDate, MonthListItemBinding>(
@@ -43,7 +43,7 @@ class MonthListAdapter(
             notifyItemChanged(position)
             selectedIndex = position
 
-            clickEvent()
+            clickEvent(items[position].year, items[position].month, true)
         }
     }
 }
