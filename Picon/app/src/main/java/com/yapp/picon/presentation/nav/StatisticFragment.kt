@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.nav
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,15 +21,21 @@ import com.yapp.picon.databinding.NavStatisticFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.model.StatisticDate
 import com.yapp.picon.presentation.nav.adapter.MonthListAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
+class StatisticFragment(
+    private val application: Application
+): BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
     R.layout.nav_statistic_fragment
 ) {
     private lateinit var transaction: FragmentTransaction
     private lateinit var transrateUp: Animation
     private lateinit var transrateDown: Animation
     private lateinit var monthAdapter: MonthListAdapter
+    private val token = MutableLiveData<String>()
+    private val userVM: UserInfoViewModel by viewModel()
+    private val todayDate = getTodayDate()
 
     @Suppress("UNCHECKED_CAST")
     override val vm: NavViewModel by activityViewModels {
@@ -40,11 +48,19 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
     override fun initBinding() {
     }
 
+    private fun getTodayDate(): StatisticDate {
+        Calendar.getInstance().let {
+            return StatisticDate(true,
+                it.get(Calendar.YEAR),
+                it.get(Calendar.MONTH)+1
+            )
+        }
+    }
+
     override fun onStart() {
         super.onStart()
-        // childFragmentManager를 사용해서 nav_statistic_content_view 붙이기
         transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment()).addToBackStack(
+        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment(application)).addToBackStack(
             null
         ).commit()
 
@@ -64,9 +80,12 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
             vm.clickFinishButton(it)
         }
 
-        vm.requestUserInfo()
+        userVM.requestUserInfo()
+        token.observe(this, {
+            vm.requestUserInfo(it)
+            vm.requestStatistic(it, todayDate.year, todayDate.month)
+        })
 
-        getTodayDate().let { vm.requestStatistic(it.year, it.month) }
         observeVM()
     }
 
@@ -99,20 +118,8 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
         )
     }
 
-    private fun getTodayDate(): StatisticDate {
-        Calendar.getInstance().let {
-            return StatisticDate(true,
-                it.get(Calendar.YEAR),
-                it.get(Calendar.MONTH)+1
-            )
-        }
-    }
-
     private fun setAllDatesInMonthList() {
-        val todayDate = getTodayDate()
-        vm.statisticRepository.signUpDate.observe(this, {
-            println("asdlfkjal;sjdfl;ajl year: ${it.year}, month: ${it.month} aldskjf;lajf")
-            val signUpDate = StatisticDate(false, it.year, it.month)
+        vm.statisticRepository.signUpDate.observe(this, { signUpDate ->
             val monthList: MutableList<StatisticDate> = mutableListOf()
 
             for (year in todayDate.year downTo signUpDate.year) {
@@ -157,7 +164,7 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
                 }
             }
             if (flag) {
-                vm.requestStatistic(year, month)
+                vm.requestStatistic(token.value!!, year, month)
             }
         }
     }
@@ -175,6 +182,9 @@ class StatisticFragment: BaseFragment<NavStatisticFragmentBinding, NavViewModel>
         })
         vm.statisticRepository.title.observe(this, {
             binding.navStatisticAppBar.navStatisticTitleTv.text = it
+        })
+        userVM.token.observe(this, {
+            token.value = it
         })
     }
 
