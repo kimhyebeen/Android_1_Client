@@ -12,14 +12,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/my_profile_item_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="1dp"
+        android:layout_height="128dp"
+        android:layout_margin="2dp"
         android:background="@drawable/ic_custom_rounded_warm_gray">
 
         <ImageView
             android:id="@+id/my_profile_post_item_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="118dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -2,9 +2,7 @@ package com.yapp.picon.presentation.profile
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
 import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -33,37 +31,35 @@ class MyProfilePostAdapter(
         position: Int
     ) {
         super.onBindViewHolder(baseViewHolder, position)
-        val size = baseViewHolder.itemView.width
+        // todo - 게시물 아이템 사이즈 조절하기
+        println("$position - ${items[position].color}, ${items[position].imageUrl}")
 
         baseViewHolder.itemView.apply {
-            layoutParams = LinearLayout.LayoutParams(
-                size,
-                size + dpToPx(context, 3f).toInt())
             setBackgroundResource(
                 getColors(items[position].color)
             )
             setOnClickListener { clickEvent(it, items[position].id) }
         }
 
-        baseViewHolder.itemView.my_profile_post_item_image.apply {
-            layoutParams = LinearLayout.LayoutParams(size, size)
-        }
-
         val multiOption = MultiTransformation(
             CenterCrop(),
             RoundedCorners(5)
         )
-        Glide.with(context)
-            .load(items[position].imageUrl)
-            .apply(RequestOptions.bitmapTransform(multiOption))
-            .into(baseViewHolder.itemView.my_profile_post_item_image)
+        if (items[position].imageUrl.isNotEmpty()) {
+            Glide.with(context)
+                .load(items[position].imageUrl)
+                .apply(RequestOptions.bitmapTransform(multiOption))
+                .into(baseViewHolder.itemView.my_profile_post_item_image)
+        } else {
+            // todo - 이미지가 없을 수도 있나??
+        }
     }
 
-    private fun dpToPx(context: Context, dp: Float): Float {
-        val displayMetrics = context.resources.displayMetrics
-
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
-    }
+//    private fun dpToPx(context: Context, dp: Float): Float {
+//        val displayMetrics = context.resources.displayMetrics
+//
+//        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
+//    }
 
     private fun getColors(color: String): Int {
         return when(color) {
