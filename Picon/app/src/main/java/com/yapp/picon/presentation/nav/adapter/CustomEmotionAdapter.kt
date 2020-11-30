@@ -40,7 +40,6 @@ class CustomEmotionAdapter(
         baseViewHolder.itemView.emotion_item_color_iv.setImageResource(
             getResource(items[position].color)
         )
-        baseViewHolder.itemView.emotion_item_tv.text = items[position].emotion
 
         baseViewHolder.itemView.setOnLongClickListener {
             setDialog(it.id)
