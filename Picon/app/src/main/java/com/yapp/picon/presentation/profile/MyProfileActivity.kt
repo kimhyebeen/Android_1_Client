@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.yapp.picon.BR
@@ -11,20 +12,29 @@ import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.nav.UserInfoViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewModel>(
     R.layout.my_profile_activity
 ) {
     private lateinit var postAdapter: MyProfilePostAdapter
+    val getContent = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) {
+        Glide.with(this)
+            .load(it)
+            .circleCrop()
+            .into(binding.myProfileUserImage)
+        // todo - 위 코드 없애고 서버에 프로필 사진 저장만 해도 vm을 옵저빙하기 때문에 프로필 사진이 바뀜
+    }
 
-    override val vm: MyProfileViewModel by viewModel()
     private val userVM: UserInfoViewModel by viewModel()
+    override val vm: MyProfileViewModel by viewModel()
 
     override fun initViewModel() {
         vm.backButton.observe(this, {
             if (it) onBackPressed()
         })
         vm.profileImageUrl.observe(this, {
-            // todo - uri로 바꿔야 하는 건가?
             if (it.isNotEmpty()) {
                 Glide.with(this)
                     .load(it)
@@ -39,7 +49,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         })
         vm.changeProfileImageButton.observe(this, {
             if (it) {
-                // todo - 프로필 이미지 변경 기능
+                getContent.launch("image/*")
             }
         })
         vm.postList.observe(this, {
@@ -53,8 +63,9 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         userVM.requestUserInfo()
         binding.setVariable(BR.profileVM, vm)
 
-        postAdapter = MyProfilePostAdapter(this,
-            { view, id -> startPostDetailActivity(view, id)},
+        postAdapter = MyProfilePostAdapter(
+            this,
+            { view, id -> startPostDetailActivity(view, id) },
             R.layout.my_profile_post_item,
             BR.profilePost
         )
