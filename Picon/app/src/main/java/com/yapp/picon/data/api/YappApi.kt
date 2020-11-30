@@ -40,10 +40,13 @@ interface YappApi {
 
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(
+        @Header("AccessToken") AccessToken: String,
         @Path("year") year: String,
         @Path("month") month: String
     ): Statistics
 
     @GET("/display/member/")
-    suspend fun requestUserInfo(): UserResponse
+    suspend fun requestUserInfo(
+        @Header("AccessToken") AccessToken: String
+    ): UserResponse
 }
