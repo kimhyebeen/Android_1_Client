@@ -32,8 +32,6 @@ class MyProfilePostAdapter(
     ) {
         super.onBindViewHolder(baseViewHolder, position)
         // todo - 게시물 아이템 사이즈 조절하기
-        println("$position - ${items[position].color}, ${items[position].imageUrl}")
-
         baseViewHolder.itemView.apply {
             setBackgroundResource(
                 getColors(items[position].color)

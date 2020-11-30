@@ -46,7 +46,7 @@ class MyProfileViewModel: BaseViewModel() {
             try {
                 NetworkModule.yappApi.requestUserInfo(token).let {
                     _myProfileTitle.value = it.member.nickName
-                    _profileImageUrl.value = it.member.profileImageUrl
+                    _profileImageUrl.value = it.member.profileImageUrl ?: ""
                 }
             } catch (e: Exception) {
                 Log.e("MyProfileViewModel", "requestUserInfo Error - ${e.message}")

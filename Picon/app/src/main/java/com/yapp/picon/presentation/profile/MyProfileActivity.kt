@@ -20,11 +20,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     val getContent = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) {
-        Glide.with(this)
-            .load(it)
-            .circleCrop()
-            .into(binding.myProfileUserImage)
-        // todo - 위 코드 없애고 서버에 프로필 사진 저장만 해도 vm을 옵저빙하기 때문에 프로필 사진이 바뀜
+        // todo - 서버에 프로필 사진 저장
     }
 
     private val userVM: UserInfoViewModel by viewModel()
@@ -35,16 +31,10 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
             if (it) onBackPressed()
         })
         vm.profileImageUrl.observe(this, {
-            if (it.isNotEmpty()) {
-                Glide.with(this)
-                    .load(it)
-                    .circleCrop()
-                    .into(binding.myProfileUserImage)
-            } else {
-                Glide.with(this)
-                    .load(R.drawable.profile_pic)
-                    .circleCrop()
-                    .into(binding.myProfileUserImage)
+            if (it.isEmpty()) setProfileImage(null)
+            else {
+                setProfileImage(it)
+                // todo - 그냥 http String일 때랑, Uri로 변환해줘야 하는 걸 어떻게 구분해야하지?
             }
         })
         vm.changeProfileImageButton.observe(this, {
@@ -82,6 +72,20 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     override fun onResume() {
         super.onResume()
         vm.initFlags()
+    }
+
+    private fun <T> setProfileImage(value: T?) {
+        value?.let {
+            Glide.with(this)
+                .load(it)
+                .circleCrop()
+                .into(binding.myProfileUserImage)
+        } ?: run {
+            Glide.with(this)
+                .load(R.drawable.profile_pic)
+                .circleCrop()
+                .into(binding.myProfileUserImage)
+        }
     }
 
     private fun observeUserToken() {
