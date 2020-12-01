@@ -8,6 +8,8 @@ import com.yapp.picon.domain.usecase.GetRevGeoUseCase
 import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.PostMarker
+import com.yapp.picon.presentation.util.toPostMarker
+import com.yapp.picon.presentation.util.toPresentation
 import kotlinx.coroutines.launch
 
 class MapViewModel(
@@ -65,15 +67,9 @@ class MapViewModel(
             requestPostsUseCase().let { postsResponse ->
                 Log.e(tag, "requestPosts FINISH")
                 if (postsResponse.status == 200) {
+
                     _postMarkers.value = postsResponse.posts.map { post ->
-                        PostMarker(
-                            post.id,
-                            post.coordinate,
-                            post.imageUrls,
-                            post.address,
-                            post.emotion,
-                            post.memo
-                        )
+                        toPostMarker(toPresentation(post))
                     }
 
                     _postLoadYN.value = true
