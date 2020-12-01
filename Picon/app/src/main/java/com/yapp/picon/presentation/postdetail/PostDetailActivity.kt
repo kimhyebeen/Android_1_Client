@@ -10,13 +10,14 @@ import com.yapp.picon.data.model.Emotion
 import com.yapp.picon.data.model.Post
 import com.yapp.picon.databinding.PostDetailActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.math.BigDecimal
-
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
 ) {
+    private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
     override val vm: PostDetailViewModel by viewModel()
 
     override fun initViewModel() {
@@ -50,14 +51,24 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
         getPostFromIntent()
+        binding.postDetailImagePager.setOnClickListener {
+            // todo - 사진 full 화면 전환
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
         vm.initFlag()
+    }
+
+    private fun setImagePager(list: List<String>) {
+        // todo - 어댑터 구현 및 설정
+
+        vm.setImageNumber(1, 3)
     }
 
     private fun getPostFromIntent() {
@@ -73,15 +84,24 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 
         setViewModel(exPost)
         setEmotionCircleImage("VERY_LIGHT_BROWN")
+        setBackgroundColor("VERY_LIGHT_BROWN")
     }
 
     private fun setViewModel(post: Post) {
+        // todo - post의 날짜로 적용하기
+        val date = "2020.05.20"
+        val dateList = date.split('.')
+
         vm.setImageList(post.imageUrls ?: listOf())
         vm.setAddress(post.address.address)
-        // todo - post의 날짜로 적용하기
-        vm.setDate(2020, 5, 20)
-        vm.setEmotion(Emotion.VERY_LIGHT_BROWN.toString())
+        vm.setDate(dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt())
         vm.setContent(post.memo ?: "")
+
+        emotionDatabaseRepository.getAll().observe(this, { list ->
+            vm.setEmotion(
+                list[getColorIndex("VERY_LIGHT_BROWN")].emotion
+            )
+        })
     }
 
     private fun setEmotionCircleImage(color: String) {
@@ -97,10 +117,28 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         )
     }
 
-    private fun setImagePager(list: List<String>) {
-        // todo
+    private fun setBackgroundColor(color: String) {
+        binding.postDetailLayout.setBackgroundResource(
+            when (color) {
+                "SOFT_BLUE" -> R.color.soft_blue_30
+                "CORN_FLOWER" -> R.color.cornflower_30
+                "BLUE_GRAY" -> R.color.blue_gray_30
+                "VERY_LIGHT_BROWN" -> R.color.very_light_brown_30
+                "WARM_GRAY" -> R.color.warm_gray_30
+                else -> throw Exception("PostDetailActivity - setBackgroundColor - color type is wrong.")
+            }
+        )
+    }
 
-        vm.setImageNumber(1, 3)
+    private fun getColorIndex(value: String): Int {
+        return when(value) {
+            "SOFT_BLUE" -> 0
+            "CORN_FLOWER" -> 1
+            "BLUE_GRAY" -> 2
+            "VERY_LIGHT_BROWN" -> 3
+            "WARM_GRAY" -> 4
+            else -> throw Exception("PostDetailActivity - getColorIndex - color type is wrong.")
+        }
     }
 
     override fun onBackPressed() {
