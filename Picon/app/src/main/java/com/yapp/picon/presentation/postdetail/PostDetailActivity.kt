@@ -1,10 +1,19 @@
 package com.yapp.picon.presentation.postdetail
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.yapp.picon.BR
 import com.yapp.picon.R
+import com.yapp.picon.databinding.DialogCustomRemovePostBinding
 import com.yapp.picon.databinding.PostDetailActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Emotion
@@ -17,7 +26,10 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 ) {
     private lateinit var imagePagerAdapter: ImagePagerAdapter
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
+    private lateinit var removeDialog: Dialog
+    private lateinit var removeBuilder: AlertDialog.Builder
     private var totalImage = 0
+    private var id = -1
 
     override val vm: PostDetailViewModel by viewModel()
 
@@ -45,7 +57,21 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         })
         vm.removeButtonFlag.observe(this, {
             if (it) {
-                // todo - 다이얼로그 띄우기
+                removeDialog.show()
+                setDialogSize()
+                vm.clickEditIcon(binding.postDetailEditIconButton)
+            }
+        })
+        vm.dialogRemoveButtonFlag.observe(this, {
+            if (it) {
+                vm.removePost(id)
+                finish()
+            }
+        })
+        vm.dialogCancelButtonFlag.observe(this, {
+            if (it) {
+                removeDialog.dismiss()
+                vm.initFlag()
             }
         })
     }
@@ -55,6 +81,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
         setImagePager()
+        setFinishDialog()
         getPostFromIntent()
     }
 
@@ -83,6 +110,9 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private fun getPostFromIntent() {
         val post = intent.getParcelableExtra<Post>("post")
         post?.let {
+            totalImage = it.imageUrls?.size ?: 0
+            id = it.id ?: -1
+
             setViewModel(it)
             setEmotionCircleImage(it.emotion?.name ?: "")
             setBackgroundColor(it.emotion?.name ?: "")
@@ -93,7 +123,6 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         val dateList = post.createdDate?.split('.')
             ?: throw Exception("PostDetailActivity - setViewModel - createdDate is null")
 
-        totalImage = post.imageUrls?.size ?: 0
         vm.setImageList(post.imageUrls ?: listOf())
         vm.setImageNumber(1, totalImage)
         vm.setAddress(post.address.address)
@@ -105,6 +134,29 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
                 list[getColorIndex(post.emotion)].emotion
             )
         })
+    }
+
+    private fun setFinishDialog() {
+        val dialogRemoveView: DialogCustomRemovePostBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this), R.layout.dialog_custom_remove_post, null, false
+        )
+        dialogRemoveView.setVariable(BR.dialogRemove, vm)
+        removeBuilder = AlertDialog.Builder(this)
+        removeBuilder.setView(dialogRemoveView.root)
+
+        removeDialog = removeBuilder.create()
+        removeDialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
+    private fun setDialogSize() {
+        val layoutParams = WindowManager.LayoutParams().apply {
+            copyFrom(removeDialog.window!!.attributes)
+            width = (274 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        removeDialog.window?.attributes = layoutParams
     }
 
     private fun setEmotionCircleImage(color: String) {
