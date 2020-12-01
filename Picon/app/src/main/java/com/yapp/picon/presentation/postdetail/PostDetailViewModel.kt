@@ -3,9 +3,15 @@ package com.yapp.picon.presentation.postdetail
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import kotlinx.coroutines.launch
 
-class PostDetailViewModel: BaseViewModel() {
+class PostDetailViewModel(
+    private val loadAccessTokenUseCase: LoadAccessTokenUseCase
+): BaseViewModel() {
     private val _imageList = MutableLiveData<List<String>>()
     val imageList: LiveData<List<String>> get() = _imageList
 
@@ -41,6 +47,20 @@ class PostDetailViewModel: BaseViewModel() {
         _editIconFlag.value = false
         _editButtonFlag.value = false
         _removeButtonFlag.value = false
+    }
+
+    fun removePost(id: Int) {
+        viewModelScope.launch {
+            try {
+                loadAccessTokenUseCase().let { token ->
+                    if (token.isNotEmpty()) {
+                        NetworkModule.yappApi.removePost(token, id)
+                    }
+                }
+            } catch (e: Exception) {
+                println("PostDetailViewModel removePost error - ${e.message}")
+            }
+        }
     }
 
     fun setImageList(list: List<String>) {

@@ -45,7 +45,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         })
         vm.removeButtonFlag.observe(this, {
             if (it) {
-                // todo - 게시물 지우기
+                // todo - 다이얼로그 띄우기
             }
         })
     }
