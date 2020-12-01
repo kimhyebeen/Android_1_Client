@@ -52,6 +52,8 @@
 
         <activity android:name=".presentation.profile.MyProfileActivity" />
 
+        <activity android:name=".presentation.postdetail.PostDetailActivity" />
+
     </application>
 
 </manifest>
