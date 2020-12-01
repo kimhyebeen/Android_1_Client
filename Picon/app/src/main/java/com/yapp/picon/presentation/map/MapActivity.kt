@@ -84,6 +84,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         super.onResume()
 
         setNavHeader()
+        vm.requestPosts()
     }
 
     override fun initViewModel() {
@@ -302,16 +303,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         }
 
         settingOptionToMap()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        vm.requestPosts()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
