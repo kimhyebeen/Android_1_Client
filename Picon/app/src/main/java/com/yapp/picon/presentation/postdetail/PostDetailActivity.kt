@@ -79,7 +79,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
             listOf("https://search.pstatic.net/common/?autoRotate=true&quality=95&type=w750&src=https%3A%2F%2Fnaverbooking-phinf.pstatic.net%2F20201015_116%2F1602738772174qL85D_JPEG%2Fimage.jpg"),
             Address("서울 영등포구 국제금융로2길 24", "서울", "", "영등포구"),
             Emotion.VERY_LIGHT_BROWN,
-            ""
+            "",
+            "2020.05.20"
         )
 
         setViewModel(exPost)

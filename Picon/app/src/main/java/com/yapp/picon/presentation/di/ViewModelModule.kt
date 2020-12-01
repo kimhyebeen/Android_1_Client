@@ -5,7 +5,6 @@ import com.yapp.picon.presentation.map.MapViewModel
 import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.pingallery.PinGalleryViewModel
 import com.yapp.picon.presentation.post.PostViewModel
-import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.postdetail.PostDetailViewModel
 import com.yapp.picon.presentation.profile.MyProfileViewModel
 import com.yapp.picon.presentation.search.SearchViewModel
@@ -24,4 +23,5 @@ val viewModelModule = module {
     viewModel { UserInfoViewModel(get()) }
     viewModel { MyProfileViewModel() }
     viewModel { PostDetailViewModel() }
+    viewModel { PinGalleryViewModel() }
 }
