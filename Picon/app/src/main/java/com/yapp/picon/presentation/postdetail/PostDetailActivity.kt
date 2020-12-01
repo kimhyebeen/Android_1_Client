@@ -53,6 +53,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         vm.editButtonFlag.observe(this, {
             if (it) {
                 // todo - 편집 화면 띄우기
+                vm.clickEditIcon(binding.postDetailEditIconButton)
             }
         })
         vm.removeButtonFlag.observe(this, {
