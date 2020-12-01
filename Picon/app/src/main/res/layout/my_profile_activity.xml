@@ -78,73 +78,69 @@
             app:layout_constraintTop_toTopOf="@+id/my_profile_user_image"
             app:srcCompat="@drawable/ic_camera" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="1dp"
-            android:layout_height="22dp"
-            android:layout_marginTop="30dp"
-            android:background="@color/brownish_grey"
+        <LinearLayout
+            android:id="@+id/my_profile_follow_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/my_profile_user_image" />
+            app:layout_constraintTop_toBottomOf="@+id/my_profile_user_image">
 
-        <TextView
-            android:id="@+id/my_profile_following_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="51dp"
-            android:text="@string/my_profile_following"
-            android:textColor="@color/very_light_pink"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/divider"
-            app:layout_constraintEnd_toStartOf="@+id/divider"
-            app:layout_constraintTop_toTopOf="@+id/divider" />
+            <TextView
+                android:id="@+id/my_profile_following_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="@string/my_profile_following"
+                android:textColor="@color/very_light_pink"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/my_profile_follower_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:text="@string/my_profile_follower"
-            android:textColor="@color/very_light_pink"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/divider"
-            app:layout_constraintStart_toEndOf="@+id/divider"
-            app:layout_constraintTop_toTopOf="@+id/divider" />
+            <TextView
+                android:id="@+id/my_profile_following_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{profileVM.following.toString()}"
+                android:textColor="@color/pale_grey"
+                android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/my_profile_following_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{profileVM.following.toString()}"
-            android:textColor="@color/pale_grey"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/my_profile_following_text"
-            app:layout_constraintStart_toEndOf="@+id/my_profile_following_text"
-            app:layout_constraintTop_toTopOf="@+id/my_profile_following_text" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="17dp"
+                android:background="@color/brownish_grey" />
 
-        <TextView
-            android:id="@+id/my_profile_follower_number"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@{profileVM.follower.toString()}"
-            android:textColor="@color/pale_grey"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/my_profile_follower_text"
-            app:layout_constraintStart_toEndOf="@+id/my_profile_follower_text"
-            app:layout_constraintTop_toTopOf="@+id/my_profile_follower_text" />
+            <TextView
+                android:id="@+id/my_profile_follower_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:text="@string/my_profile_follower"
+                android:textColor="@color/very_light_pink"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/my_profile_follower_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{profileVM.follower.toString()}"
+                android:textColor="@color/pale_grey"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/my_profile_post_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider" />
+            app:layout_constraintTop_toBottomOf="@+id/my_profile_follow_linear_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
