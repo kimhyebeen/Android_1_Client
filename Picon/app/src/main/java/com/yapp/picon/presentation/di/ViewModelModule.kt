@@ -6,6 +6,7 @@ import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.pingallery.PinGalleryViewModel
 import com.yapp.picon.presentation.post.PostViewModel
 import com.yapp.picon.presentation.nav.UserInfoViewModel
+import com.yapp.picon.presentation.postdetail.PostDetailViewModel
 import com.yapp.picon.presentation.profile.MyProfileViewModel
 import com.yapp.picon.presentation.search.SearchViewModel
 import com.yapp.picon.presentation.simplejoin.SimpleJoinViewModel
@@ -22,4 +23,5 @@ val viewModelModule = module {
     viewModel { PostViewModel(get(), get()) }
     viewModel { UserInfoViewModel(get()) }
     viewModel { MyProfileViewModel() }
+    viewModel { PostDetailViewModel() }
 }
