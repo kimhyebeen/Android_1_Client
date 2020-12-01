@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.util
 
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("visibleOrInvisible")
@@ -27,5 +28,12 @@ fun View.visibleOrGoneStr(value: String) {
         "false" -> View.GONE
         "FALSE" -> View.GONE
         else -> this.visibility
+    }
+}
+
+@BindingAdapter("setBgColorStr")
+fun View.setBgColorStr(color: String) {
+    if (color.isNotEmpty()) {
+        this.setBackgroundColor(color.toColorInt())
     }
 }

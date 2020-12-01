@@ -2,6 +2,8 @@ package com.yapp.picon.presentation.di
 
 import com.yapp.picon.presentation.login.LoginViewModel
 import com.yapp.picon.presentation.map.MapViewModel
+import com.yapp.picon.presentation.nav.UserInfoViewModel
+import com.yapp.picon.presentation.pingallery.PinGalleryViewModel
 import com.yapp.picon.presentation.post.PostViewModel
 import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.profile.MyProfileViewModel
