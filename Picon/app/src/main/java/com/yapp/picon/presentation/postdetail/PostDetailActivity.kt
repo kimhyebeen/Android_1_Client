@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.postdetail
 
 import android.os.Bundle
 import android.view.View
+import androidx.viewpager2.widget.ViewPager2
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.PostDetailActivityBinding
@@ -10,19 +11,21 @@ import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.math.BigDecimal
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
 ) {
+    private lateinit var imagePagerAdapter: ImagePagerAdapter
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
+    private var totalImage = 0
+
     override val vm: PostDetailViewModel by viewModel()
 
     override fun initViewModel() {
         binding.setVariable(BR.postDetailVM, vm)
 
         vm.imageList.observe(this, {
-            setImagePager(it)
+            imagePagerAdapter.setItems(it)
         })
         vm.content.observe(this, {
             if (it.isEmpty()) binding.postDetailContentText.visibility = View.GONE
@@ -51,10 +54,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         super.onCreate(savedInstanceState)
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
+        setImagePager()
         getPostFromIntent()
-        binding.postDetailImagePager.setOnClickListener {
-            // todo - 사진 full 화면 전환
-        }
     }
 
     override fun onResume() {
@@ -63,10 +64,20 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         vm.initFlag()
     }
 
-    private fun setImagePager(list: List<String>) {
-        // todo - 어댑터 구현 및 설정
-
-        vm.setImageNumber(1, 3)
+    private fun setImagePager() {
+        imagePagerAdapter = ImagePagerAdapter(this)
+        binding.postDetailImagePager.apply {
+            adapter = imagePagerAdapter
+            setOnClickListener {
+                // todo - 사진 full 화면 전환
+            }
+            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    vm.setImageNumber(position+1, totalImage)
+                }
+            })
+        }
     }
 
     private fun getPostFromIntent() {
@@ -82,7 +93,9 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         val dateList = post.createdDate?.split('.')
             ?: throw Exception("PostDetailActivity - setViewModel - createdDate is null")
 
+        totalImage = post.imageUrls?.size ?: 0
         vm.setImageList(post.imageUrls ?: listOf())
+        vm.setImageNumber(1, totalImage)
         vm.setAddress(post.address.address)
         vm.setDate(dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt())
         vm.setContent(post.memo ?: "")
