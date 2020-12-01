@@ -98,5 +98,14 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 
     private fun setImagePager(list: List<String>) {
         // todo
+
+        vm.setImageNumber(1, 3)
+    }
+
+    override fun onBackPressed() {
+        binding.postDetailImagePager.currentItem.let { cur ->
+            if (cur == 0) super.onBackPressed()
+            else binding.postDetailImagePager.currentItem = cur - 1
+        }
     }
 }
