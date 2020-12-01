@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -9,7 +10,9 @@ import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MyProfileActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.UserInfoViewModel
+import com.yapp.picon.presentation.postdetail.PostDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -17,7 +20,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     R.layout.my_profile_activity
 ) {
     private lateinit var postAdapter: MyProfilePostAdapter
-    val getContent = registerForActivityResult(
+    private val getContent = registerForActivityResult(
         ActivityResultContracts.GetContent()
     ) {
         // todo - 서버에 프로필 사진 저장
@@ -55,7 +58,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
 
         postAdapter = MyProfilePostAdapter(
             this,
-            { view, id -> startPostDetailActivity(view, id) },
+            { view, post -> startPostDetailActivity(view, post) },
             R.layout.my_profile_post_item,
             BR.profilePost
         )
@@ -96,7 +99,11 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         })
     }
 
-    private fun startPostDetailActivity(view: View, id: Int) {
-        // todo - 게시글 보여주는 액티비티 실행 (id를 인텐트로 넘겨줘요)
+    private fun startPostDetailActivity(view: View, post: Post) {
+        Intent(this, PostDetailActivity::class.java).apply {
+            putExtra("post", post)
+        }.let {
+            startActivity(it)
+        }
     }
 }
