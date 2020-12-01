@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.postdetail
 
 import android.os.Bundle
 import android.view.View
+import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.data.model.Address
 import com.yapp.picon.data.model.Coordinate
@@ -19,6 +20,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     override val vm: PostDetailViewModel by viewModel()
 
     override fun initViewModel() {
+        binding.setVariable(BR.postDetailVM, vm)
+
         vm.imageList.observe(this, {
             setImagePager(it)
         })

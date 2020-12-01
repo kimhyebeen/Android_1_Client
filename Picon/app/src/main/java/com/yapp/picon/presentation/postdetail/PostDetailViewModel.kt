@@ -21,6 +21,9 @@ class PostDetailViewModel: BaseViewModel() {
     private val _date = MutableLiveData<String>()
     val date: LiveData<String> get() = _date
 
+    private val _imageNumber = MutableLiveData<String>()
+    val imageNumber: LiveData<String> get() = _imageNumber
+
     private val _editIconFlag = MutableLiveData<Boolean>()
     val editIconFlag: LiveData<Boolean> get() = _editIconFlag
 
@@ -58,6 +61,10 @@ class PostDetailViewModel: BaseViewModel() {
 
     fun setDate(value: String) {
         _date.value = value
+    }
+
+    fun setImageNumber(count: Int, total: Int) {
+        _imageNumber.value = "$count/$total"
     }
 
     fun clickEditIcon(view: View) {
