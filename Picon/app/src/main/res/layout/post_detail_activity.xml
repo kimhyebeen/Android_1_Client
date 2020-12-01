@@ -112,18 +112,20 @@
                 android:id="@+id/post_detail_edit_linear"
                 android:layout_width="94dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="46dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/bg_updown_list_2"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_detail_edit_icon_button">
+                app:layout_constraintTop_toTopOf="@+id/post_detail_edit_icon_button">
 
                 <Button
                     android:id="@+id/post_detail_edit_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{postDetailVM::clickEditButton}"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
+                    android:onClick="@{postDetailVM::clickEditButton}"
                     android:paddingStart="18dp"
                     android:paddingEnd="0dp"
                     android:text="@string/edit"
@@ -134,9 +136,9 @@
                     android:id="@+id/post_detail_remove_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{postDetailVM::clickRemoveButton}"
                     android:background="@color/transparent"
                     android:gravity="start|center_vertical"
+                    android:onClick="@{postDetailVM::clickRemoveButton}"
                     android:paddingStart="18dp"
                     android:paddingEnd="0dp"
                     android:text="@string/remove"

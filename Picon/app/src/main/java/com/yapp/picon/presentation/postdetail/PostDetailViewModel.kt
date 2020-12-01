@@ -3,9 +3,15 @@ package com.yapp.picon.presentation.postdetail
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import kotlinx.coroutines.launch
 
-class PostDetailViewModel: BaseViewModel() {
+class PostDetailViewModel(
+    private val loadAccessTokenUseCase: LoadAccessTokenUseCase
+): BaseViewModel() {
     private val _imageList = MutableLiveData<List<String>>()
     val imageList: LiveData<List<String>> get() = _imageList
 
@@ -33,6 +39,12 @@ class PostDetailViewModel: BaseViewModel() {
     private val _removeButtonFlag = MutableLiveData<Boolean>()
     val removeButtonFlag: LiveData<Boolean> get() = _removeButtonFlag
 
+    private val _dialogRemoveButtonFlag = MutableLiveData<Boolean>()
+    val dialogRemoveButtonFlag: LiveData<Boolean> get() = _dialogRemoveButtonFlag
+
+    private val _dialogCancelButtonFlag = MutableLiveData<Boolean>()
+    val dialogCancelButtonFlag: LiveData<Boolean> get() = _dialogCancelButtonFlag
+
     init {
         initFlag()
     }
@@ -41,6 +53,22 @@ class PostDetailViewModel: BaseViewModel() {
         _editIconFlag.value = false
         _editButtonFlag.value = false
         _removeButtonFlag.value = false
+        _dialogCancelButtonFlag.value = false
+        _dialogRemoveButtonFlag.value = false
+    }
+
+    fun removePost(id: Int) {
+        viewModelScope.launch {
+            try {
+                loadAccessTokenUseCase().let { token ->
+                    if (token.isNotEmpty()) {
+                        NetworkModule.yappApi.removePost(token, id)
+                    }
+                }
+            } catch (e: Exception) {
+                println("PostDetailViewModel removePost error - ${e.message}")
+            }
+        }
     }
 
     fun setImageList(list: List<String>) {
@@ -90,6 +118,18 @@ class PostDetailViewModel: BaseViewModel() {
     fun clickRemoveButton(view: View) {
         _removeButtonFlag.value?.let {
             _removeButtonFlag.value = !it
+        }
+    }
+
+    fun clickDialogRemoveButton(view: View) {
+        _dialogRemoveButtonFlag.value?.let {
+            _dialogRemoveButtonFlag.value = !it
+        }
+    }
+
+    fun clickDialogCancelButton(view: View) {
+        _dialogCancelButtonFlag.value?.let {
+            _dialogCancelButtonFlag.value = !it
         }
     }
 }

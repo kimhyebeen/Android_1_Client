@@ -1,30 +1,43 @@
 package com.yapp.picon.presentation.postdetail
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
+import androidx.databinding.DataBindingUtil
+import androidx.viewpager2.widget.ViewPager2
 import com.yapp.picon.BR
 import com.yapp.picon.R
-import com.yapp.picon.data.model.Address
-import com.yapp.picon.data.model.Coordinate
-import com.yapp.picon.data.model.Emotion
-import com.yapp.picon.data.model.Post
+import com.yapp.picon.databinding.DialogCustomRemovePostBinding
 import com.yapp.picon.databinding.PostDetailActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Emotion
+import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.math.BigDecimal
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
 ) {
+    private lateinit var imagePagerAdapter: ImagePagerAdapter
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
+    private lateinit var removeDialog: Dialog
+    private lateinit var removeBuilder: AlertDialog.Builder
+    private var totalImage = 0
+    private var id = -1
+
     override val vm: PostDetailViewModel by viewModel()
 
     override fun initViewModel() {
         binding.setVariable(BR.postDetailVM, vm)
 
         vm.imageList.observe(this, {
-            setImagePager(it)
+            imagePagerAdapter.setItems(it)
         })
         vm.content.observe(this, {
             if (it.isEmpty()) binding.postDetailContentText.visibility = View.GONE
@@ -40,11 +53,27 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         vm.editButtonFlag.observe(this, {
             if (it) {
                 // todo - 편집 화면 띄우기
+                vm.clickEditIcon(binding.postDetailEditIconButton)
             }
         })
         vm.removeButtonFlag.observe(this, {
             if (it) {
-                // todo - 게시물 지우기
+                removeDialog.show()
+                setDialogSize()
+                vm.clickEditIcon(binding.postDetailEditIconButton)
+            }
+        })
+        vm.dialogRemoveButtonFlag.observe(this, {
+            if (it) {
+                removeDialog.dismiss()
+                vm.removePost(id)
+                finish()
+            }
+        })
+        vm.dialogCancelButtonFlag.observe(this, {
+            if (it) {
+                removeDialog.dismiss()
+                vm.initFlag()
             }
         })
     }
@@ -53,10 +82,9 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         super.onCreate(savedInstanceState)
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
+        setImagePager()
+        setFinishDialog()
         getPostFromIntent()
-        binding.postDetailImagePager.setOnClickListener {
-            // todo - 사진 full 화면 전환
-        }
     }
 
     override fun onResume() {
@@ -65,44 +93,72 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         vm.initFlag()
     }
 
-    private fun setImagePager(list: List<String>) {
-        // todo - 어댑터 구현 및 설정
-
-        vm.setImageNumber(1, 3)
+    private fun setImagePager() {
+        imagePagerAdapter = ImagePagerAdapter(this)
+        binding.postDetailImagePager.apply {
+            adapter = imagePagerAdapter
+            setOnClickListener {
+                // todo - 사진 full 화면 전환
+            }
+            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    vm.setImageNumber(position+1, totalImage)
+                }
+            })
+        }
     }
 
     private fun getPostFromIntent() {
-        // todo - intent에서 post객체 받아오기
-        val exPost = Post( // 더미 데이터
-            42,
-            Coordinate(BigDecimal(37.5600000), BigDecimal(126.9700000)),
-            listOf("https://search.pstatic.net/common/?autoRotate=true&quality=95&type=w750&src=https%3A%2F%2Fnaverbooking-phinf.pstatic.net%2F20201015_116%2F1602738772174qL85D_JPEG%2Fimage.jpg"),
-            Address("서울 영등포구 국제금융로2길 24", "서울", "", "영등포구"),
-            Emotion.VERY_LIGHT_BROWN,
-            "",
-            "2020.05.20"
-        )
+        val post = intent.getParcelableExtra<Post>("post")
+        post?.let {
+            totalImage = it.imageUrls?.size ?: 0
+            id = it.id ?: -1
 
-        setViewModel(exPost)
-        setEmotionCircleImage("VERY_LIGHT_BROWN")
-        setBackgroundColor("VERY_LIGHT_BROWN")
+            setViewModel(it)
+            setEmotionCircleImage(it.emotion?.name ?: "")
+            setBackgroundColor(it.emotion?.name ?: "")
+        }
     }
 
     private fun setViewModel(post: Post) {
-        // todo - post의 날짜로 적용하기
-        val date = "2020.05.20"
-        val dateList = date.split('.')
+        val dateList = post.createdDate?.split('.')
+            ?: throw Exception("PostDetailActivity - setViewModel - createdDate is null")
 
         vm.setImageList(post.imageUrls ?: listOf())
+        vm.setImageNumber(1, totalImage)
         vm.setAddress(post.address.address)
         vm.setDate(dateList[0].toInt(), dateList[1].toInt(), dateList[2].toInt())
         vm.setContent(post.memo ?: "")
 
         emotionDatabaseRepository.getAll().observe(this, { list ->
             vm.setEmotion(
-                list[getColorIndex("VERY_LIGHT_BROWN")].emotion
+                list[getColorIndex(post.emotion)].emotion
             )
         })
+    }
+
+    private fun setFinishDialog() {
+        val dialogRemoveView: DialogCustomRemovePostBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this), R.layout.dialog_custom_remove_post, null, false
+        )
+        dialogRemoveView.setVariable(BR.dialogRemove, vm)
+        removeBuilder = AlertDialog.Builder(this)
+        removeBuilder.setView(dialogRemoveView.root)
+
+        removeDialog = removeBuilder.create()
+        removeDialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
+    private fun setDialogSize() {
+        val layoutParams = WindowManager.LayoutParams().apply {
+            copyFrom(removeDialog.window!!.attributes)
+            width = (274 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+            height = WindowManager.LayoutParams.WRAP_CONTENT
+        }
+        removeDialog.window?.attributes = layoutParams
     }
 
     private fun setEmotionCircleImage(color: String) {
@@ -131,14 +187,14 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         )
     }
 
-    private fun getColorIndex(value: String): Int {
+    private fun getColorIndex(value: Emotion?): Int {
         return when(value) {
-            "SOFT_BLUE" -> 0
-            "CORN_FLOWER" -> 1
-            "BLUE_GRAY" -> 2
-            "VERY_LIGHT_BROWN" -> 3
-            "WARM_GRAY" -> 4
-            else -> throw Exception("PostDetailActivity - getColorIndex - color type is wrong.")
+            Emotion.SOFT_BLUE -> 0
+            Emotion.CORN_FLOWER -> 1
+            Emotion.BLUE_GRAY -> 2
+            Emotion.VERY_LIGHT_BROWN -> 3
+            Emotion.WARM_GRAY -> 4
+            else -> throw Exception("PostDetailActivity - getColorIndex - emotion is null.")
         }
     }
 

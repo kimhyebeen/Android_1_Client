@@ -53,7 +53,6 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userVM.requestUserInfo()
         binding.setVariable(BR.profileVM, vm)
 
         postAdapter = MyProfilePostAdapter(
@@ -74,6 +73,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
 
     override fun onResume() {
         super.onResume()
+        userVM.requestUserInfo()
         vm.initFlags()
     }
 
