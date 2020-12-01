@@ -28,9 +28,9 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         })
         vm.editIconFlag.observe(this, {
             if (it) {
-                // todo - 버튼 리스트 띄우기
+                binding.postDetailEditLinear.visibility = View.VISIBLE
             } else {
-                // todo - 버튼 리스트 감추기
+                binding.postDetailEditLinear.visibility = View.GONE
             }
         })
         vm.editButtonFlag.observe(this, {
