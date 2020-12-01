@@ -124,21 +124,7 @@ class CustomEmotionFragment(
         emotionDatabaseRepository.getAll().observe(this, {
             customAdapter.setItems(it)
             customAdapter.notifyDataSetChanged()
-
-            if (it.isEmpty()) {
-                initDatabase()
-            }
         })
-    }
-
-    private fun initDatabase() {
-        CoroutineScope(Dispatchers.IO).launch {
-            emotionDatabaseRepository.insert(EmotionEntity(1, "SOFT_BLUE", "새벽 3시"))
-            emotionDatabaseRepository.insert(EmotionEntity(2, "CORN_FLOWER", "구름없는 하늘"))
-            emotionDatabaseRepository.insert(EmotionEntity(3, "BLUE_GRAY", "아침 이슬"))
-            emotionDatabaseRepository.insert(EmotionEntity(4, "VERY_LIGHT_BROWN", "창문 너머 노을"))
-            emotionDatabaseRepository.insert(EmotionEntity(5, "WARM_GRAY", "잔잔한 밤"))
-        }
     }
 
     private fun saveEmotionList() {

@@ -29,6 +29,7 @@ import com.yapp.picon.presentation.model.PostMarker
 import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
+import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.nav.adapter.NavHeaderEmotionAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import com.yapp.picon.presentation.post.PostActivity
@@ -40,6 +41,9 @@ import com.yapp.picon.presentation.util.pinMarker
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ted.gun0912.clustering.naver.TedNaverClustering
 import kotlinx.android.synthetic.main.map_nav_head.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
@@ -48,6 +52,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 ), NavigationView.OnNavigationItemSelectedListener {
   
     override val vm: MapViewModel by viewModel()
+    private val userVM: UserInfoViewModel by viewModel()
 
     private lateinit var naverMap: NaverMap
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
@@ -57,6 +62,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userVM.requestUserInfo()
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
         headerEmotionAdapter = NavHeaderEmotionAdapter(R.layout.map_nav_head_emotion_item, BR.headEmoItem)
         /*
@@ -130,6 +136,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     private fun setNavHeader() {
+        observeUserToken()
+
         setUserCircleImage()
         setUserNameText()
         setAlarmImageEvent()
@@ -137,12 +145,26 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         setHeadEmotionAdapter()
     }
 
+    private fun observeUserToken() {
+        userVM.token.observe(this, {
+            vm.requestUserInfo(it)
+        })
+    }
+
     private fun setUserCircleImage() {
-        // todo - 유저 프로필 사진으로 변경
-        Glide.with(this)
-            .load(R.drawable.profile_pic)
-            .circleCrop()
-            .into(binding.navView.getHeaderView(0).nav_head_circle_user_image)
+        vm.profileImageUrl.observe(this, {
+            if (it.isNotEmpty()) {
+                Glide.with(this)
+                    .load(it)
+                    .circleCrop()
+                    .into(binding.navView.getHeaderView(0).nav_head_circle_user_image)
+            } else {
+                Glide.with(this)
+                    .load(R.drawable.profile_pic)
+                    .circleCrop()
+                    .into(binding.navView.getHeaderView(0).nav_head_circle_user_image)
+            }
+        })
 
         binding.navView.getHeaderView(0).nav_head_circle_user_image.setOnClickListener {
             startActivity(
@@ -152,7 +174,9 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     private fun setUserNameText() {
-        // todo - binding.navView.getHeaderView(0).nav_head_user_name_text에 '(닉네임)님' 적용
+        vm.profileNickname.observe(this, {
+            binding.navView.getHeaderView(0).nav_head_user_name_text.text = it
+        })
     }
 
     private fun setAlarmImageEvent() {
@@ -177,7 +201,21 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             origin.map { list.add(it) }
             headerEmotionAdapter.setItems(list)
             headerEmotionAdapter.notifyDataSetChanged()
+
+            if (origin.isEmpty()) {
+                initDatabase()
+            }
         })
+    }
+
+    private fun initDatabase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            emotionDatabaseRepository.insert(EmotionEntity(1, "SOFT_BLUE", "새벽 3시"))
+            emotionDatabaseRepository.insert(EmotionEntity(2, "CORN_FLOWER", "구름없는 하늘"))
+            emotionDatabaseRepository.insert(EmotionEntity(3, "BLUE_GRAY", "아침 이슬"))
+            emotionDatabaseRepository.insert(EmotionEntity(4, "VERY_LIGHT_BROWN", "창문 너머 노을"))
+            emotionDatabaseRepository.insert(EmotionEntity(5, "WARM_GRAY", "잔잔한 밤"))
+        }
     }
 
     private fun setCurrentLocation() {
