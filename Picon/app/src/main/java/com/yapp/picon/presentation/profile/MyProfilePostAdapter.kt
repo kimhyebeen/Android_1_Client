@@ -12,15 +12,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MyProfilePostItemBinding
 import com.yapp.picon.presentation.base.BaseRecyclerView
-import com.yapp.picon.presentation.model.MyProfilePost
+import com.yapp.picon.presentation.model.Emotion
+import com.yapp.picon.presentation.model.Post
 import kotlinx.android.synthetic.main.my_profile_post_item.view.*
 
 class MyProfilePostAdapter(
     private val context: Context,
-    private val clickEvent: (View, Int) -> Unit,
+    private val clickEvent: (View, Post) -> Unit,
     @LayoutRes private val layoutRes: Int,
     bindingVariabledId: Int
-) : BaseRecyclerView.BaseAdapter<MyProfilePost, MyProfilePostItemBinding>(
+) : BaseRecyclerView.BaseAdapter<Post, MyProfilePostItemBinding>(
     layoutRes,
     bindingVariabledId
 ) {
@@ -33,23 +34,19 @@ class MyProfilePostAdapter(
         super.onBindViewHolder(baseViewHolder, position)
         // todo - 게시물 아이템 사이즈 조절하기
         baseViewHolder.itemView.apply {
-            setBackgroundResource(
-                getColors(items[position].color)
-            )
-            setOnClickListener { clickEvent(it, items[position].id) }
+            items[position].emotion?.let { setBackgroundResource(getColors(it)) }
+            setOnClickListener { clickEvent(it, items[position]) }
         }
 
         val multiOption = MultiTransformation(
             CenterCrop(),
             RoundedCorners(5)
         )
-        if (items[position].imageUrl.isNotEmpty()) {
+        items[position].imageUrls?.let { imageList ->
             Glide.with(context)
-                .load(items[position].imageUrl)
+                .load(imageList[0])
                 .apply(RequestOptions.bitmapTransform(multiOption))
                 .into(baseViewHolder.itemView.my_profile_post_item_image)
-        } else {
-            // todo - 이미지가 없을 수도 있나??
         }
     }
 
@@ -59,14 +56,13 @@ class MyProfilePostAdapter(
 //        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
 //    }
 
-    private fun getColors(color: String): Int {
+    private fun getColors(color: Emotion): Int {
         return when(color) {
-            "SOFT_BLUE" -> R.drawable.ic_custom_rounded_soft_blue
-            "CORN_FLOWER" -> R.drawable.ic_custom_rounded_corn_flower
-            "BLUE_GRAY" -> R.drawable.ic_custom_rounded_blue_gray
-            "VERY_LIGHT_BROWN" -> R.drawable.ic_custom_rounded_very_light_brown
-            "WARM_GRAY" -> R.drawable.ic_custom_rounded_warm_gray
-            else -> throw Exception("MyProfilePostAdapter - getColors - color type is wrong.")
+            Emotion.SOFT_BLUE -> R.drawable.ic_custom_rounded_soft_blue
+            Emotion.CORN_FLOWER -> R.drawable.ic_custom_rounded_corn_flower
+            Emotion.BLUE_GRAY -> R.drawable.ic_custom_rounded_blue_gray
+            Emotion.VERY_LIGHT_BROWN -> R.drawable.ic_custom_rounded_very_light_brown
+            Emotion.WARM_GRAY -> R.drawable.ic_custom_rounded_warm_gray
         }
     }
 }

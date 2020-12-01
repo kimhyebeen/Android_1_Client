@@ -6,7 +6,7 @@
     <data>
         <variable
             name="profilePost"
-            type="com.yapp.picon.presentation.model.MyProfilePost" />
+            type="com.yapp.picon.presentation.model.Post" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
