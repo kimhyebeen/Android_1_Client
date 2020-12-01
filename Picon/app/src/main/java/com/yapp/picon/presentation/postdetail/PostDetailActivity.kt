@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.View
 import com.yapp.picon.BR
 import com.yapp.picon.R
-import com.yapp.picon.data.model.Address
-import com.yapp.picon.data.model.Coordinate
-import com.yapp.picon.data.model.Emotion
-import com.yapp.picon.data.model.Post
 import com.yapp.picon.databinding.PostDetailActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.math.BigDecimal
@@ -72,20 +69,12 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     }
 
     private fun getPostFromIntent() {
-        // todo - intent에서 post객체 받아오기
-        val exPost = Post( // 더미 데이터
-            42,
-            Coordinate(BigDecimal(37.5600000), BigDecimal(126.9700000)),
-            listOf("https://search.pstatic.net/common/?autoRotate=true&quality=95&type=w750&src=https%3A%2F%2Fnaverbooking-phinf.pstatic.net%2F20201015_116%2F1602738772174qL85D_JPEG%2Fimage.jpg"),
-            Address("서울 영등포구 국제금융로2길 24", "서울", "", "영등포구"),
-            Emotion.VERY_LIGHT_BROWN,
-            "",
-            "2020.05.20"
-        )
-
-        setViewModel(exPost)
-        setEmotionCircleImage("VERY_LIGHT_BROWN")
-        setBackgroundColor("VERY_LIGHT_BROWN")
+        val post = intent.getParcelableExtra<Post>("post")
+        post?.let {
+            setViewModel(it)
+            setEmotionCircleImage(it.emotion?.name ?: "")
+            setBackgroundColor(it.emotion?.name ?: "")
+        }
     }
 
     private fun setViewModel(post: Post) {
