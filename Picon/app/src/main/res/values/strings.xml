@@ -68,6 +68,7 @@
     <string name="X">X</string>
     <string name="follow">팔로우</string>
     <string name="un_follow">언팔로우</string>
+    <string name="edit">편집</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
     <string name="withdrawal">탈퇴</string>
