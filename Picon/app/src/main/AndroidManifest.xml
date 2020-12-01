@@ -52,6 +52,8 @@
 
         <activity android:name=".presentation.profile.MyProfileActivity" />
 
+        <activity android:name=".presentation.pingallery.PinGalleryActivity" />
+
     </application>
 
 </manifest>

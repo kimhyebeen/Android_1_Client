@@ -38,6 +38,7 @@ import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
 import com.yapp.picon.presentation.nav.adapter.NavHeaderEmotionAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
+import com.yapp.picon.presentation.pingallery.PinGalleryActivity
 import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.profile.MyProfileActivity
 import com.yapp.picon.presentation.search.SearchActivity
@@ -361,6 +362,11 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                     )
                 }.markerClickListener {
                     val item = arrayListOf(toPost(it))
+
+                    startActivity(
+                        Intent(this@MapActivity, PinGalleryActivity::class.java)
+                            .putParcelableArrayListExtra("posts", item)
+                    )
                 }
                 .customCluster {
                     clusterMarker(
@@ -372,6 +378,11 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                     it.items.forEach { postMarker ->
                         items.add(toPost(postMarker))
                     }
+
+                    startActivity(
+                        Intent(this@MapActivity, PinGalleryActivity::class.java)
+                            .putParcelableArrayListExtra("posts", items)
+                    )
                 }
                 .items(postMarkers)
                 .make()
