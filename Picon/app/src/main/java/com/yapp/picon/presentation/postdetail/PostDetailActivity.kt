@@ -6,6 +6,7 @@ import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.PostDetailActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -78,9 +79,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     }
 
     private fun setViewModel(post: Post) {
-        // todo - post의 날짜로 적용하기
-        val date = "2020.05.20"
-        val dateList = date.split('.')
+        val dateList = post.createdDate?.split('.')
+            ?: throw Exception("PostDetailActivity - setViewModel - createdDate is null")
 
         vm.setImageList(post.imageUrls ?: listOf())
         vm.setAddress(post.address.address)
@@ -89,7 +89,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 
         emotionDatabaseRepository.getAll().observe(this, { list ->
             vm.setEmotion(
-                list[getColorIndex("VERY_LIGHT_BROWN")].emotion
+                list[getColorIndex(post.emotion)].emotion
             )
         })
     }
@@ -120,14 +120,14 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         )
     }
 
-    private fun getColorIndex(value: String): Int {
+    private fun getColorIndex(value: Emotion?): Int {
         return when(value) {
-            "SOFT_BLUE" -> 0
-            "CORN_FLOWER" -> 1
-            "BLUE_GRAY" -> 2
-            "VERY_LIGHT_BROWN" -> 3
-            "WARM_GRAY" -> 4
-            else -> throw Exception("PostDetailActivity - getColorIndex - color type is wrong.")
+            Emotion.SOFT_BLUE -> 0
+            Emotion.CORN_FLOWER -> 1
+            Emotion.BLUE_GRAY -> 2
+            Emotion.VERY_LIGHT_BROWN -> 3
+            Emotion.WARM_GRAY -> 4
+            else -> throw Exception("PostDetailActivity - getColorIndex - emotion is null.")
         }
     }
 
