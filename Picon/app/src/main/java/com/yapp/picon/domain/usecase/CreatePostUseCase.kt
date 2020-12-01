@@ -24,7 +24,8 @@ class CreatePostUseCase(
                         imageUrls = imageUrls,
                         address = address,
                         emotion = emotion,
-                        memo = memo
+                        memo = memo,
+                        createdDate = null
                     )
                 )
             )

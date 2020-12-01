@@ -5,10 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -22,31 +26,35 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MapActivityBinding
+import com.yapp.picon.databinding.MarkerViewBinding
 import com.yapp.picon.helper.LocationHelper
 import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
-import com.yapp.picon.presentation.model.PostMarker
+import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.EmotionEntity
+import com.yapp.picon.presentation.model.Post
+import com.yapp.picon.presentation.model.PostMarker
 import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
 import com.yapp.picon.presentation.nav.adapter.NavHeaderEmotionAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
+import com.yapp.picon.presentation.pingallery.PinGalleryActivity
 import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.profile.MyProfileActivity
 import com.yapp.picon.presentation.search.SearchActivity
 import com.yapp.picon.presentation.util.NaverCamera
-import com.yapp.picon.presentation.util.clusterMarker
-import com.yapp.picon.presentation.util.pinMarker
+import com.yapp.picon.presentation.util.toPost
+import jp.wasabeef.glide.transformations.MaskTransformation
+import kotlinx.android.synthetic.main.map_nav_head.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ted.gun0912.clustering.naver.TedNaverClustering
-import kotlinx.android.synthetic.main.map_nav_head.view.*
 
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.layout.map_activity,
     R.id.map_frame
 ), NavigationView.OnNavigationItemSelectedListener {
-  
+
     override val vm: MapViewModel by viewModel()
 
     private lateinit var naverMap: NaverMap
@@ -76,6 +84,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         super.onResume()
 
         setNavHeader()
+        vm.requestPosts()
     }
 
     override fun initViewModel() {
@@ -296,16 +305,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         settingOptionToMap()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        vm.requestPosts()
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -350,20 +349,164 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             TedNaverClustering.with<PostMarker>(this, naverMap)
                 .customMarker { clusterItem ->
                     pinMarker(
-                        clusterItem.position,
-                        this@MapActivity,
-                        clusterItem.imageUrls?.get(0),
-                        clusterItem.emotion
+                        clusterItem
                     )
-                }.customCluster {
+                }.markerClickListener {
+                    val item = arrayListOf(toPost(it))
+
+                    startActivity(
+                        Intent(this@MapActivity, PinGalleryActivity::class.java)
+                            .putParcelableArrayListExtra("posts", item)
+                    )
+                }
+                .customCluster {
                     clusterMarker(
-                        this@MapActivity,
-                        it.items.random(),
-                        it.items.size
+                        it.items
+                    )
+                }
+                .clusterClickListener {
+                    val items = arrayListOf<Post>()
+                    it.items.forEach { postMarker ->
+                        items.add(toPost(postMarker))
+                    }
+
+                    startActivity(
+                        Intent(this@MapActivity, PinGalleryActivity::class.java)
+                            .putParcelableArrayListExtra("posts", items)
                     )
                 }
                 .items(postMarkers)
                 .make()
         }
     }
+
+    private fun pinMarker(
+        postMarker: PostMarker
+    ): Marker {
+        val latLng =
+            LatLng(postMarker.coordinate.lat.toDouble(), postMarker.coordinate.lng.toDouble())
+        val imageUrl = postMarker.imageUrls?.get(0)
+        val emotion = postMarker.emotion
+
+        return Marker(latLng).apply {
+            layoutInflater.inflate(R.layout.marker_view, null).run {
+                DataBindingUtil.bind<MarkerViewBinding>(this)?.run {
+                    when (emotion) {
+                        Emotion.SOFT_BLUE -> {
+                            markerViewIvMarker.setBackgroundResource(
+                                R.drawable.pin_soft_blue
+                            )
+                        }
+
+                        Emotion.CORN_FLOWER -> {
+                            markerViewIvMarker.setBackgroundResource(
+                                R.drawable.pin_cornflower
+                            )
+                        }
+
+                        Emotion.BLUE_GRAY -> {
+                            markerViewIvMarker.setBackgroundResource(
+                                R.drawable.pin_blue_grey
+                            )
+                        }
+
+                        Emotion.VERY_LIGHT_BROWN -> {
+                            markerViewIvMarker.setBackgroundResource(
+                                R.drawable.pin_very_light_brown
+                            )
+                        }
+
+                        Emotion.WARM_GRAY -> {
+                            markerViewIvMarker.setBackgroundResource(
+                                R.drawable.pin_warm_grey
+                            )
+                        }
+                    }
+
+                    Glide.with(this@MapActivity)
+                        .load(imageUrl)
+                        .apply(
+                            RequestOptions.bitmapTransform(
+                                MaskTransformation(R.drawable.pin_image)
+                            )
+                        )
+                        .thumbnail(0.1f)
+                        .into(markerViewIvImage)
+                }
+                icon = OverlayImage.fromView(this)
+            }
+        }
+    }
+
+    private fun clusterMarker(
+        postMarkers: Collection<PostMarker>
+    ): View {
+        val count = postMarkers.size
+        val thisPostMarker = postMarkers.random()
+
+        return layoutInflater.inflate(R.layout.marker_view, null).apply {
+            DataBindingUtil.bind<MarkerViewBinding>(this)?.run {
+                markerViewTvCount.text = count.toString()
+                markerViewTvCount.visibility = View.VISIBLE
+
+                when (thisPostMarker.emotion) {
+                    Emotion.SOFT_BLUE -> {
+                        markerViewTvCount.setBackgroundResource(
+                            R.drawable.bg_soft_blue_radius_1dp
+                        )
+                        markerViewIvMarker.setBackgroundResource(
+                            R.drawable.pin_soft_blue
+                        )
+                    }
+
+                    Emotion.CORN_FLOWER -> {
+                        markerViewTvCount.setBackgroundResource(
+                            R.drawable.bg_cornflower_radius_1dp
+                        )
+                        markerViewIvMarker.setBackgroundResource(
+                            R.drawable.pin_cornflower
+                        )
+                    }
+
+                    Emotion.BLUE_GRAY -> {
+                        markerViewTvCount.setBackgroundResource(
+                            R.drawable.bg_blue_grey_radius_1dp
+                        )
+                        markerViewIvMarker.setBackgroundResource(
+                            R.drawable.pin_blue_grey
+                        )
+                    }
+
+                    Emotion.VERY_LIGHT_BROWN -> {
+                        markerViewTvCount.setBackgroundResource(
+                            R.drawable.bg_very_light_brown_radius_1dp
+                        )
+                        markerViewIvMarker.setBackgroundResource(
+                            R.drawable.pin_very_light_brown
+                        )
+                    }
+
+                    Emotion.WARM_GRAY -> {
+                        markerViewTvCount.setBackgroundResource(
+                            R.drawable.bg_warm_grey_radius_1dp
+                        )
+                        markerViewIvMarker.setBackgroundResource(
+                            R.drawable.pin_warm_grey
+                        )
+                    }
+                }
+
+                Glide.with(this@MapActivity)
+                    .load(thisPostMarker.imageUrls?.random())
+                    .apply(
+                        RequestOptions.bitmapTransform(
+                            MaskTransformation(R.drawable.pin_image)
+                        )
+                    )
+                    .thumbnail(0.1f)
+                    .into(markerViewIvImage)
+            }
+        }
+    }
+
 }

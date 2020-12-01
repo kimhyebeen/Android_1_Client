@@ -1,6 +1,10 @@
-package com.yapp.picon.data.model
+package com.yapp.picon.presentation.model
 
-data class Post(
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+class Post(
     val id: Int?,
     val coordinate: Coordinate,
     val imageUrls: List<String>?,
@@ -8,4 +12,4 @@ data class Post(
     val emotion: Emotion?,
     val memo: String?,
     val createdDate: String?
-)
+) : Parcelable
