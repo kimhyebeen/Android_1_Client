@@ -59,8 +59,16 @@ class PostDetailViewModel: BaseViewModel() {
         _content.value = value
     }
 
-    fun setDate(value: String) {
-        _date.value = value
+    fun setDate(year: Int, month: Int, day: Int) {
+        if (month < 10 && day < 10) {
+            _date.value = "${year}년 0${month}월 0${day}일"
+        } else if (month < 10 && day >= 10) {
+            _date.value = "${year}년 0${month}월 ${day}일"
+        } else if (month >= 10 && day < 10) {
+            _date.value = "${year}년 ${month}월 0${day}일"
+        } else {
+            _date.value = "${year}년 ${month}월 ${day}일"
+        }
     }
 
     fun setImageNumber(count: Int, total: Int) {

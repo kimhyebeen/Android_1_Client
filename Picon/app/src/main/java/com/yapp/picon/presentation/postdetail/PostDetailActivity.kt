@@ -78,7 +78,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private fun setViewModel(post: Post) {
         vm.setImageList(post.imageUrls ?: listOf())
         vm.setAddress(post.address.address)
-        vm.setDate("2020년 05월 20일")
+        // todo - post의 날짜로 적용하기
+        vm.setDate(2020, 5, 20)
         vm.setEmotion(Emotion.VERY_LIGHT_BROWN.toString())
         vm.setContent(post.memo ?: "")
     }
