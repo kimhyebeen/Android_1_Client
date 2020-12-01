@@ -64,6 +64,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         })
         vm.dialogRemoveButtonFlag.observe(this, {
             if (it) {
+                removeDialog.dismiss()
                 vm.removePost(id)
                 finish()
             }
