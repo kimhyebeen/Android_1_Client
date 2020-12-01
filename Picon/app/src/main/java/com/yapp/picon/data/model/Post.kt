@@ -6,5 +6,6 @@ data class Post(
     val imageUrls: List<String>?,
     val address: Address,
     val emotion: Emotion?,
-    val memo: String?
+    val memo: String?,
+    val createdDate: String?
 )

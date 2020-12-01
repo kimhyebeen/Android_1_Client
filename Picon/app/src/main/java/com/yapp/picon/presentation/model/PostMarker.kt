@@ -12,6 +12,7 @@ data class PostMarker(
     val address: Address,
     val emotion: Emotion?,
     val memo: String?,
+    val createdDate: String?,
     var position: LatLng = LatLng(coordinate.lat.toDouble(), coordinate.lng.toDouble())
 ) : TedClusterItem {
 

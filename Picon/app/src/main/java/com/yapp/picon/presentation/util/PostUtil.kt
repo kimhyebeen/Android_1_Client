@@ -9,7 +9,8 @@ fun toPresentation(post: com.yapp.picon.data.model.Post): Post =
         post.imageUrls,
         toPresentation(post.address),
         post.emotion?.let { toPresentation(it) },
-        post.memo
+        post.memo,
+        post.createdDate
     )
 
 private fun toPresentation(coordinate: com.yapp.picon.data.model.Coordinate): Coordinate =
@@ -28,7 +29,8 @@ fun toPostMarker(post: Post): PostMarker =
         post.imageUrls,
         post.address,
         post.emotion,
-        post.memo
+        post.memo,
+        post.createdDate
     )
 
 fun toPost(postMarker: PostMarker) =
@@ -38,5 +40,6 @@ fun toPost(postMarker: PostMarker) =
         postMarker.imageUrls,
         postMarker.address,
         postMarker.emotion,
-        postMarker.memo
+        postMarker.memo,
+        postMarker.createdDate
     )
