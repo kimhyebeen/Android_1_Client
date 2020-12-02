@@ -57,6 +57,36 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <EditText
+            android:id="@+id/manage_friend_search_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/bg_edit_text_white_80"
+            android:ems="10"
+            android:hint="@string/manage_friend_edit_hint"
+            android:inputType="textPersonName"
+            android:paddingStart="12dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="46dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/manage_friend_tool_bar" />
+
+        <ImageView
+            android:id="@+id/manage_friend_search_delete_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/manage_friend_search_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/manage_friend_search_et"
+            app:srcCompat="@drawable/ic_search_delete" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
