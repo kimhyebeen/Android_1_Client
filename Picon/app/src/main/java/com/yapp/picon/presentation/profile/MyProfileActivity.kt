@@ -22,8 +22,8 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     private lateinit var postAdapter: MyProfilePostAdapter
     private val getContent = registerForActivityResult(
         ActivityResultContracts.GetContent()
-    ) {
-        vm.requestUploadProfileImage(it)
+    ) { imageUri ->
+        // todo - 여기서 갤러리에서 선택한 이미지 uri를 받아서, 프로필 이미지를 업데이터 해야합니다.
     }
 
     private val userVM: UserInfoViewModel by viewModel()
