@@ -54,6 +54,8 @@
 
         <activity android:name=".presentation.postdetail.PostDetailActivity" />
 
+        <activity android:name=".presentation.postdetail.PostDetailImageActivity" />
+
         <activity android:name=".presentation.pingallery.PinGalleryActivity" />
 
     </application>

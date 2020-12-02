@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.postdetail
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -30,6 +31,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private lateinit var removeBuilder: AlertDialog.Builder
     private var totalImage = 0
     private var id = -1
+    private var emotionColor = ""
 
     override val vm: PostDetailViewModel by viewModel()
 
@@ -94,12 +96,16 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     }
 
     private fun setImagePager() {
-        imagePagerAdapter = ImagePagerAdapter(this)
+        imagePagerAdapter = ImagePagerAdapter(this) { img ->
+            println("PostDetailActivity - setImagePager - $emotionColor, $img")
+            Intent(this, PostDetailImageActivity::class.java).apply {
+                putExtra("image", img)
+                putExtra("color", emotionColor)
+            }.let { startActivity(it) }
+        }
+
         binding.postDetailImagePager.apply {
             adapter = imagePagerAdapter
-            setOnClickListener {
-                // todo - 사진 full 화면 전환
-            }
             registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -116,6 +122,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
             id = it.id ?: -1
 
             setViewModel(it)
+            emotionColor = post.emotion?.name ?: ""
             setEmotionCircleImage(it.emotion?.name ?: "")
             setBackgroundColor(it.emotion?.name ?: "")
         }

@@ -5,7 +5,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class ImagePagerAdapter(
-    fa: FragmentActivity
+    fa: FragmentActivity,
+    private val clickEvent: (String) -> Unit
 ): FragmentStateAdapter(fa) {
     private var items = listOf<String>()
 
@@ -17,7 +18,7 @@ class ImagePagerAdapter(
     override fun getItemCount(): Int = items.size
 
     override fun createFragment(position: Int): Fragment {
-        return PostDetailImageSlideFragment(items[position])
+        return PostDetailImageSlideFragment(items[position]) { img -> clickEvent(img) }
     }
 
 }
