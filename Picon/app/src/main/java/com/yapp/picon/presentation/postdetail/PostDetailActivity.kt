@@ -2,13 +2,17 @@ package com.yapp.picon.presentation.postdetail
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.yapp.picon.BR
@@ -20,6 +24,7 @@ import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.nio.file.Files.move
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
@@ -30,6 +35,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private lateinit var removeBuilder: AlertDialog.Builder
     private var totalImage = 0
     private var id = -1
+    private var emotionColor = ""
 
     override val vm: PostDetailViewModel by viewModel()
 
@@ -82,6 +88,11 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         super.onCreate(savedInstanceState)
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
+        window.run {
+            sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+            sharedElementExitTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        }
+
         setImagePager()
         setFinishDialog()
         getPostFromIntent()
@@ -94,12 +105,20 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     }
 
     private fun setImagePager() {
-        imagePagerAdapter = ImagePagerAdapter(this)
+        imagePagerAdapter = ImagePagerAdapter(this) { img ->
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                binding.postDetailImagePager,
+                "image"
+            )
+
+            Intent(this, PostDetailImageActivity::class.java).apply {
+                putExtra("image", img)
+                putExtra("color", emotionColor)
+            }.let { startActivity(it, options.toBundle()) }
+        }
+
         binding.postDetailImagePager.apply {
             adapter = imagePagerAdapter
-            setOnClickListener {
-                // todo - 사진 full 화면 전환
-            }
             registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -116,6 +135,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
             id = it.id ?: -1
 
             setViewModel(it)
+            emotionColor = post.emotion?.name ?: ""
             setEmotionCircleImage(it.emotion?.name ?: "")
             setBackgroundColor(it.emotion?.name ?: "")
         }
