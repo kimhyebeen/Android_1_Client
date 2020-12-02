@@ -37,6 +37,7 @@
                     android:contentDescription="@string/image_description"
                     android:padding="18dp"
                     android:src="@drawable/ic_back"
+                    android:onClick="@{manageVM::clickBackButton}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
