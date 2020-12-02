@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.postdetail
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.yapp.picon.R
 import com.yapp.picon.databinding.PostDetailImageActivityBinding
@@ -17,6 +18,9 @@ class PostDetailImageActivity: BaseActivity<PostDetailImageActivityBinding, Post
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        ViewCompat.setTransitionName(binding.postDetailImageView, "image")
+
         val image = intent.getStringExtra("image")
         val color = intent.getStringExtra("color")
 
