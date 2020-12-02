@@ -1,5 +1,6 @@
 package com.yapp.picon.data.repository.post
 
+import com.yapp.picon.data.model.DefaultResponse
 import com.yapp.picon.data.model.PostRequest
 import com.yapp.picon.data.model.PostResponse
 import com.yapp.picon.data.model.PostsResponse
@@ -20,4 +21,7 @@ class PostRepositoryImpl(
 
     override suspend fun requestPosts(accessToken: String): PostsResponse =
         yappDataSource.requestPosts(accessToken)
+
+    override suspend fun deletePost(accessToken: String, id: String): DefaultResponse =
+        yappDataSource.deletePost(accessToken, id)
 }

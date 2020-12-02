@@ -38,6 +38,13 @@ interface YappApi {
         @Header("AccessToken") accessToken: String
     ): PostsResponse
 
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @DELETE("display/post/{id}")
+    suspend fun deletePost(
+        @Header("AccessToken") AccessToken: String,
+        @Path("id") id: String
+    ): DefaultResponse
+
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(
         @Header("AccessToken") AccessToken: String,
