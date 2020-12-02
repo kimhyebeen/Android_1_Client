@@ -35,7 +35,7 @@
     <string name="nav_statistic_place_title">장소 Top5</string>
     <string name="nav_statistic_pin">핀</string>
     <string name="nav_statistic_place">서울 강남구</string>
-    
+
     <string name="dialog_custom_emotion_title">색상에 어울리는 감정을 정해주세요.</string>
     <string name="dialog_custom_finish_title">변경된 내용을 저장하지 않겠습니까?</string>
 
@@ -79,4 +79,6 @@
     <string name="id">아이디</string>
     <string name="pw">비밀번호</string>
     <string name="join_membership">회원가입</string>
+    <string name="edit">편집</string>
+    <string name="pin_gallery">핀 갤러리</string>
 </resources>

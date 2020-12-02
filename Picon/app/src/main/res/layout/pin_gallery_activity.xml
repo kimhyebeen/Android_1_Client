@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,9 +16,11 @@
         android:background="@color/dark_grey">
 
         <ImageButton
+            android:id="@+id/pin_gallery_ib_back"
+            visibleOrGone="@{pinGalleryVM.showYN}"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="18dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/image_description"
             android:paddingStart="18dp"
@@ -29,12 +32,31 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/pin_gallery_tv_cancel"
+            visibleOrGone="@{pinGalleryVM.editYN}"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:gravity="end"
+            android:paddingStart="11dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="11dp"
+            android:paddingBottom="14dp"
+            android:text="@string/cancellation"
+            android:textColor="@color/very_light_pink"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/pin_gallery_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:gravity="center_horizontal"
-            android:text="핀 갤러리"
+            android:text="@string/pin_gallery"
             android:textColor="@color/very_light_pink"
             android:textSize="16sp"
             android:textStyle="normal"
@@ -43,6 +65,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/pin_gallery_tv_edit"
+            visibleOrGone="@{pinGalleryVM.showYN}"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginTop="18dp"
@@ -52,12 +76,32 @@
             android:paddingTop="14dp"
             android:paddingEnd="11dp"
             android:paddingBottom="14dp"
-            android:text="편집"
+            android:text="@string/edit"
             android:textColor="@color/very_light_pink"
             android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/pin_gallery_tv_delete"
+            visibleOrGone="@{pinGalleryVM.editYN}"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:gravity="end"
+            android:paddingStart="11dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="11dp"
+            android:paddingBottom="14dp"
+            android:text="@{pinGalleryVM.deleteCount}"
+            android:textColor="@color/coral"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="삭제(4)" />
 
         <TextView
             android:id="@+id/pin_gallery_tv_address"
@@ -66,12 +110,13 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="18dp"
             android:gravity="end"
-            android:text="서울시 강서구"
+            android:text="@{pinGalleryVM.address}"
             android:textColor="@color/very_light_pink"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pin_gallery_tv_title" />
+            app:layout_constraintTop_toBottomOf="@id/pin_gallery_tv_title"
+            tools:text="서울시 강서구" />
 
         <TextView
             android:id="@+id/pin_gallery_tv_count"
@@ -80,23 +125,26 @@
             android:layout_marginStart="10dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="end"
-            android:text="23 pins"
+            android:text="@{pinGalleryVM.pinCount}"
             android:textColor="@color/very_light_pink_two"
             android:textSize="14sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@id/pin_gallery_tv_address"
             app:layout_constraintStart_toEndOf="@id/pin_gallery_tv_address"
-            app:layout_constraintTop_toTopOf="@id/pin_gallery_tv_address" />
+            app:layout_constraintTop_toTopOf="@id/pin_gallery_tv_address"
+            tools:text="23 pins" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pin_gallery_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pin_gallery_tv_address"
-            app:setItems="@{pinGalleryVM.items}" />
+            app:setPinItems="@{pinGalleryVM.items}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

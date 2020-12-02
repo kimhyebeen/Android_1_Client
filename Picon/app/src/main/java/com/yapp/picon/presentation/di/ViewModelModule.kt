@@ -19,5 +19,5 @@ val viewModelModule = module {
     viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { PostViewModel(get(), get()) }
     viewModel { UserInfoViewModel(get()) }
-    viewModel { PinGalleryViewModel() }
+    viewModel { PinGalleryViewModel(get(), get()) }
 }
