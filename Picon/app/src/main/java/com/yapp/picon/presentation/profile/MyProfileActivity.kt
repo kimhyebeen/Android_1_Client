@@ -22,8 +22,8 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     private lateinit var postAdapter: MyProfilePostAdapter
     private val getContent = registerForActivityResult(
         ActivityResultContracts.GetContent()
-    ) {
-        // todo - 서버에 프로필 사진 저장
+    ) { imageUri ->
+        // todo - 여기서 갤러리에서 선택한 이미지 uri를 받아서, 프로필 이미지를 업데이터 해야합니다.
     }
 
     private val userVM: UserInfoViewModel by viewModel()
@@ -34,10 +34,9 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
             if (it) onBackPressed()
         })
         vm.profileImageUrl.observe(this, {
-            if (it.isEmpty()) setProfileImage(null)
+            if (it.isNotEmpty()) setProfileImage(it)
             else {
-                setProfileImage(it)
-                // todo - 그냥 http String일 때랑, Uri로 변환해줘야 하는 걸 어떻게 구분해야하지?
+                setProfileImage(null)
             }
         })
         vm.changeProfileImageButton.observe(this, {
@@ -77,10 +76,10 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         vm.initFlags()
     }
 
-    private fun <T> setProfileImage(value: T?) {
+    private fun setProfileImage(value: String?) {
         value?.let {
             Glide.with(this)
-                .load(it)
+                .load(value)
                 .circleCrop()
                 .into(binding.myProfileUserImage)
         } ?: run {
