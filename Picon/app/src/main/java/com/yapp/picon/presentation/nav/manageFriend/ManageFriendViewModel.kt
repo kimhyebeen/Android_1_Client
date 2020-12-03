@@ -16,13 +16,16 @@ class ManageFriendViewModel: BaseViewModel() {
     private val _followerList = MutableLiveData<List<FollowItem>>()
     val followerList: LiveData<List<FollowItem>> get() = _followerList
 
+    private val _searchList = MutableLiveData<List<FollowItem>>()
+    val searchList: LiveData<List<FollowItem>> get() = _searchList
+
     val searchText = MutableLiveData<String>()
 
     init {
         _backButton.value = false
         searchText.value = ""
 
-        // todo - api 연결 후 followingList, followerList 삭제
+        // todo - api 연결 후 followingList, followerList, searchList 삭제
         _followingList.value = listOf(
             FollowItem(0,
                 "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
@@ -64,6 +67,37 @@ class ManageFriendViewModel: BaseViewModel() {
                 true
             )
         )
+
+        _searchList.value = listOf(
+            FollowItem(0,
+                "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
+                "apple@naver.com",
+                true,
+                true
+            ),
+            FollowItem(1,
+                "",
+                "orange@naver.com",
+                true,
+                false
+            ),
+            FollowItem(2,
+                "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
+                "mango11@naver.com",
+                true,
+                true
+            ),
+            FollowItem(3,
+                "",
+                "watermelon@naver.com",
+                false,
+                true
+            )
+        )
+    }
+
+    fun requestSearch(search: String) {
+        // todo - search api 요청
     }
 
     fun clickBackButton(view: View) {

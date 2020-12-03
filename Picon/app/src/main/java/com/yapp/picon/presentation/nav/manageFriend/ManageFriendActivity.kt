@@ -30,6 +30,8 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
 
                 onHideKeypad()
             } else {
+                vm.requestSearch(it)
+
                 binding.manageFriendSearchDeleteButton.visibility = View.VISIBLE
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.manage_friend_frame_layout, searchFragment)
