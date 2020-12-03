@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.google.android.material.tabs.TabLayoutMediator
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendActivityBinding
@@ -14,7 +13,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFriendViewModel>(
     R.layout.manage_friend_activity
 ) {
-    private lateinit var pagerAdapter: ManageFriendPagerAdapter
+    private lateinit var mainFragment: ManageFriendMainFragment
+    private val searchFragment = ManageFriendSearchFragment()
     override val vm: ManageFriendViewModel by viewModel()
 
     override fun initViewModel() {
@@ -24,9 +24,16 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
         vm.searchText.observe(this, {
             if (it.isEmpty()) {
                 binding.manageFriendSearchDeleteButton.visibility = View.GONE
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.manage_friend_frame_layout, mainFragment)
+                    .addToBackStack(null).commit()
+
                 onHideKeypad()
             } else {
                 binding.manageFriendSearchDeleteButton.visibility = View.VISIBLE
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.manage_friend_frame_layout, searchFragment)
+                    .addToBackStack(null).commit()
             }
         })
     }
@@ -35,20 +42,7 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
         super.onCreate(savedInstanceState)
         binding.setVariable(BR.manageVM, vm)
 
-        setPagerAdapter()
-    }
-
-    private fun setPagerAdapter() {
-        pagerAdapter = ManageFriendPagerAdapter(this)
-        binding.manageFriendViewPager.adapter = pagerAdapter
-
-        TabLayoutMediator(
-            binding.manageFriendTabLayout,
-            binding.manageFriendViewPager
-        ) { tab, position ->
-            if (position == 0) tab.text = getString(R.string.my_profile_following)
-            else tab.text = getString(R.string.my_profile_follower)
-        }.attach()
+        mainFragment = ManageFriendMainFragment(this)
     }
 
     private fun onHideKeypad() {
@@ -56,5 +50,10 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
         val view: View = currentFocus ?: View(this)
         view.clearFocus()
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
