@@ -2,6 +2,7 @@ package com.yapp.picon.presentation.nav.manageFriend
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.yapp.picon.BR
@@ -21,8 +22,8 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
         vm.backButton.observe(this, {
             if (it) onBackPressed()
         })
-        vm.searchText.observe(this, {
-            if (it.isEmpty()) {
+        vm.searchText.observe(this, { str ->
+            if (str.isEmpty()) {
                 binding.manageFriendSearchDeleteButton.visibility = View.GONE
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.manage_friend_frame_layout, mainFragment)
@@ -30,12 +31,18 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
 
                 onHideKeypad()
             } else {
-                vm.requestSearch(it)
+                if (binding.manageFriendSearchDeleteButton.visibility == View.GONE) {
+                    binding.manageFriendSearchDeleteButton.visibility = View.VISIBLE
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.manage_friend_frame_layout, searchFragment)
+                        .addToBackStack(null).commit()
+                }
 
-                binding.manageFriendSearchDeleteButton.visibility = View.VISIBLE
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.manage_friend_frame_layout, searchFragment)
-                    .addToBackStack(null).commit()
+                Handler().postDelayed({
+                    if (str == binding.manageFriendSearchEt.text.toString()) {
+                        vm.requestSearch(str)
+                    }
+                },500)
             }
         })
     }
