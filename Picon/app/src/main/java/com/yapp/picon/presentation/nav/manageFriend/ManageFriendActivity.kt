@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.android.material.tabs.TabLayoutMediator
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendActivityBinding
@@ -13,6 +14,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFriendViewModel>(
     R.layout.manage_friend_activity
 ) {
+    private lateinit var pagerAdapter: ManageFriendPagerAdapter
     override val vm: ManageFriendViewModel by viewModel()
 
     override fun initViewModel() {
@@ -31,8 +33,22 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding.setVariable(BR.manageVM, vm)
+
+        setPagerAdapter()
+    }
+
+    private fun setPagerAdapter() {
+        pagerAdapter = ManageFriendPagerAdapter(this)
+        binding.manageFriendViewPager.adapter = pagerAdapter
+
+        TabLayoutMediator(
+            binding.manageFriendTabLayout,
+            binding.manageFriendViewPager
+        ) { tab, position ->
+            if (position == 0) tab.text = getString(R.string.my_profile_following)
+            else tab.text = getString(R.string.my_profile_follower)
+        }.attach()
     }
 
     private fun onHideKeypad() {
