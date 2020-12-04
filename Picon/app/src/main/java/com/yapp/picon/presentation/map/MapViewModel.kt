@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.domain.usecase.GetRevGeoUseCase
 import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
@@ -36,6 +37,12 @@ class MapViewModel(
     private val _showAddressYN = MutableLiveData<Boolean>()
     val showAddressYN: LiveData<Boolean> get() = _showAddressYN
 
+    private val _profileNickname = MutableLiveData<String>()
+    val profileNickname: LiveData<String> get() = _profileNickname
+
+    private val _profileImageUrl = MutableLiveData<String>()
+    val profileImageUrl: LiveData<String> get() = _profileImageUrl
+
     var address = MutableLiveData<String>()
 
     init {
@@ -44,6 +51,8 @@ class MapViewModel(
         _postMarkers.value = mutableListOf()
         _postLoadYN.value = false
         _showAddressYN.value = false
+        _profileNickname.value = ""
+        _profileImageUrl.value = ""
     }
 
     private fun showToast(msg: String) {
@@ -59,6 +68,19 @@ class MapViewModel(
     fun toggleShowPinYN() {
         _showPinYN.value = _showPinYN.value?.let {
             !it
+        }
+    }
+
+    fun requestUserInfo(token: String) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestUserInfo(token).let {
+                    _profileNickname.value = it.member.nickName
+                    _profileImageUrl.value = it.member.profileImageUrl ?: ""
+                }
+            } catch (e: Exception) {
+                Log.e("MyProfileViewModel", "requestUserInfo Error - ${e.message}")
+            }
         }
     }
 

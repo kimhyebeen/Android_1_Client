@@ -25,6 +25,13 @@
     <color name="brownish_pink">#d46c6c</color>
     <color name="coral">#e46666</color>
 
+    <color name="dark_gray_60">#99151516</color>
     <color name="soft_blue_70">#b38187da</color>
     <color name="cornflower_80">#cc6699fc</color>
+
+    <color name="soft_blue_30">#4D8187DA</color>
+    <color name="cornflower_30">#4D6699FC</color>
+    <color name="blue_gray_30">#4D79AED0</color>
+    <color name="very_light_brown_30">#4DE6AF75</color>
+    <color name="warm_gray_30">#4D9A948B</color>
 </resources>

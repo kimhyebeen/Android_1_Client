@@ -35,7 +35,8 @@
     <string name="nav_statistic_place_title">장소 Top5</string>
     <string name="nav_statistic_pin">핀</string>
     <string name="nav_statistic_place">서울 강남구</string>
-    
+
+    <string name="dialog_custom_remove_post_title">핀을 삭제하시겠습니까?</string>
     <string name="dialog_custom_emotion_title">색상에 어울리는 감정을 정해주세요.</string>
     <string name="dialog_custom_finish_title">변경된 내용을 저장하지 않겠습니까?</string>
 
@@ -66,6 +67,9 @@
     <string name="intro_fragment_3_sub">사진을 필터링해서 모아보고\n나만의 여행지도를 공유해보세요.</string>
 
     <string name="X">X</string>
+    <string name="follow">팔로우</string>
+    <string name="un_follow">언팔로우</string>
+    <string name="edit">편집</string>
     <string name="remove">삭제</string>
     <string name="confirm">확인</string>
     <string name="withdrawal">탈퇴</string>

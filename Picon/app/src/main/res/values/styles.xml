@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -11,6 +11,18 @@
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
         <item name="android:checkboxStyle">@style/CheckboxStyle</item>
+
+        <!-- View Transition -->
+        <item
+            name="android:windowSharedElementEnterTransition"
+            tools:ignore="NewApi">
+            @android:transition/move
+        </item>
+        <item
+            name="android:windowSharedElementExitTransition"
+            tools:ignore="NewApi">
+            @android:transition/move
+        </item>
     </style>
 
     <style name="SearchActivity" parent="Theme.AppCompat.Light.NoActionBar">
