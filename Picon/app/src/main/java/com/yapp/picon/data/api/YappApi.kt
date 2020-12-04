@@ -40,10 +40,10 @@ interface YappApi {
 
     @Headers("Content-Type: application/json;charset=UTF-8")
     @DELETE("display/post/{id}")
-    suspend fun deletePost(
-        @Header("AccessToken") AccessToken: String,
-        @Path("id") id: String
-    ): DefaultResponse
+    suspend fun removePost(
+        @Header("AccessToken") accessToken: String,
+        @Path("id") id: Int
+    ): PostsResponse
 
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(
