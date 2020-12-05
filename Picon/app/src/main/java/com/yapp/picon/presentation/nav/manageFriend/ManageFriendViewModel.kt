@@ -1,10 +1,15 @@
 package com.yapp.picon.presentation.nav.manageFriend
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.FollowItem
+import kotlinx.coroutines.launch
 
 class ManageFriendViewModel: BaseViewModel() {
     private val _backButton = MutableLiveData<Boolean>()
@@ -25,23 +30,26 @@ class ManageFriendViewModel: BaseViewModel() {
         _backButton.value = false
         searchText.value = ""
 
-        // todo - api 연결 후 followingList, followerList, searchList 삭제
+        // todo - api 연결 후 followingList, followerList 삭제
         _followingList.value = listOf(
             FollowItem(0,
                 "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
                 "apple@naver.com",
+                "apple",
                 true,
                 true
             ),
             FollowItem(1,
                 "",
                 "orange@naver.com",
+                "orange",
                 true,
                 false
             ),
             FollowItem(2,
                 "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
                 "mango11@naver.com",
+                "mango",
                 true,
                 true
             )
@@ -51,53 +59,46 @@ class ManageFriendViewModel: BaseViewModel() {
             FollowItem(0,
                 "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
                 "apple@naver.com",
+                "apple",
                 true,
                 true
             ),
             FollowItem(1,
                 "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
                 "mango11@naver.com",
+                "mange",
                 true,
                 true
             ),
             FollowItem(0,
                 "",
                 "watermelon@naver.com",
-                false,
-                true
-            )
-        )
-
-        _searchList.value = listOf(
-            FollowItem(0,
-                "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
-                "apple@naver.com",
-                true,
-                true
-            ),
-            FollowItem(1,
-                "",
-                "orange@naver.com",
-                true,
-                false
-            ),
-            FollowItem(2,
-                "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
-                "mango11@naver.com",
-                true,
-                true
-            ),
-            FollowItem(3,
-                "",
-                "watermelon@naver.com",
+                "watermelon",
                 false,
                 true
             )
         )
     }
 
-    fun requestSearch(search: String) {
-        // todo - search api 요청
+    fun requestSearch(token: String, input: String) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestAllUser(token, input).members.let {  list ->
+                    list.map {
+                        FollowItem(
+                            it.id,
+                            it.profileImageUrl ?: "",
+                            it.identity,
+                            it.nickName,
+                            false,
+                            false
+                        )
+                    }.let { _searchList.value = it }
+                }
+            } catch (e: Exception) {
+                Log.e("ManageFriendViewModel", "requestSearch error - ${e.message}")
+            }
+        }
     }
 
     fun clickBackButton(view: View) {
