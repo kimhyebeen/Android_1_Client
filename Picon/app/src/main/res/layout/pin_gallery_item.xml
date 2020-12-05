@@ -4,11 +4,11 @@
 
     <data>
 
-        <import type="java.util.Map" />
+        <import type="com.yapp.picon.presentation.model.Pin" />
 
         <variable
             name="pinGalleryItem"
-            type="Map&lt;String,String>" />
+            type="Pin" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -25,7 +25,7 @@
 
             <ImageView
                 android:id="@+id/post_picture_item_iv"
-                setUrlImg="@{pinGalleryItem[`img`]}"
+                setUrlImg="@{pinGalleryItem.imageUrl}"
                 android:layout_width="118dp"
                 android:layout_height="118dp"
                 android:contentDescription="@string/image_description"
@@ -35,7 +35,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                setColorStr="@{pinGalleryItem[`color`]}"
+                setColorStr="@{pinGalleryItem.rgb}"
                 android:layout_width="118dp"
                 android:layout_height="6dp"
                 android:contentDescription="@string/image_description"
@@ -44,7 +44,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
-                visibleOrGoneStr="@{pinGalleryItem[`oneYN`]}"
+                visibleOrGone="@{pinGalleryItem.showManyYN}"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="2dp"
@@ -56,11 +56,13 @@
 
             <CheckBox
                 android:id="@+id/pin_gallery_item_cb_select"
-                visibleOrGoneStr="@{pinGalleryItem[`selectYN`]}"
+                visibleOrGone="@{pinGalleryItem.showCbYN}"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp"
+                android:button="@drawable/pin_gallery_check_box"
+                android:checked="@={pinGalleryItem.checkYN}"
                 android:paddingStart="0dp"
                 android:paddingEnd="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
