@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="profileVM"
             type="com.yapp.picon.presentation.profile.MyProfileViewModel" />
@@ -33,9 +33,9 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:contentDescription="@string/image_description"
+                    android:onClick="@{profileVM::clickBackButton}"
                     android:padding="18dp"
                     android:src="@drawable/ic_back"
-                    android:onClick="@{profileVM::clickBackButton}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -61,6 +61,7 @@
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_marginTop="2dp"
+            android:contentDescription="@string/image_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/my_profile_tool_bar"
@@ -72,7 +73,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="49dp"
             android:layout_marginTop="35dp"
-            android:onClick="@{profileVM::clickChangeProfileImageButton}"
+            android:contentDescription="@string/image_description"
             android:padding="9dp"
             app:layout_constraintStart_toStartOf="@+id/my_profile_user_image"
             app:layout_constraintTop_toTopOf="@+id/my_profile_user_image"

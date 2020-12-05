@@ -22,6 +22,6 @@ val viewModelModule = module {
     viewModel { PostViewModel(get(), get()) }
     viewModel { UserInfoViewModel(get()) }
     viewModel { PinGalleryViewModel(get(), get()) }
-    viewModel { MyProfileViewModel() }
+    viewModel { MyProfileViewModel(get(), get(), get(), get()) }
     viewModel { PostDetailViewModel(get()) }
 }
