@@ -2,7 +2,6 @@ package com.yapp.picon.presentation.nav.manageFriend
 
 import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,6 +10,10 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.nav.UserInfoViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFriendViewModel>(
@@ -36,12 +39,13 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
                 if (binding.manageFriendSearchDeleteButton.visibility == View.GONE) {
                     changeToSearchFragment()
                 }
-                Handler().postDelayed({
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(1000)
                     if (str == binding.manageFriendSearchEt.text.toString()) {
                         if (token.isNotEmpty()) vm.requestSearch(token, str)
                         else Log.e("ManageFriendActivity", "requestSearch failed. token is Empty.")
                     }
-                },500)
+                }
             }
         })
     }
