@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
 import com.sangcomz.fishbun.define.Define.ALBUM_REQUEST_CODE
@@ -17,6 +16,7 @@ import com.yapp.picon.databinding.PostActivityBinding
 import com.yapp.picon.databinding.PostEmotionItemBinding
 import com.yapp.picon.databinding.PostPictureItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -62,7 +62,7 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         setAdapter()
         setOnClickListeners()
 
-        //todo reverse geoloaction 으로 받은 주소 ui에 표시
+        setEmotions()
         setData()
         setContentResolver()
         startAlbum()
@@ -75,11 +75,11 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
     private fun setOnClickListeners() {
         binding.postIvBack.setOnClickListener { finish() }
+        binding.postTvSave.setOnClickListener { vm.uploadImage() }
+    }
 
-        binding.postTvSave.setOnClickListener {
-            //todo 세이브 포스트
-            vm.uploadImage()
-        }
+    private fun setEmotions() {
+        EmotionDatabaseRepository(application).getAll().observe(this, { vm.setEmotions(it) })
     }
 
     private fun setData() {
@@ -117,17 +117,12 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
     override fun initViewModel() {
         binding.setVariable(BR.postVM, vm)
 
-        val toastMsgObserver = Observer<String> {
-            showToast(it)
-        }
-        vm.toastMsg.observe(this, toastMsgObserver)
-
-        val finishYNObserver = Observer<Boolean> {
+        vm.toastMsg.observe(this, { showToast(it) })
+        vm.finishYN.observe(this, {
             if (it) {
                 finish()
             }
-        }
-        vm.finishYN.observe(this, finishYNObserver)
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

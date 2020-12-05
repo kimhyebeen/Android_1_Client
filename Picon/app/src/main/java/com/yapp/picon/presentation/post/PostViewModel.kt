@@ -13,6 +13,7 @@ import com.yapp.picon.data.model.Emotion
 import com.yapp.picon.domain.usecase.CreatePostUseCase
 import com.yapp.picon.domain.usecase.UploadImageUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.util.AddressUtil
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -52,35 +53,7 @@ class PostViewModel(
 
     init {
         _pictureUris.value = mutableListOf()
-
-        //todo emotions room database로 만들고 변경하기
-        _emotions.value = listOf(
-            mapOf(
-                "color" to "SOFT_BLUE",
-                "text" to "새벽 3",
-                "bg" to R.drawable.ic_custom_circle_soft_blue.toString()
-            ),
-            mapOf(
-                "color" to "CORN_FLOWER",
-                "text" to "구름없는 하늘",
-                "bg" to R.drawable.ic_custom_circle_cornflower.toString(),
-            ),
-            mapOf(
-                "color" to "BLUE_GRAY",
-                "text" to "아침 이",
-                "bg" to R.drawable.ic_custom_circle_bluegrey.toString(),
-            ),
-            mapOf(
-                "color" to "VERY_LIGHT_BROWN",
-                "text" to "창문 너머 노",
-                "bg" to R.drawable.ic_custom_circle_very_light_brown.toString(),
-            ),
-            mapOf(
-                "color" to "WARM_GRAY",
-                "text" to "잔잔한 ",
-                "bg" to R.drawable.ic_custom_circle_warm_grey.toString(),
-            )
-        )
+        _emotions.value = mutableListOf()
 
         _finishYN.value = false
     }
@@ -183,4 +156,26 @@ class PostViewModel(
             }
         }
     }
+
+    private fun indexToBg(int: Int): String {
+        return when (int) {
+            1 -> R.drawable.ic_custom_circle_soft_blue.toString()
+            2 -> R.drawable.ic_custom_circle_cornflower.toString()
+            3 -> R.drawable.ic_custom_circle_bluegrey.toString()
+            4 -> R.drawable.ic_custom_circle_very_light_brown.toString()
+            5 -> R.drawable.ic_custom_circle_warm_grey.toString()
+            else -> ""
+        }
+    }
+
+    fun setEmotions(list: List<EmotionEntity>) {
+        _emotions.value = list.map {
+            mapOf(
+                "color" to it.color,
+                "text" to it.emotion,
+                "bg" to indexToBg(it.index)
+            )
+        }
+    }
+
 }
