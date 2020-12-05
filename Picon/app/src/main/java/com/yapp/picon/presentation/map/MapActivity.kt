@@ -30,6 +30,7 @@ import com.yapp.picon.databinding.MarkerViewBinding
 import com.yapp.picon.helper.LocationHelper
 import com.yapp.picon.helper.RequestCodeSet
 import com.yapp.picon.presentation.base.BaseMapActivity
+import com.yapp.picon.presentation.collect.CollectActivity
 import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.model.Post
@@ -47,11 +48,11 @@ import com.yapp.picon.presentation.util.NaverCamera
 import com.yapp.picon.presentation.util.toPost
 import jp.wasabeef.glide.transformations.MaskTransformation
 import kotlinx.android.synthetic.main.map_nav_head.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import ted.gun0912.clustering.naver.TedNaverClustering
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ted.gun0912.clustering.naver.TedNaverClustering
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.layout.map_activity,
@@ -292,11 +293,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         )
     }
 
+    private fun startCollectActivity() {
+        startActivity(Intent(this, CollectActivity::class.java))
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.map_nav_customize_emotion_name -> startNavActivity(NavTypeStringSet.CustomEmotion.type)
             R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
             R.id.map_nav_view_travel_statistic -> startNavActivity(NavTypeStringSet.Statistic.type)
+            R.id.map_nav_collect_picture -> startCollectActivity()
         }
         return true
     }
