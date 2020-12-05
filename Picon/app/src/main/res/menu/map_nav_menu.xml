@@ -5,17 +5,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/map_nav_customize_emotion_name"
-            android:title="@string/map_menu_customize_emotion_name" />
-        <item
             android:id="@+id/map_nav_collect_picture"
             android:title="@string/map_menu_collect_picture" />
         <item
-            android:id="@+id/map_nav_share_map"
-            android:title="@string/map_menu_share_map" />
+            android:id="@+id/map_nav_manage_friend"
+            android:title="@string/map_menu_manage_friend" />
         <item
             android:id="@+id/map_nav_view_travel_statistic"
             android:title="@string/map_menu_view_travel_statistic" />
+        <item
+            android:id="@+id/map_nav_share_map"
+            android:title="@string/map_menu_share_map" />
         <item
             android:id="@+id/map_nav_setting"
             android:title="@string/map_menu_setting" />
