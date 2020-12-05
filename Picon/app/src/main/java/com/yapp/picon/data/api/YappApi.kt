@@ -56,4 +56,32 @@ interface YappApi {
     suspend fun requestUserInfo(
         @Header("AccessToken") AccessToken: String
     ): UserResponse
+
+    @GET("/display/member/search")
+    suspend fun requestAllUser(
+        @Header("AccessToken") accessToken: String,
+        @Query("input") input: String
+    ): SearchUserResponse
+
+    @GET("/display/member/following")
+    suspend fun requestFollowingList(
+        @Header("AccessToken") accessToken: String
+    ): SearchUserResponse
+
+    @GET("/display/member/follower")
+    suspend fun requestFollowerList(
+        @Header("AccessToken") accessToken: String
+    ): SearchUserResponse
+
+    @POST("/display/member/follow/{id}")
+    suspend fun requestFollow(
+        @Header("AccessToken") accessToken: String,
+        @Path("id") id: Int
+    ): PostResponse // todo - DefaultResponse로 바꾸기
+
+    @POST("/display/member/unfollow/{id}")
+    suspend fun requestUnFollow(
+        @Header("AccessToken") accessToken: String,
+        @Path("id") id: Int
+    ): PostResponse // todo - DefaultResponse로 바꾸기
 }

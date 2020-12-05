@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="manageVM"
+            type="com.yapp.picon.presentation.nav.manageFriend.ManageFriendViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_grey"
+        tools:context=".presentation.nav.manageFriend.ManageFriendActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/manage_friend_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:background="#00ffffff"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/manage_friend_back_iv"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:contentDescription="@string/image_description"
+                    android:padding="18dp"
+                    android:src="@drawable/ic_back"
+                    android:onClick="@{manageVM::clickBackButton}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/manage_friend_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/map_menu_manage_friend"
+                    android:textColor="@color/very_light_pink"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/manage_friend_back_iv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/manage_friend_back_iv" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <EditText
+            android:id="@+id/manage_friend_search_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="18dp"
+            android:text="@={manageVM.searchText}"
+            android:background="@drawable/bg_edit_text_white_80"
+            android:ems="10"
+            android:hint="@string/manage_friend_edit_hint"
+            android:inputType="textPersonName"
+            android:paddingStart="12dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="46dp"
+            android:paddingBottom="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/manage_friend_tool_bar" />
+
+        <ImageView
+            android:id="@+id/manage_friend_search_delete_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:padding="12dp"
+            android:onClick="@{manageVM::clickSearchDeleteButton}"
+            app:layout_constraintBottom_toBottomOf="@+id/manage_friend_search_et"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/manage_friend_search_et"
+            app:srcCompat="@drawable/ic_search_delete" />
+
+        <FrameLayout
+            android:id="@+id/manage_friend_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/manage_friend_search_et" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
