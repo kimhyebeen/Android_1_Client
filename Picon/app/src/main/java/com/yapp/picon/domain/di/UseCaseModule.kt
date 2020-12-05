@@ -50,6 +50,6 @@ val useCaseModule = module {
         GetRevGeoUseCase(get())
     }
     single {
-        DeletePostUseCase(get(), get())
+        RemovePostUseCase(get(), get())
     }
 }

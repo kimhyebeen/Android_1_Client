@@ -4,12 +4,12 @@ import com.yapp.picon.data.model.DefaultResponse
 import com.yapp.picon.data.repository.post.PostRepository
 import com.yapp.picon.data.repository.user.UserRepository
 
-class DeletePostUseCase(
+class RemovePostUseCase(
     private val userRepository: UserRepository,
     private val postRepository: PostRepository
 ) {
-    suspend operator fun invoke(id: String): DefaultResponse =
+    suspend operator fun invoke(id: Int): DefaultResponse =
         userRepository.loadAccessToken().let {
-            postRepository.deletePost(it, id)
+            postRepository.removePost(it, id)
         }
 }

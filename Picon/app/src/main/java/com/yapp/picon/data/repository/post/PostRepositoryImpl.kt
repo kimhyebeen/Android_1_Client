@@ -22,6 +22,6 @@ class PostRepositoryImpl(
     override suspend fun requestPosts(accessToken: String): PostsResponse =
         yappDataSource.requestPosts(accessToken)
 
-    override suspend fun deletePost(accessToken: String, id: String): DefaultResponse =
-        yappDataSource.deletePost(accessToken, id)
+    override suspend fun removePost(accessToken: String, id: Int): DefaultResponse =
+        yappDataSource.removePost(accessToken, id)
 }

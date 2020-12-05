@@ -43,7 +43,7 @@ interface YappApi {
     suspend fun removePost(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostsResponse
+    ): DefaultResponse
 
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(

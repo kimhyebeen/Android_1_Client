@@ -10,5 +10,5 @@ interface PostRepository {
     suspend fun uploadImage(accessToken: String, parts: List<MultipartBody.Part>): List<String>
     suspend fun createPost(accessToken: String, postRequest: PostRequest): PostResponse
     suspend fun requestPosts(accessToken: String): PostsResponse
-    suspend fun deletePost(accessToken: String, id: String): DefaultResponse
+    suspend fun removePost(accessToken: String, id: Int): DefaultResponse
 }
