@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.nav.manageFriend
 
+import android.util.Log
 import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
 import com.yapp.picon.R
@@ -10,7 +11,9 @@ import kotlinx.android.synthetic.main.manage_friend_tab_list_item.view.*
 
 class ManageFriendFollowAdapter(
     @LayoutRes private val layoutRes: Int,
-    bindingVariabledId: Int
+    bindingVariabledId: Int,
+    private val requestFollow: (Int) -> Unit,
+    private val requestUnFollow: (Int) -> Unit
 ): BaseRecyclerView.BaseAdapter<FollowItem, ManageFriendTabListItemBinding>(
     layoutRes, bindingVariabledId
 ) {
@@ -62,8 +65,10 @@ class ManageFriendFollowAdapter(
                     // todo - 팔로우 취소
                     item.following = false
                 } else {
-                    // todo - 팔로우 적용
-                    item.following = true
+                    item.id?.let {
+                        requestFollow(item.id)
+                        item.following = true
+                    } ?: Log.e("MF_FollowAdapter", "setFollowButton - id is null")
                 }
                 notifyItemChanged(index)
             }

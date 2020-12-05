@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendActivityBinding
@@ -31,6 +32,9 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
             this.token = it
             vm.requestFollowingList(it)
             vm.requestFollowerList(it)
+        })
+        vm.toast.observe(this, {
+            if (it.isNotEmpty()) Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
         vm.backButton.observe(this, {
             if (it) onBackPressed()

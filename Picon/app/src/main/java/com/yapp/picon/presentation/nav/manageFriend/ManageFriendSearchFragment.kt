@@ -27,7 +27,12 @@ class ManageFriendSearchFragment: BaseFragment<ManageFriendSearchFragmentBinding
 
     override fun onStart() {
         super.onStart()
-        searchAdapter = ManageFriendFollowAdapter(R.layout.manage_friend_tab_list_item, BR.followItem)
+        searchAdapter = ManageFriendFollowAdapter(
+            R.layout.manage_friend_tab_list_item,
+            BR.followItem,
+            {id -> requestFollow(id)},
+            {id -> requestUnFollow(id)}
+        )
         binding.manageFriendSearchRv.apply {
             adapter = searchAdapter
             layoutManager = LinearLayoutManager(context)
@@ -38,5 +43,17 @@ class ManageFriendSearchFragment: BaseFragment<ManageFriendSearchFragmentBinding
             searchAdapter.setItems(it)
             searchAdapter.notifyDataSetChanged()
         })
+    }
+
+    private fun requestFollow(id: Int) {
+        if (vm.token.isNotEmpty()) {
+            vm.requestFollow(vm.token, id)
+        } else vm.showToast("팔로우 실패")
+    }
+
+    private fun requestUnFollow(id: Int) {
+        if (vm.token.isNotEmpty()) {
+            vm.requestUnFollow(vm.token, id)
+        } else vm.showToast("언팔로우 실패")
     }
 }

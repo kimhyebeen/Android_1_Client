@@ -72,4 +72,10 @@ interface YappApi {
     suspend fun requestFollowerList(
         @Header("AccessToken") accessToken: String
     ): SearchUserResponse
+
+    @POST("/display/member/follow/{id}")
+    suspend fun requestFollow(
+        @Header("AccessToken") accessToken: String,
+        @Path("id") id: Int
+    ): PostResponse // todo - DefaultResponse로 바꾸기
 }

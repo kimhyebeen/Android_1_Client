@@ -11,6 +11,9 @@ import com.yapp.picon.presentation.model.FollowItem
 import kotlinx.coroutines.launch
 
 class ManageFriendViewModel: BaseViewModel() {
+    private val _toast = MutableLiveData<String>()
+    val toast: LiveData<String> get() =  _toast
+
     private val _backButton = MutableLiveData<Boolean>()
     val backButton: LiveData<Boolean> get() =  _backButton
 
@@ -95,6 +98,20 @@ class ManageFriendViewModel: BaseViewModel() {
         }
     }
 
+    fun requestFollow(token: String, id: Int) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestFollow(token, id)
+            } catch (e: Exception) {
+                Log.e("ManageFriendViewModel", "requestFollow error - ${e.message}")
+            }
+        }
+    }
+
+    fun requestUnFollow(token: String, id: Int) {
+        // todo
+    }
+
     fun clickBackButton(view: View) {
         _backButton.value?.let {
             _backButton.value = !it
@@ -103,5 +120,9 @@ class ManageFriendViewModel: BaseViewModel() {
 
     fun clickSearchDeleteButton(view: View) {
         searchText.value = ""
+    }
+
+    fun showToast(str: String) {
+        _toast.value = str
     }
 }

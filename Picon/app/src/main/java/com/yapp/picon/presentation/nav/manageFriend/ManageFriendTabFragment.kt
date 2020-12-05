@@ -31,7 +31,9 @@ class ManageFriendTabFragment(
 
         followAdapter = ManageFriendFollowAdapter(
             R.layout.manage_friend_tab_list_item,
-            BR.followItem
+            BR.followItem,
+            {id -> requestFollow(id)},
+            {id -> requestUnFollow(id)}
         )
         binding.manageFriendTabRv.apply {
             adapter = followAdapter
@@ -63,5 +65,17 @@ class ManageFriendTabFragment(
                 followAdapter.notifyDataSetChanged()
             })
         }
+    }
+
+    private fun requestFollow(id: Int) {
+        if (vm.token.isNotEmpty()) {
+            vm.requestFollow(vm.token, id)
+        } else vm.showToast("팔로우 실패")
+    }
+
+    private fun requestUnFollow(id: Int) {
+        if (vm.token.isNotEmpty()) {
+            vm.requestUnFollow(vm.token, id)
+        } else vm.showToast("언팔로우 실패")
     }
 }
