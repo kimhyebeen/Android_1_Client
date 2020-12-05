@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -23,7 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-
+        <activity android:name=".presentation.nav.manageFriend.ManageFriendActivity"></activity>
         <activity android:name=".presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,33 +30,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.yapp.picon.presentation.intro.IntroActivity" />
-
-        <activity android:name="com.yapp.picon.presentation.map.MapActivity" />
-
+        <activity android:name=".presentation.intro.IntroActivity" />
+        <activity android:name=".presentation.map.MapActivity" />
         <activity
             android:name=".presentation.nav.NavActivity"
             android:parentActivityName=".presentation.map.MapActivity" />
-
         <activity
             android:name=".presentation.search.SearchActivity"
             android:theme="@style/SearchActivity" />
-
         <activity android:name=".presentation.post.PostActivity" />
-
         <activity android:name=".presentation.login.LoginActivity" />
-
         <activity android:name=".presentation.simplejoin.SimpleJoinActivity" />
-
         <activity android:name=".presentation.profile.MyProfileActivity" />
-
         <activity android:name=".presentation.postdetail.PostDetailActivity" />
-
         <activity android:name=".presentation.postdetail.PostDetailImageActivity" />
-
         <activity android:name=".presentation.pingallery.PinGalleryActivity" />
-
     </application>
 
 </manifest>

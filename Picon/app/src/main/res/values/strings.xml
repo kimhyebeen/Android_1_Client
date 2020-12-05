@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Picon</string>
 
+    <string name="map_menu_manage_friend">친구 관리하기</string>
     <string name="map_menu_customize_emotion_name">감정 이름 커스텀하기</string>
     <string name="map_menu_collect_picture">사진 모아보기</string>
     <string name="map_menu_share_map">지도 공유하기</string>
@@ -35,6 +36,8 @@
     <string name="nav_statistic_place_title">장소 Top5</string>
     <string name="nav_statistic_pin">핀</string>
     <string name="nav_statistic_place">서울 강남구</string>
+
+    <string name="manage_friend_edit_hint">닉네임 또는 이메일을 검색하세요</string>
 
     <string name="dialog_custom_remove_post_title">핀을 삭제하시겠습니까?</string>
     <string name="dialog_custom_emotion_title">색상에 어울리는 감정을 정해주세요.</string>
@@ -83,6 +86,5 @@
     <string name="id">아이디</string>
     <string name="pw">비밀번호</string>
     <string name="join_membership">회원가입</string>
-    <string name="edit">편집</string>
     <string name="pin_gallery">핀 갤러리</string>
 </resources>
