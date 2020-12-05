@@ -56,4 +56,10 @@ interface YappApi {
     suspend fun requestUserInfo(
         @Header("AccessToken") AccessToken: String
     ): UserResponse
+
+    @GET("/display/member/search")
+    suspend fun requestAllUser(
+        @Header("AccessToken") accessToken: String,
+        @Query("input") input: String
+    ): SearchUserResponse
 }
