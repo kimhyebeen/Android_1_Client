@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.pingallery
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import com.yapp.picon.databinding.SearchItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Pin
 import com.yapp.picon.presentation.model.Post
+import com.yapp.picon.presentation.postdetail.PostDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PinGalleryActivity : BaseActivity<PinGalleryActivityBinding, PinGalleryViewModel>(
@@ -34,18 +36,21 @@ class PinGalleryActivity : BaseActivity<PinGalleryActivityBinding, PinGalleryVie
         }
     }
 
+    private fun startPostDetailActivity(post: Post) {
+        Intent(this, PostDetailActivity::class.java).apply {
+            putExtra("post", post)
+        }.let {
+            startActivity(it)
+        }
+    }
+
     private fun clickItem(item: Pin) {
         item.let {
-            //todo 핀 상세보기로 이동
-            showToast("$it")
-//            it["id"]?.toInt()?.let { id ->
-//                vm.getPost(id)?.let { post ->
-//                    startActivity(
-//                        Intent(this@PinGalleryActivity, PinGalleryActivity::class.java)
-//                            .putParcelableArrayListExtra("posts", arrayListOf(post))
-//                    )
-//                }
-//            }
+            it.id?.let { id ->
+                vm.getPost(id)?.let { post ->
+                    startPostDetailActivity(post)
+                }
+            }
         }
     }
 
