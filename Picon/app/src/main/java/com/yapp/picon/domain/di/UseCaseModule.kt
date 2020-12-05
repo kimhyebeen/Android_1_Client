@@ -52,4 +52,10 @@ val useCaseModule = module {
     single {
         RemovePostUseCase(get(), get())
     }
+    single {
+        GetUserInfoUseCase(get())
+    }
+    single {
+        UploadProfileUseCase(get())
+    }
 }

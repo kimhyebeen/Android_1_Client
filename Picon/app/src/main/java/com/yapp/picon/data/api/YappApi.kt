@@ -56,4 +56,11 @@ interface YappApi {
     suspend fun requestUserInfo(
         @Header("AccessToken") AccessToken: String
     ): UserResponse
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST("/display/member/profile")
+    suspend fun uploadProfile(
+        @Header("AccessToken") accessToken: String,
+        @Body profileUrl: String
+    ): UserResponse
 }
