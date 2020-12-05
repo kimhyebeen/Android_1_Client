@@ -6,6 +6,6 @@ data class Members (
     val nickName: String,
     val role: String,
     val createdDate: String,
-    val profileImageUrl: String?
-    // todo - isFollowing
+    val profileImageUrl: String?,
+    var isFollowing: Boolean?
 )

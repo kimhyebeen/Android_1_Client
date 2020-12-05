@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.yapp.picon.data.network.NetworkModule
-import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.FollowItem
 import kotlinx.coroutines.launch
@@ -26,58 +25,11 @@ class ManageFriendViewModel: BaseViewModel() {
 
     val searchText = MutableLiveData<String>()
 
+    var token = ""
+
     init {
         _backButton.value = false
         searchText.value = ""
-
-        // todo - api 연결 후 followingList, followerList 삭제
-        _followingList.value = listOf(
-            FollowItem(0,
-                "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
-                "apple@naver.com",
-                "apple",
-                true,
-                true
-            ),
-            FollowItem(1,
-                "",
-                "orange@naver.com",
-                "orange",
-                true,
-                false
-            ),
-            FollowItem(2,
-                "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
-                "mango11@naver.com",
-                "mango",
-                true,
-                true
-            )
-        )
-
-        _followerList.value = listOf(
-            FollowItem(0,
-                "https://images.mypetlife.co.kr/content/uploads/2019/08/23154822/dog-tongue-2.jpg",
-                "apple@naver.com",
-                "apple",
-                true,
-                true
-            ),
-            FollowItem(1,
-                "https://lh3.googleusercontent.com/proxy/opjZby-CbBpFspFeRda7_1IiENwbi82BCTVKkWDswYTU4ngBL2ay8KZ2pZIWM--ZpVHzWmg6zFv6xRWWHU23pBJAstOXkcWXhoOfJ_6d3MZEvfu7Lw",
-                "mango11@naver.com",
-                "mange",
-                true,
-                true
-            ),
-            FollowItem(0,
-                "",
-                "watermelon@naver.com",
-                "watermelon",
-                false,
-                true
-            )
-        )
     }
 
     fun requestSearch(token: String, input: String) {
@@ -97,6 +49,27 @@ class ManageFriendViewModel: BaseViewModel() {
                 }
             } catch (e: Exception) {
                 Log.e("ManageFriendViewModel", "requestSearch error - ${e.message}")
+            }
+        }
+    }
+
+    fun requestFollowingList(token: String) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestFollowingList(token).members.let { list ->
+                    list.map {
+                        FollowItem(
+                            it.id,
+                            it.profileImageUrl ?: "",
+                            it.identity,
+                            it.nickName,
+                            it.isFollowing ?: false,
+                            false
+                        )
+                    }.let { _followingList.value = it }
+                }
+            } catch (e: Exception) {
+                Log.e("ManageFriendViewModel", "requestFollowingList error - ${e.message}")
             }
         }
     }

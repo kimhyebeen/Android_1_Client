@@ -1,11 +1,13 @@
 package com.yapp.picon.presentation.nav.manageFriend
 
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendTabFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ManageFriendTabFragment(
     private val isFollowing: Boolean
@@ -13,7 +15,13 @@ class ManageFriendTabFragment(
     R.layout.manage_friend_tab_fragment
 ) {
     private lateinit var followAdapter: ManageFriendFollowAdapter
-    override val vm: ManageFriendViewModel by viewModel()
+    @Suppress("UNCHECKED_CAST")
+    override val vm: ManageFriendViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                ManageFriendViewModel() as T
+        }
+    }
 
     override fun initBinding() {
     }
@@ -37,7 +45,10 @@ class ManageFriendTabFragment(
     override fun onResume() {
         super.onResume()
 
-        // todo - requestFollowing / requestFollower
+        if (vm.token.isNotEmpty()) {
+            if (isFollowing) vm.requestFollowingList(vm.token)
+//            else // todo - requestFollower
+        }
     }
 
     private fun setAdapterItems() {

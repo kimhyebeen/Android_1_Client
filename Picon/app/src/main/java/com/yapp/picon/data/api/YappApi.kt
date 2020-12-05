@@ -62,4 +62,9 @@ interface YappApi {
         @Header("AccessToken") accessToken: String,
         @Query("input") input: String
     ): SearchUserResponse
+
+    @GET("/display/member/following")
+    suspend fun requestFollowingList(
+        @Header("AccessToken") accessToken: String
+    ): SearchUserResponse
 }

@@ -1,11 +1,13 @@
 package com.yapp.picon.presentation.nav.manageFriend
 
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendMainFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ManageFriendMainFragment(
     private val application: FragmentActivity
@@ -13,7 +15,14 @@ class ManageFriendMainFragment(
     R.layout.manage_friend_main_fragment
 ) {
     private lateinit var pagerAdapter: ManageFriendPagerAdapter
-    override val vm: ManageFriendViewModel by viewModel()
+
+    @Suppress("UNCHECKED_CAST")
+    override val vm: ManageFriendViewModel by activityViewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                ManageFriendViewModel() as T
+        }
+    }
 
     override fun initBinding() {
     }

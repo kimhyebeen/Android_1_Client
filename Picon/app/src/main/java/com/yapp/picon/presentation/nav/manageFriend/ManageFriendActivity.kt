@@ -27,7 +27,9 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
 
     override fun initViewModel() {
         userVM.token.observe(this, {
+            if (vm.token.isEmpty()) vm.token = it
             this.token = it
+            vm.requestFollowingList(it)
         })
         vm.backButton.observe(this, {
             if (it) onBackPressed()
