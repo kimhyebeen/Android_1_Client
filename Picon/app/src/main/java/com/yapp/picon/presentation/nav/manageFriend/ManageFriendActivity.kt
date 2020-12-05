@@ -30,6 +30,7 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
             if (vm.token.isEmpty()) vm.token = it
             this.token = it
             vm.requestFollowingList(it)
+            vm.requestFollowerList(it)
         })
         vm.backButton.observe(this, {
             if (it) onBackPressed()

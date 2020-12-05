@@ -50,11 +50,11 @@ class ManageFriendFollowAdapter(
     ) {
         holder.itemView.friend_list_item_follow_button.apply {
             text = if (item.following) {
-                setBackgroundResource(R.drawable.bg_follow_button)
-                "팔로우"
-            } else {
                 setBackgroundResource(R.drawable.bg_un_follow_button)
                 "언팔로우"
+            } else {
+                setBackgroundResource(R.drawable.bg_follow_button)
+                "팔로우"
             }
 
             setOnClickListener {

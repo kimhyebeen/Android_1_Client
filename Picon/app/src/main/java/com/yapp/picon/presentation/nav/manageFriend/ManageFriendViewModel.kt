@@ -74,6 +74,27 @@ class ManageFriendViewModel: BaseViewModel() {
         }
     }
 
+    fun requestFollowerList(token: String) {
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestFollowerList(token).members.let { list ->
+                    list.map {
+                        FollowItem(
+                            it.id,
+                            it.profileImageUrl ?: "",
+                            it.identity,
+                            it.nickName,
+                            it.isFollowing ?: false,
+                            true
+                        )
+                    }.let { _followerList.value = it }
+                }
+            } catch (e: Exception) {
+                Log.e("ManageFriendViewModel", "requestFollowerList error - ${e.message}")
+            }
+        }
+    }
+
     fun clickBackButton(view: View) {
         _backButton.value?.let {
             _backButton.value = !it

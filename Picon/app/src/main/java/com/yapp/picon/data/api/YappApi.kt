@@ -67,4 +67,9 @@ interface YappApi {
     suspend fun requestFollowingList(
         @Header("AccessToken") accessToken: String
     ): SearchUserResponse
+
+    @GET("/display/member/follower")
+    suspend fun requestFollowerList(
+        @Header("AccessToken") accessToken: String
+    ): SearchUserResponse
 }

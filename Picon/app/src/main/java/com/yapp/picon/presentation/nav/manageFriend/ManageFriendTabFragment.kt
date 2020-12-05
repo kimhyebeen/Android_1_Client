@@ -47,7 +47,7 @@ class ManageFriendTabFragment(
 
         if (vm.token.isNotEmpty()) {
             if (isFollowing) vm.requestFollowingList(vm.token)
-//            else // todo - requestFollower
+            else vm.requestFollowerList(vm.token)
         }
     }
 
