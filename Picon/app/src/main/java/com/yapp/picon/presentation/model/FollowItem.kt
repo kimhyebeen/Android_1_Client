@@ -5,6 +5,5 @@ data class FollowItem (
     val image: String,
     val email: String,
     val nickname: String,
-    var following: Boolean,
-    var follower: Boolean
+    var following: Boolean
 )

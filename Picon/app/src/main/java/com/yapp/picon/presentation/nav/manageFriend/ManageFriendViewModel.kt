@@ -45,8 +45,7 @@ class ManageFriendViewModel: BaseViewModel() {
                             it.profileImageUrl ?: "",
                             it.identity,
                             it.nickName,
-                            false,
-                            false
+                            it.isFollowing ?: false
                         )
                     }.let { _searchList.value = it }
                 }
@@ -66,8 +65,7 @@ class ManageFriendViewModel: BaseViewModel() {
                             it.profileImageUrl ?: "",
                             it.identity,
                             it.nickName,
-                            it.isFollowing ?: false,
-                            false
+                            it.isFollowing ?: false
                         )
                     }.let { _followingList.value = it }
                 }
@@ -87,8 +85,7 @@ class ManageFriendViewModel: BaseViewModel() {
                             it.profileImageUrl ?: "",
                             it.identity,
                             it.nickName,
-                            it.isFollowing ?: false,
-                            true
+                            it.isFollowing ?: false
                         )
                     }.let { _followerList.value = it }
                 }
@@ -109,7 +106,13 @@ class ManageFriendViewModel: BaseViewModel() {
     }
 
     fun requestUnFollow(token: String, id: Int) {
-        // todo
+        viewModelScope.launch {
+            try {
+                NetworkModule.yappApi.requestUnFollow(token, id)
+            } catch (e: Exception) {
+                Log.e("ManageFriendViewModel", "requestUnFollow error - ${e.message}")
+            }
+        }
     }
 
     fun clickBackButton(view: View) {

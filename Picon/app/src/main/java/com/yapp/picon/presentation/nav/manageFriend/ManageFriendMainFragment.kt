@@ -33,6 +33,15 @@ class ManageFriendMainFragment(
         setPagerAdapter()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        if (vm.token.isNotEmpty()) {
+            vm.requestFollowingList(vm.token)
+            vm.requestFollowerList(vm.token)
+        }
+    }
+
     private fun setPagerAdapter() {
         pagerAdapter = ManageFriendPagerAdapter(application)
         binding.manageFriendViewPager.adapter = pagerAdapter

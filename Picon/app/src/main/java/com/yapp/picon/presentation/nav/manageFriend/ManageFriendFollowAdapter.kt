@@ -62,13 +62,15 @@ class ManageFriendFollowAdapter(
 
             setOnClickListener {
                 if (item.following) {
-                    // todo - 팔로우 취소
-                    item.following = false
+                    item.id?.let {
+                        requestUnFollow(it)
+                        item.following = false
+                    } ?: Log.e("MF_FollowAdapter", "setFollowButton - unfollow - id is null")
                 } else {
                     item.id?.let {
-                        requestFollow(item.id)
+                        requestFollow(it)
                         item.following = true
-                    } ?: Log.e("MF_FollowAdapter", "setFollowButton - id is null")
+                    } ?: Log.e("MF_FollowAdapter", "setFollowButton - follow - id is null")
                 }
                 notifyItemChanged(index)
             }
