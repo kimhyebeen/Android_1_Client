@@ -79,11 +79,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             NavHeaderEmotionAdapter(R.layout.map_nav_head_emotion_item, BR.headEmoItem)
         /*
         todo
-            1. 시작 시 지도 카메라 한반도 전체 보여주기
-            2. 전체 포스트 조회 및 마커로 뿌려주기
-            3. 해당 마커는 클러스터링 라이브러리를 이용한다.
-            4. 마커 클릭 시 엑티비티 이동
-            5. 다시 화면으로 돌아왔을 경우 전체 포스트 다시 조회
+            1. 전체 포스트 조회 및 마커로 뿌려주기 이미지 확인
+            2. 다시 화면으로 돌아왔을 경우 전체 포스트 다시 조회
          */
 
         setToolBar()
