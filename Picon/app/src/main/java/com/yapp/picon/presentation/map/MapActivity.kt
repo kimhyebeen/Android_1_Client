@@ -38,6 +38,7 @@ import com.yapp.picon.presentation.nav.NavActivity
 import com.yapp.picon.presentation.nav.NavTypeStringSet
 import com.yapp.picon.presentation.nav.UserInfoViewModel
 import com.yapp.picon.presentation.nav.adapter.NavHeaderEmotionAdapter
+import com.yapp.picon.presentation.nav.manageFriend.ManageFriendActivity
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import com.yapp.picon.presentation.pingallery.PinGalleryActivity
 import com.yapp.picon.presentation.post.PostActivity
@@ -300,7 +301,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.map_nav_customize_emotion_name -> startNavActivity(NavTypeStringSet.CustomEmotion.type)
+            R.id.map_nav_manage_friend -> startActivity(Intent(this, ManageFriendActivity::class.java))
             R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
             R.id.map_nav_view_travel_statistic -> startNavActivity(NavTypeStringSet.Statistic.type)
             R.id.map_nav_collect_picture -> startCollectActivity()
