@@ -8,23 +8,19 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="55dp"
-        android:layout_height="63dp">
-
-        <ImageView
-            android:id="@+id/marker_view_iv_marker"
-            android:layout_width="46dp"
-            android:layout_height="63dp"
-            android:contentDescription="@string/image_description"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@drawable/ic_map_pin" />
+        android:id="@+id/marker_view_cl"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:paddingStart="1dp"
+        android:paddingEnd="1dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="6dp"
+        tools:background="@drawable/ic_map_pin">
 
         <ImageView
             android:id="@+id/marker_view_iv_image"
-            android:layout_width="45dp"
-            android:layout_height="60dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:contentDescription="@string/image_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +29,7 @@
             android:id="@+id/marker_view_tv_count"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:minWidth="16dp"
             android:paddingStart="4dp"
