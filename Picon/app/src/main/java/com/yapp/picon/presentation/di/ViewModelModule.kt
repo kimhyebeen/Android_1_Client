@@ -18,7 +18,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { SimpleJoinViewModel(get()) }
     viewModel { SearchViewModel(get(), get(), get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get()) }
     viewModel { MapViewModel(get(), get()) }
     viewModel { SplashViewModel(get(), get(), get()) }
     viewModel { PostViewModel(get(), get()) }
