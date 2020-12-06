@@ -1,4 +1,4 @@
-package com.yapp.picon.helper
+package com.yapp.picon.presentation.util
 
 import android.Manifest
 import android.app.Activity

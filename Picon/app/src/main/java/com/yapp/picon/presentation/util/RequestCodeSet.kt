@@ -1,4 +1,4 @@
-package com.yapp.picon.helper
+package com.yapp.picon.presentation.util
 
 enum class RequestCodeSet(val code: Int) {
     LOCATION_REQUEST_CODE(200),
