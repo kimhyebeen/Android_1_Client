@@ -51,7 +51,7 @@ class CollectViewModel(
 
                     posts.map {
                         val size = it.imageUrls?.size ?: 0
-                        val showManyYN = size <= 1
+                        val showManyYN = size > 1
 
                         Pin(
                             it.id,

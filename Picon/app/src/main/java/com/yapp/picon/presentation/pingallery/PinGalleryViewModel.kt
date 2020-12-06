@@ -76,7 +76,7 @@ class PinGalleryViewModel(
         _posts.value?.let {
             _items.value = it.map { post ->
                 val size = post.imageUrls?.size ?: 0
-                val showManyYN = size <= 1
+                val showManyYN = size > 1
 
                 Pin(
                     post.id,
