@@ -84,11 +84,11 @@ interface YappApi {
     suspend fun requestFollow(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostResponse // todo - DefaultResponse로 바꾸기
+    ): DefaultResponse
 
     @POST("/display/member/unfollow/{id}")
     suspend fun requestUnFollow(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostResponse // todo - DefaultResponse로 바꾸기
+    ): DefaultResponse
 }
