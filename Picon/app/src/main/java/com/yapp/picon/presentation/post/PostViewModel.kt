@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.R
 import com.yapp.picon.data.model.Coordinate
 import com.yapp.picon.data.model.Emotion
 import com.yapp.picon.domain.usecase.CreatePostUseCase
@@ -42,7 +41,6 @@ class PostViewModel(
 
     private val _lat = MutableLiveData<Double>()
     private val _lng = MutableLiveData<Double>()
-    private val _selectedEmotion = MutableLiveData<Emotion>()
     private val _contentResolver = MutableLiveData<ContentResolver>()
 
     var memo = MutableLiveData<String>()
@@ -51,11 +49,14 @@ class PostViewModel(
     private val _finishYN = MutableLiveData<Boolean>()
     val finishYN: LiveData<Boolean> get() = _finishYN
 
+    private val _clickEmotionNumber = MutableLiveData<Int>()
+    val clickEmotionNumber: LiveData<Int> get() = _clickEmotionNumber
+
     init {
         _pictureUris.value = mutableListOf()
         _emotions.value = mutableListOf()
-
         _finishYN.value = false
+        _clickEmotionNumber.value = 0
     }
 
     private fun showToast(msg: String) {
@@ -79,10 +80,6 @@ class PostViewModel(
         _pictureUris.value = _pictureUris.value?.minus(uri)
     }
 
-    fun setSelectedEmotion(emotion: String) {
-        _selectedEmotion.value = Emotion.valueOf(emotion)
-    }
-
     private fun getPath(uri: Uri): String? {
         _contentResolver.value?.let {
             it.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null)?.run {
@@ -97,7 +94,7 @@ class PostViewModel(
         return null
     }
 
-    fun uploadImage() {
+    private fun uploadImage() {
         viewModelScope.launch {
             _pictureUris.value?.let {
                 val arrBody: MutableList<MultipartBody.Part> = ArrayList()
@@ -132,6 +129,19 @@ class PostViewModel(
         }
     }
 
+    private fun getEmotion() : Emotion? {
+        return _clickEmotionNumber.value?.let {
+            when(it) {
+                1 -> Emotion.SOFT_BLUE
+                2 -> Emotion.CORN_FLOWER
+                3 -> Emotion.BLUE_GRAY
+                4 -> Emotion.VERY_LIGHT_BROWN
+                5 -> Emotion.WARM_GRAY
+                else -> null
+            }
+        }
+    }
+
     private fun createPost(imageUrls: List<String>?) {
         viewModelScope.launch {
             val lat = _lat.value ?: return@launch
@@ -145,7 +155,7 @@ class PostViewModel(
                 imageUrls,
                 address = AddressUtil.getAddress(address.value.toString()),
                 memo = memo.value,
-                emotion = _selectedEmotion.value
+                emotion = getEmotion()
             ).let {
                 if (it.status == 200) {
                     showToast("새로운 핀이 작성되었습니다.")
@@ -157,25 +167,27 @@ class PostViewModel(
         }
     }
 
-    private fun indexToBg(int: Int): String {
-        return when (int) {
-            1 -> R.drawable.ic_custom_circle_soft_blue.toString()
-            2 -> R.drawable.ic_custom_circle_cornflower.toString()
-            3 -> R.drawable.ic_custom_circle_bluegrey.toString()
-            4 -> R.drawable.ic_custom_circle_very_light_brown.toString()
-            5 -> R.drawable.ic_custom_circle_warm_grey.toString()
-            else -> ""
-        }
-    }
-
     fun setEmotions(list: List<EmotionEntity>) {
         _emotions.value = list.map {
             mapOf(
                 "color" to it.color,
-                "text" to it.emotion,
-                "bg" to indexToBg(it.index)
+                "text" to it.emotion
             )
         }
+    }
+
+    fun setClickEmotionNumber(clickEmotionNumber: Int) {
+        _clickEmotionNumber.value = clickEmotionNumber
+    }
+
+    fun startCreatePost() {
+        val emotion = getEmotion()
+
+        if (emotion == null) {
+            showToast("감정을 선택해주세요.")
+            return
+        }
+        uploadImage()
     }
 
 }

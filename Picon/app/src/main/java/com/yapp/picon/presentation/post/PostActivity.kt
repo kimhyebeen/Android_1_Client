@@ -13,7 +13,6 @@ import com.sangcomz.fishbun.define.Define.INTENT_PATH
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.PostActivityBinding
-import com.yapp.picon.databinding.PostEmotionItemBinding
 import com.yapp.picon.databinding.PostPictureItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
@@ -40,22 +39,6 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         }
     }
 
-    private val postEmotionClickAdapter =
-        object :
-            PostEmotionClickAdapter<PostEmotionItemBinding>(
-                R.layout.post_emotion_item,
-                BR.postEmotionItem,
-                { item: Map<String, String>? -> itemClicked(item) }
-            ) {}
-
-    private fun itemClicked(item: Map<String, String>?) {
-        item?.let {
-            it["color"]?.let { color ->
-                vm.setSelectedEmotion(color)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -70,12 +53,17 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
     private fun setAdapter() {
         binding.postPictureRecyclerView.adapter = postPictureClickAdapter
-        binding.postEmotionRecyclerView.adapter = postEmotionClickAdapter
     }
 
     private fun setOnClickListeners() {
         binding.postIvBack.setOnClickListener { finish() }
-        binding.postTvSave.setOnClickListener { vm.uploadImage() }
+        binding.postTvSave.setOnClickListener { vm.startCreatePost() }
+
+        binding.postEmotionLi1.setOnClickListener { vm.setClickEmotionNumber(1) }
+        binding.postEmotionLi2.setOnClickListener { vm.setClickEmotionNumber(2) }
+        binding.postEmotionLi3.setOnClickListener { vm.setClickEmotionNumber(3) }
+        binding.postEmotionLi4.setOnClickListener { vm.setClickEmotionNumber(4) }
+        binding.postEmotionLi5.setOnClickListener { vm.setClickEmotionNumber(5) }
     }
 
     private fun setEmotions() {
