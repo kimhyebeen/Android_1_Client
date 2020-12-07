@@ -7,6 +7,7 @@ import com.yapp.picon.presentation.nav.manageFriend.ManageFriendViewModel
 import com.yapp.picon.presentation.pingallery.PinGalleryViewModel
 import com.yapp.picon.presentation.post.PostViewModel
 import com.yapp.picon.presentation.postdetail.PostDetailViewModel
+import com.yapp.picon.presentation.profile.FriendProfileViewModel
 import com.yapp.picon.presentation.profile.MyProfileViewModel
 import com.yapp.picon.presentation.search.SearchViewModel
 import com.yapp.picon.presentation.simplejoin.SimpleJoinViewModel
@@ -26,4 +27,5 @@ val viewModelModule = module {
     viewModel { MyProfileViewModel() }
     viewModel { PostDetailViewModel(get()) }
     viewModel { ManageFriendViewModel() }
+    viewModel { FriendProfileViewModel() }
 }
