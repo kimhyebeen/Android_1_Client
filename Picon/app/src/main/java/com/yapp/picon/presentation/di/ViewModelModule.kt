@@ -27,5 +27,5 @@ val viewModelModule = module {
     viewModel { MyProfileViewModel() }
     viewModel { PostDetailViewModel(get()) }
     viewModel { ManageFriendViewModel() }
-    viewModel { FriendProfileViewModel() }
+    viewModel { FriendProfileViewModel(get()) }
 }

@@ -18,5 +18,8 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.setVariable(BR.fpVM, vm)
+
+        val identity = intent.getStringExtra("identity")
+        vm.requestFriendProfile(identity)
     }
 }
