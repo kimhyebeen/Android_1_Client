@@ -1,9 +1,6 @@
 package com.yapp.picon.data.repository.post
 
-import com.yapp.picon.data.model.DefaultResponse
-import com.yapp.picon.data.model.PostRequest
-import com.yapp.picon.data.model.PostResponse
-import com.yapp.picon.data.model.PostsResponse
+import com.yapp.picon.data.model.*
 import com.yapp.picon.data.source.yapp.YappDataSource
 import okhttp3.MultipartBody
 
@@ -24,4 +21,11 @@ class PostRepositoryImpl(
 
     override suspend fun removePost(accessToken: String, id: Int): DefaultResponse =
         yappDataSource.removePost(accessToken, id)
+
+    override suspend fun requestStatistic(
+        accessToken: String,
+        year: String,
+        month: String
+    ): Statistics =
+        yappDataSource.requestStatistic(accessToken, year, month)
 }

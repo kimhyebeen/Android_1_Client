@@ -1,9 +1,6 @@
 package com.yapp.picon.data.repository.post
 
-import com.yapp.picon.data.model.DefaultResponse
-import com.yapp.picon.data.model.PostRequest
-import com.yapp.picon.data.model.PostResponse
-import com.yapp.picon.data.model.PostsResponse
+import com.yapp.picon.data.model.*
 import okhttp3.MultipartBody
 
 interface PostRepository {
@@ -11,4 +8,5 @@ interface PostRepository {
     suspend fun createPost(accessToken: String, postRequest: PostRequest): PostResponse
     suspend fun requestPosts(accessToken: String): PostsResponse
     suspend fun removePost(accessToken: String, id: Int): DefaultResponse
+    suspend fun requestStatistic(accessToken: String, year: String, month: String): Statistics
 }

@@ -58,4 +58,7 @@ val useCaseModule = module {
     single {
         UploadProfileUseCase(get())
     }
+    single {
+        GetStatisticUseCase(get(), get())
+    }
 }

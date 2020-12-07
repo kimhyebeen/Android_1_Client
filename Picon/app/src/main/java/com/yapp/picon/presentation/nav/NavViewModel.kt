@@ -7,7 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.yapp.picon.data.model.AddressCount
 import com.yapp.picon.data.model.EmotionCount
 import com.yapp.picon.data.model.Statistics
-import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.GetStatisticUseCase
+import com.yapp.picon.domain.usecase.GetUserInfoUseCase
 import com.yapp.picon.domain.usecase.LogoutUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
@@ -19,7 +20,9 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class NavViewModel(
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val getStatisticUseCase: GetStatisticUseCase
 ) : BaseViewModel() {
     val settingRepository = SettingRepository()
     val customRepository = CustomEmotionRepository()
@@ -39,10 +42,10 @@ class NavViewModel(
         _logoutYN.value = false
     }
 
-    fun requestUserInfo(token: String) {
+    fun requestUserInfo() {
         viewModelScope.launch {
             try {
-                NetworkModule.yappApi.requestUserInfo(token).let {
+                getUserInfoUseCase().let {
                     val date = it.member.createdDate.split('.')
                     statisticRepository.setSignUpDate(date[0].toInt(), date[1].toInt())
                 }
@@ -53,10 +56,10 @@ class NavViewModel(
         }
     }
 
-    fun requestStatistic(token: String, year: Int, month: Int) {
+    fun requestStatistic(year: Int, month: Int) {
         viewModelScope.launch {
             try {
-                NetworkModule.yappApi.requestStatistics(token, year.toString(), month.toString())
+                getStatisticUseCase(year.toString(), month.toString())
                     .let { statistic ->
                         setEmotionGraphList(statistic)
                         setPlaceGraphList(statistic)

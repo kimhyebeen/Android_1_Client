@@ -29,5 +29,5 @@ val viewModelModule = module {
     viewModel { PostDetailViewModel(get()) }
     viewModel { CollectViewModel(get()) }
     viewModel { ManageFriendViewModel() }
-    viewModel { NavViewModel(get()) }
+    viewModel { NavViewModel(get(), get(), get()) }
 }

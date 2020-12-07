@@ -12,4 +12,5 @@ interface YappDataSource {
     suspend fun removePost(accessToken: String, id: Int): DefaultResponse
     suspend fun requestUserInfo(accessToken: String): UserResponse
     suspend fun uploadProfile(accessToken: String, imageUrl: String): UserResponse
+    suspend fun requestStatistic(accessToken: String, year: String, month: String): Statistics
 }

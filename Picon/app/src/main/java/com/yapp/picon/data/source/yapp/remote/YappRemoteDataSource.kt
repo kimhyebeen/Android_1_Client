@@ -34,4 +34,11 @@ class YappRemoteDataSource(
 
     override suspend fun uploadProfile(accessToken: String, imageUrl: String): UserResponse =
         retrofitService.uploadProfile(accessToken, imageUrl)
+
+    override suspend fun requestStatistic(
+        accessToken: String,
+        year: String,
+        month: String
+    ): Statistics =
+        retrofitService.requestStatistics(accessToken, year, month)
 }
