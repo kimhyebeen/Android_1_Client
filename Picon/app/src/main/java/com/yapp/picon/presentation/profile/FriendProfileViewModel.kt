@@ -9,6 +9,9 @@ import com.yapp.picon.data.model.Members
 import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.Address
+import com.yapp.picon.presentation.model.Coordinate
+import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import kotlinx.coroutines.launch
 
@@ -45,10 +48,7 @@ class FriendProfileViewModel(
         _follower.value = 0
 
         _backButton.value = false
-    }
-
-    fun requestPostList() {
-        // todo - 친구 게시물 리스트 받아오기
+        _postList.value = listOf()
     }
 
     fun requestFriendProfile(input: String) {
@@ -80,7 +80,7 @@ class FriendProfileViewModel(
                         _member.value?.let {
                             NetworkModule.yappApi.requestFollow(token, it.id)
                             _isFollowing.value = true
-                        }
+                        } ?: Log.e("FriendProfileViewModel", "requestFollow - member is null")
                     } else Log.e("FriendProfileViewModel","requestFollow - token is empty")
                 }
             } catch (e: Exception) {
@@ -97,12 +97,54 @@ class FriendProfileViewModel(
                         _member.value?.let {
                             NetworkModule.yappApi.requestUnFollow(token, it.id)
                             _isFollowing.value = false
-                        }
+                        } ?: Log.e("FriendProfileViewModel", "requestUnFollow - member is null")
                     } else Log.e("FriendProfileViewModel","requestUnFollow - token is empty")
                 }
             } catch (e: Exception) {
                 Log.e("FriendProfileViewModel","requestUnFollow error - ${e.message}")
             }
+        }
+    }
+
+    fun requestPostList(id: Int) {
+        viewModelScope.launch {
+            try {
+                loadAccessTokenUseCase().let { token ->
+                    if (token.isNotEmpty()) {
+                        NetworkModule.yappApi.requestFriendPosts(token, id).posts.let { list ->
+                            list.map { post ->
+                                Post(
+                                    post.id,
+                                    Coordinate(post.coordinate.lat, post.coordinate.lng),
+                                    post.imageUrls,
+                                    Address(
+                                        post.address.address,
+                                        post.address.addrCity,
+                                        post.address.addrDo,
+                                        post.address.addrGu
+                                    ),
+                                    getEmotion(post.emotion!!.name),
+                                    post.memo,
+                                    post.createdDate
+                                )
+                            }.let { posts -> _postList.value = posts }
+                        }
+                    } else Log.e("FriendProfileViewModel","requestPostList - token is empty")
+                }
+            } catch (e: Exception) {
+                Log.e("FriendProfileViewModel","requestPostList error - ${e.message}")
+            }
+        }
+    }
+
+    private fun getEmotion(value: String): Emotion {
+        return when (value) {
+            "SOFT_BLUE" -> Emotion.SOFT_BLUE
+            "CORN_FLOWER" -> Emotion.CORN_FLOWER
+            "BLUE_GRAY" -> Emotion.BLUE_GRAY
+            "VERY_LIGHT_BROWN" -> Emotion.VERY_LIGHT_BROWN
+            "WARM_GRAY" -> Emotion.WARM_GRAY
+            else -> throw Exception("MyProfileViewModel - getEmotion - color type is wrong.")
         }
     }
 

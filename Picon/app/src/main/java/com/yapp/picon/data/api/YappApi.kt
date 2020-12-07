@@ -39,6 +39,13 @@ interface YappApi {
     ): PostsResponse
 
     @Headers("Content-Type: application/json;charset=UTF-8")
+    @GET("display/post/member/{id}")
+    suspend fun requestFriendPosts(
+        @Header("AccessToken") accessToken: String,
+        @Path("id") id: Int
+    ): PostsResponse
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
     @DELETE("display/post/{id}")
     suspend fun removePost(
         @Header("AccessToken") accessToken: String,

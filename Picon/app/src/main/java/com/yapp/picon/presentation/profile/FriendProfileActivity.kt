@@ -17,6 +17,8 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
     R.layout.friend_profile_activity
 ) {
     private lateinit var postAdapter: MyProfilePostAdapter
+    private var userId: Int? = null
+
     override val vm: FriendProfileViewModel by viewModel()
 
     override fun initViewModel() {
@@ -33,6 +35,16 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
             postAdapter.setItems(it)
             postAdapter.notifyDataSetChanged()
         })
+        vm.member.observe(this, {
+            if (userId == null) userId = it.id
+            vm.requestPostList(it.id)
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        userId?.let { vm.requestPostList(it) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
