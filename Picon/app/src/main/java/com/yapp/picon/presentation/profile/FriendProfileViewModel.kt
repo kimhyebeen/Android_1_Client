@@ -64,6 +64,40 @@ class FriendProfileViewModel(
         }
     }
 
+    fun requestFollow() {
+        viewModelScope.launch {
+            try {
+                loadAccessTokenUseCase().let { token ->
+                    if (token.isNotEmpty()) {
+                        _member.value?.let {
+                            NetworkModule.yappApi.requestFollow(token, it.id)
+                            _isFollowing.value = true
+                        }
+                    } else Log.e("FriendProfileViewModel","requestFollow - token is empty")
+                }
+            } catch (e: Exception) {
+                Log.e("FriendProfileViewModel","requestFollow error - ${e.message}")
+            }
+        }
+    }
+
+    fun requestUnFollow() {
+        viewModelScope.launch {
+            try {
+                loadAccessTokenUseCase().let { token ->
+                    if (token.isNotEmpty()) {
+                        _member.value?.let {
+                            NetworkModule.yappApi.requestUnFollow(token, it.id)
+                            _isFollowing.value = false
+                        }
+                    } else Log.e("FriendProfileViewModel","requestUnFollow - token is empty")
+                }
+            } catch (e: Exception) {
+                Log.e("FriendProfileViewModel","requestUnFollow error - ${e.message}")
+            }
+        }
+    }
+
     fun clickBackButton(view: View) {
         _backButton.value?.let {
             _backButton.value = !it

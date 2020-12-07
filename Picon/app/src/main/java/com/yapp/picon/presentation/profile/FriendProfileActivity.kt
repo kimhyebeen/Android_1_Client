@@ -20,6 +20,9 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
         vm.image.observe(this, {
             setProfileImage(it)
         })
+        vm.isFollowing.observe(this, {
+            setFollowButton(it)
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,23 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
                 .centerCrop()
                 .circleCrop()
                 .into(binding.friendProfileUserImage)
+        }
+    }
+
+    private fun setFollowButton(value: Boolean) {
+        binding.friendProfileFollowButton.apply {
+            if (value) {
+                setBackgroundResource(R.drawable.bg_un_follow_button)
+                text = "언팔로우"
+            } else {
+                setBackgroundResource(R.drawable.bg_follow_button)
+                text = "팔로우"
+            }
+
+            setOnClickListener {
+                if (value) vm.requestUnFollow()
+                else vm.requestFollow()
+            }
         }
     }
 }
