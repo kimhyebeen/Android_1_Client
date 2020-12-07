@@ -1,16 +1,22 @@
 package com.yapp.picon.presentation.profile
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.FriendProfileActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Post
+import com.yapp.picon.presentation.postdetail.PostDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendProfileViewModel>(
     R.layout.friend_profile_activity
 ) {
+    private lateinit var postAdapter: MyProfilePostAdapter
     override val vm: FriendProfileViewModel by viewModel()
 
     override fun initViewModel() {
@@ -23,11 +29,26 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
         vm.isFollowing.observe(this, {
             setFollowButton(it)
         })
+        vm.postList.observe(this, {
+            postAdapter.setItems(it)
+            postAdapter.notifyDataSetChanged()
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.setVariable(BR.fpVM, vm)
+
+        postAdapter = MyProfilePostAdapter(this,
+            { view, post -> startPostDetailActivity(view, post) },
+            R.layout.my_profile_post_item,
+            BR.profilePost
+        )
+        binding.friendProfilePostRv.apply {
+            adapter = postAdapter
+            layoutManager = GridLayoutManager(context, 3)
+            setHasFixedSize(true)
+        }
 
         val identity = intent.getStringExtra("identity")
         vm.requestFriendProfile(identity)
@@ -63,6 +84,14 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
                 if (value) vm.requestUnFollow()
                 else vm.requestFollow()
             }
+        }
+    }
+
+    private fun startPostDetailActivity(view: View, post: Post) {
+        Intent(this, PostDetailActivity::class.java).apply {
+            putExtra("post", post)
+        }.let {
+            startActivity(it)
         }
     }
 }

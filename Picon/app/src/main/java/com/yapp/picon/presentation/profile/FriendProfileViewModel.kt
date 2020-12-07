@@ -9,6 +9,7 @@ import com.yapp.picon.data.model.Members
 import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.Post
 import kotlinx.coroutines.launch
 
 class FriendProfileViewModel(
@@ -35,12 +36,19 @@ class FriendProfileViewModel(
     private val _follower = MutableLiveData<Int>()
     val follower: LiveData<Int> get() =  _follower
 
+    private val _postList = MutableLiveData<List<Post>>()
+    val postList: LiveData<List<Post>> get() = _postList
+
     init {
         // todo - following, follower 수 받아오기
         _following.value = 0
         _follower.value = 0
 
         _backButton.value = false
+    }
+
+    fun requestPostList() {
+        // todo - 친구 게시물 리스트 받아오기
     }
 
     fun requestFriendProfile(input: String) {
