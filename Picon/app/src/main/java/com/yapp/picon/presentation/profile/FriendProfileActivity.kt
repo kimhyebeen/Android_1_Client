@@ -34,6 +34,9 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
         vm.postList.observe(this, {
             postAdapter.setItems(it)
             postAdapter.notifyDataSetChanged()
+
+            if (it.isEmpty()) binding.friendProfileEmptyPostText.visibility = View.VISIBLE
+            else binding.friendProfileEmptyPostText.visibility = View.GONE
         })
         vm.member.observe(this, {
             if (userId == null) userId = it.id
@@ -102,6 +105,7 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
     private fun startPostDetailActivity(view: View, post: Post) {
         Intent(this, PostDetailActivity::class.java).apply {
             putExtra("post", post)
+            putExtra("isFriend", true)
         }.let {
             startActivity(it)
         }

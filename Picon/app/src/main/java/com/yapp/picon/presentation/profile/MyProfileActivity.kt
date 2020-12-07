@@ -47,6 +47,9 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         vm.postList.observe(this, {
             postAdapter.setItems(it)
             postAdapter.notifyDataSetChanged()
+
+            if (it.isEmpty()) binding.myProfileEmptyPostText.visibility = View.VISIBLE
+            else binding.myProfileEmptyPostText.visibility = View.GONE
         })
     }
 
