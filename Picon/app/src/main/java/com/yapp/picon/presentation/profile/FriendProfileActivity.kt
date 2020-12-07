@@ -13,6 +13,9 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
     override val vm: FriendProfileViewModel by viewModel()
 
     override fun initViewModel() {
+        vm.backButton.observe(this, {
+            onBackPressed()
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.profile
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,9 @@ import kotlinx.coroutines.launch
 class FriendProfileViewModel(
     private val loadAccessTokenUseCase: LoadAccessTokenUseCase
 ): BaseViewModel() {
+    private val _backButton = MutableLiveData<Boolean>()
+    val backButton: LiveData<Boolean> get() =  _backButton
+
     private val _member = MutableLiveData<Members>()
     val member: LiveData<Members> get() =  _member
 
@@ -55,6 +59,12 @@ class FriendProfileViewModel(
             } catch (e: Exception) {
                 Log.e("FriendProfileViewModel","requestFriendProfile error - ${e.message}")
             }
+        }
+    }
+
+    fun clickBackButton(view: View) {
+        _backButton.value?.let {
+            _backButton.value = !it
         }
     }
 }
