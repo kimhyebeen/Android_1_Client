@@ -10,10 +10,7 @@ import android.view.animation.AnimationUtils
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
@@ -21,6 +18,7 @@ import com.yapp.picon.databinding.NavStatisticFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.model.StatisticDate
 import com.yapp.picon.presentation.nav.adapter.MonthListAdapter
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -37,13 +35,7 @@ class StatisticFragment(
     private val userVM: UserInfoViewModel by viewModel()
     private val todayDate = getTodayDate()
 
-    @Suppress("UNCHECKED_CAST")
-    override val vm: NavViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                NavViewModel() as T
-        }
-    }
+    override val vm: NavViewModel by sharedViewModel()
 
     override fun initBinding() {
     }

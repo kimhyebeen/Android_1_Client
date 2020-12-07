@@ -15,15 +15,13 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogSettingBinding
 import com.yapp.picon.databinding.NavSettingFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.nav.repository.SettingRepository
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     R.layout.nav_setting_fragment
@@ -32,13 +30,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
     private lateinit var repo: SettingRepository
     private lateinit var dialogBinding: DialogSettingBinding
 
-    @Suppress("UNCHECKED_CAST")
-    override val vm: NavViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                NavViewModel() as T
-        }
-    }
+    override val vm: NavViewModel by sharedViewModel()
 
     override fun initBinding() {
         binding.setVariable(BR.navVM, vm)
@@ -154,6 +146,7 @@ class SettingFragment: BaseFragment<NavSettingFragmentBinding, NavViewModel>(
 
     private fun logoutAccount() {
         // todo - 계정 로그아웃
+        vm.logout()
     }
 
     private fun setDialog() {

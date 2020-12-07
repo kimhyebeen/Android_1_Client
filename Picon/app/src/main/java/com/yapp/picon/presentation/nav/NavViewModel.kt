@@ -8,6 +8,7 @@ import com.yapp.picon.data.model.AddressCount
 import com.yapp.picon.data.model.EmotionCount
 import com.yapp.picon.data.model.Statistics
 import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.domain.usecase.LogoutUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.StatisticEmotionGraphItem
 import com.yapp.picon.presentation.model.StatisticPlaceGraphItem
@@ -17,19 +18,25 @@ import com.yapp.picon.presentation.nav.repository.StatisticRepository
 import kotlinx.coroutines.launch
 import java.util.*
 
-class NavViewModel: BaseViewModel() {
+class NavViewModel(
+    private val logoutUseCase: LogoutUseCase
+) : BaseViewModel() {
     val settingRepository = SettingRepository()
     val customRepository = CustomEmotionRepository()
     val statisticRepository = StatisticRepository()
 
     private val _finishFlag = MutableLiveData<Boolean>()
     private val _toastMsg = MutableLiveData<String>()
+    private val _logoutYN = MutableLiveData<Boolean>()
 
     val toastMsg: LiveData<String> get() = _toastMsg
     val finishFlag: LiveData<Boolean> get() = _finishFlag
+    val logoutYN: LiveData<Boolean> get() = _logoutYN
+
 
     init {
         _finishFlag.value = false
+        _logoutYN.value = false
     }
 
     fun requestUserInfo(token: String) {
@@ -49,11 +56,12 @@ class NavViewModel: BaseViewModel() {
     fun requestStatistic(token: String, year: Int, month: Int) {
         viewModelScope.launch {
             try {
-                NetworkModule.yappApi.requestStatistics(token, year.toString(), month.toString()).let { statistic ->
-                    setEmotionGraphList(statistic)
-                    setPlaceGraphList(statistic)
-                    statisticRepository.setTotalPin(statistic.emotionTotal)
-                }
+                NetworkModule.yappApi.requestStatistics(token, year.toString(), month.toString())
+                    .let { statistic ->
+                        setEmotionGraphList(statistic)
+                        setPlaceGraphList(statistic)
+                        statisticRepository.setTotalPin(statistic.emotionTotal)
+                    }
             } catch (e: Exception) {
                 println("NavViewModel error - ${e.message}")
                 statisticRepository.initializeGraphData()
@@ -113,7 +121,7 @@ class NavViewModel: BaseViewModel() {
     }
 
     private fun getColorIndex(color: String): Int {
-        return when(color) {
+        return when (color) {
             "SOFT_BLUE" -> 0
             "CORN_FLOWER" -> 1
             "BLUE_GRAY" -> 2
@@ -151,4 +159,12 @@ class NavViewModel: BaseViewModel() {
     fun settingInitializeDialogFlag() {
         settingRepository.initializeSettingFlag()
     }
+
+    fun logout() {
+        viewModelScope.launch {
+            logoutUseCase()
+            _logoutYN.value = true
+        }
+    }
+
 }
