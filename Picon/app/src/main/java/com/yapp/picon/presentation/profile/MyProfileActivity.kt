@@ -101,6 +101,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     private fun startPostDetailActivity(view: View, post: Post) {
         Intent(this, PostDetailActivity::class.java).apply {
             putExtra("post", post)
+            putExtra("isFriend", false)
         }.let {
             startActivity(it)
         }
