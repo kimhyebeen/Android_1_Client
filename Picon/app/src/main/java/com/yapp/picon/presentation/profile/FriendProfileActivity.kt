@@ -1,6 +1,7 @@
 package com.yapp.picon.presentation.profile
 
 import android.os.Bundle
+import com.bumptech.glide.Glide
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.FriendProfileActivityBinding
@@ -14,7 +15,10 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
 
     override fun initViewModel() {
         vm.backButton.observe(this, {
-            onBackPressed()
+            if (it) onBackPressed()
+        })
+        vm.image.observe(this, {
+            setProfileImage(it)
         })
     }
 
@@ -24,5 +28,21 @@ class FriendProfileActivity: BaseActivity<FriendProfileActivityBinding, FriendPr
 
         val identity = intent.getStringExtra("identity")
         vm.requestFriendProfile(identity)
+    }
+
+    private fun setProfileImage(value: String) {
+        if (value.isNotEmpty()) {
+            Glide.with(this)
+                .load(value)
+                .centerCrop()
+                .circleCrop()
+                .into(binding.friendProfileUserImage)
+        } else {
+            Glide.with(this)
+                .load(R.drawable.profile_pic)
+                .centerCrop()
+                .circleCrop()
+                .into(binding.friendProfileUserImage)
+        }
     }
 }

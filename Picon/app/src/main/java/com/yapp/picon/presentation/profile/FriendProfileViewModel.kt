@@ -39,6 +39,8 @@ class FriendProfileViewModel(
         // todo - following, follower 수 받아오기
         _following.value = 0
         _follower.value = 0
+
+        _backButton.value = false
     }
 
     fun requestFriendProfile(input: String) {
