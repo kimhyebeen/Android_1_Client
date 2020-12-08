@@ -77,6 +77,7 @@
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="19dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_max="96dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_detail_address_text">
 
@@ -92,7 +93,7 @@
                         android:text="@{postDetailVM.content}"
                         android:textColor="@color/pale_grey"
                         android:textSize="14sp"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                 </LinearLayout>
 

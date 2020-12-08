@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.util.Pair
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager2.widget.ViewPager2
 import com.yapp.picon.BR
@@ -24,7 +23,6 @@ import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.nio.file.Files.move
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
@@ -46,8 +44,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
             imagePagerAdapter.setItems(it)
         })
         vm.content.observe(this, {
-            if (it.isEmpty()) binding.postDetailContentText.visibility = View.GONE
-            else binding.postDetailContentText.visibility = View.VISIBLE
+            if (it.isEmpty()) binding.postDetailScrollView.visibility = View.GONE
+            else binding.postDetailScrollView.visibility = View.VISIBLE
         })
         vm.editIconFlag.observe(this, {
             if (it) {
