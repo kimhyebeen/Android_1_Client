@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.PermissionListener
@@ -35,25 +34,28 @@ class MyProfileActivity : BaseActivity<MyProfileActivityBinding, MyProfileViewMo
     override fun initViewModel() {
         binding.setVariable(BR.profileVM, vm)
 
-        vm.backButton.observe(this) {
+        vm.backButton.observe(this, {
             if (it) onBackPressed()
-        }
-        vm.userInfoLoadYN.observe(this) {
+        })
+        vm.userInfoLoadYN.observe(this, {
             if (it) {
                 setProfileImage()
                 vm.setUserInfoLoadYN(false)
             }
-        }
-        vm.postList.observe(this) {
+        })
+        vm.postList.observe(this, {
             postAdapter.setItems(it)
             postAdapter.notifyDataSetChanged()
-        }
-        vm.profileNewImageUri.observe(this) {
+
+            if (it.isEmpty()) binding.myProfileEmptyPostText.visibility = View.VISIBLE
+            else binding.myProfileEmptyPostText.visibility = View.GONE
+        })
+        vm.profileNewImageUri.observe(this, {
             setProfileImage(it)
-        }
-        vm.toastMsg.observe(this) {
+        })
+        vm.toastMsg.observe(this, {
             showToast(it)
-        }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,6 +111,7 @@ class MyProfileActivity : BaseActivity<MyProfileActivityBinding, MyProfileViewMo
     private fun startPostDetailActivity(view: View, post: Post) {
         Intent(this, PostDetailActivity::class.java).apply {
             putExtra("post", post)
+            putExtra("isFriend", false)
         }.let {
             startActivity(it)
         }

@@ -81,6 +81,13 @@ class ManageFriendActivity : BaseActivity<ManageFriendActivityBinding, ManageFri
         mainFragment = ManageFriendMainFragment(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        changeToMainFragment()
+        vm.searchText.value = ""
+    }
+
     private fun onHideKeypad() {
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         val view: View = currentFocus ?: View(this)
