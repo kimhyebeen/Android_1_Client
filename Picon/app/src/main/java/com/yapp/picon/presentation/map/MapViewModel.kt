@@ -71,6 +71,10 @@ class MapViewModel(
         }
     }
 
+    fun closePinYN() {
+        _showPinYN.value = false
+    }
+
     fun requestUserInfo(token: String) {
         viewModelScope.launch {
             try {
@@ -89,13 +93,11 @@ class MapViewModel(
             requestPostsUseCase().let { postsResponse ->
                 Log.e(tag, "requestPosts FINISH")
                 if (postsResponse.status == 200) {
-
                     _postMarkers.value = postsResponse.posts.map { post ->
                         toPostMarker(toPresentation(post))
                     }
 
                     _postLoadYN.value = true
-
                 } else {
                     showToast("Error : ${postsResponse.errorMessage}")
                 }
@@ -136,4 +138,5 @@ class MapViewModel(
             }
         }
     }
+
 }

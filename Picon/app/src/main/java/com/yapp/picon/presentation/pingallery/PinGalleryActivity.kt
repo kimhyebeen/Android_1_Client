@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.pingallery
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -93,10 +94,19 @@ class PinGalleryActivity : BaseActivity<PinGalleryActivityBinding, PinGalleryVie
     }
 
     private fun setListeners() {
-        binding.pinGalleryIbBack.setOnClickListener { finish() }
+        binding.pinGalleryIbBack.setOnClickListener { setResultAndFinish() }
         binding.pinGalleryTvEdit.setOnClickListener { vm.setEditMode() }
         binding.pinGalleryTvCancel.setOnClickListener { vm.setShowMode() }
         binding.pinGalleryTvDelete.setOnClickListener { vm.deletePost() }
+    }
+
+    private fun setResultAndFinish() {
+        vm.deleteYN.value?.let {
+            if (it) {
+                setResult(Activity.RESULT_OK)
+            }
+        }
+        finish()
     }
 
     override fun onBackPressed() {
@@ -104,7 +114,7 @@ class PinGalleryActivity : BaseActivity<PinGalleryActivityBinding, PinGalleryVie
             vm.setShowMode()
             return
         }
-        super.onBackPressed()
+        setResultAndFinish()
     }
 
 }

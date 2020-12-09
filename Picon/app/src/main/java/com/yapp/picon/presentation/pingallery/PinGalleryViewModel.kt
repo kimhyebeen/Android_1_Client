@@ -38,12 +38,16 @@ class PinGalleryViewModel(
     private val _showYN = MutableLiveData<Boolean>()
     val showYN: LiveData<Boolean> get() = _showYN
 
+    private val _deleteYN = MutableLiveData<Boolean>()
+    val deleteYN: LiveData<Boolean> get() = _deleteYN
+
     init {
         _items.value = mutableListOf()
         _posts.value = mutableListOf()
         _deleteCount.value = "삭제"
         _showYN.value = true
         _editYN.value = false
+        _deleteYN.value = false
     }
 
     private fun showToast(msg: String) {
@@ -149,6 +153,7 @@ class PinGalleryViewModel(
                         deletedPinCount == deletingPinCount -> {
                             showToast("$deletedPinCount 개의 핀이 삭제되었습니다.")
                             setShowMode()
+                            _deleteYN.value = true
                         }
                         else -> {
                             showToast("삭제 중 오류가 발생했습니다.")

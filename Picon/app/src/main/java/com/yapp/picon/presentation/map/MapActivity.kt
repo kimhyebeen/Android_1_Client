@@ -8,8 +8,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -44,10 +42,7 @@ import com.yapp.picon.presentation.pingallery.PinGalleryActivity
 import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.profile.MyProfileActivity
 import com.yapp.picon.presentation.search.SearchActivity
-import com.yapp.picon.presentation.util.LocationHelper
-import com.yapp.picon.presentation.util.NaverCamera
-import com.yapp.picon.presentation.util.RequestCodeSet
-import com.yapp.picon.presentation.util.toPost
+import com.yapp.picon.presentation.util.*
 import jp.wasabeef.glide.transformations.MaskTransformation
 import kotlinx.android.synthetic.main.map_nav_head.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +65,8 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     private lateinit var headerEmotionAdapter: NavHeaderEmotionAdapter
 
     private val currentLocationMarker = Marker()
+
+    private lateinit var cluster: TedNaverClustering<PostMarker>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,18 +93,17 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     override fun initViewModel() {
         binding.setVariable(BR.mapVM, vm)
 
-        val toastMsgObserver = Observer<String> {
+        vm.toastMsg.observe(this, {
             showToast(it)
-        }
-        vm.toastMsg.observe(this, toastMsgObserver)
+        })
 
-        val loadPostYNObserver = Observer<Boolean> {
+        vm.postLoadYN.observe(this, {
             if (it) {
-                showMarkers()
+                Log.e(tag, "postLoadYN : showCluster")
+                showCluster()
                 vm.completeLoadPost()
             }
-        }
-        vm.postLoadYN.observe(this, loadPostYNObserver)
+        })
     }
 
     private fun setToolBar() {
@@ -281,7 +277,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
         startActivityForResult(
             intent,
-            RequestCodeSet.SEARCH_REQUEST_CODE.code
+            ActivityCode.REFRESH_MAP_CODE.code
         )
     }
 
@@ -298,7 +294,12 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.map_nav_manage_friend -> startActivity(Intent(this, ManageFriendActivity::class.java))
+            R.id.map_nav_manage_friend -> startActivity(
+                Intent(
+                    this,
+                    ManageFriendActivity::class.java
+                )
+            )
             R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
             R.id.map_nav_view_travel_statistic -> startNavActivity(NavTypeStringSet.Statistic.type)
             R.id.map_nav_collect_picture -> startCollectActivity()
@@ -355,10 +356,10 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         }
 
         settingOptionToMap()
-        getPostsAndShowMarkers()
+        requestPosts()
     }
 
-    private fun getPostsAndShowMarkers() {
+    private fun requestPosts() {
         vm.requestPosts()
     }
 
@@ -381,8 +382,12 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                         naverMap.moveCamera(cameraUpdate)
                     }
                 }
-                RequestCodeSet.REFRESH_MAP_CODE.code -> {
-                    getPostsAndShowMarkers()
+
+                ActivityCode.REFRESH_MAP_CODE.code -> {
+                    Log.e(tag, "refresh posts")
+                    vm.closePinYN()
+                    clearCluster()
+                    requestPosts()
                 }
             }
         }
@@ -404,16 +409,18 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     //todo 디자인 수정 필요
-    private fun showMarkers() {
-        vm.postMarkers.value?.let { postMarkers ->
-            TedNaverClustering.with<PostMarker>(this, naverMap)
+    private fun showCluster() {
+        vm.postMarkers.value?.let {
+            Log.e(tag, "initCluster")
+            cluster = TedNaverClustering.with<PostMarker>(this, naverMap)
                 .customMarker { pinMarker(it) }
                 .markerClickListener {
                     val item = arrayListOf(toPost(it))
 
-                    startActivity(
+                    startActivityForResult(
                         Intent(this@MapActivity, PinGalleryActivity::class.java)
-                            .putParcelableArrayListExtra("posts", item)
+                            .putParcelableArrayListExtra("posts", item),
+                        ActivityCode.REFRESH_MAP_CODE.code
                     )
                 }
                 .customCluster { clusterMarker(it.items) }
@@ -423,14 +430,22 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                         items.add(toPost(postMarker))
                     }
 
-                    startActivity(
+                    startActivityForResult(
                         Intent(this@MapActivity, PinGalleryActivity::class.java)
-                            .putParcelableArrayListExtra("posts", items)
+                            .putParcelableArrayListExtra("posts", items),
+                        ActivityCode.REFRESH_MAP_CODE.code
                     )
                 }
-                .items(postMarkers)
+                .items(it)
                 .make()
+
+            refreshCamera()
         }
+    }
+
+    private fun clearCluster() {
+        Log.e(tag, "clearCluster")
+        cluster.clearItems()
     }
 
     private fun emotionToDrawable(emotion: Emotion): Int {
@@ -458,7 +473,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     ): Marker {
         val latLng =
             LatLng(postMarker.coordinate.lat.toDouble(), postMarker.coordinate.lng.toDouble())
-        val imageUrl = postMarker.imageUrls?.get(0)
         val emotion = postMarker.emotion
 
         return Marker(latLng).apply {
@@ -468,16 +482,21 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                         markerViewCl.setBackgroundResource(emotionToDrawable(it))
                     }
 
-                    Log.e(this@MapActivity.tag, "Marker url $imageUrl")
-                    Glide.with(this@MapActivity)
-                        .load(imageUrl)
-                        .apply(
-                            RequestOptions.bitmapTransform(
-                                MaskTransformation(R.drawable.pin_image)
+                    postMarker.imageUrls?.get(0)?.let {
+                        Glide.with(this@MapActivity)
+                            .load(it)
+                            .override(64, 64)
+                            .centerCrop()
+                            .apply(
+                                RequestOptions.bitmapTransform(
+                                    MaskTransformation(R.drawable.pin_image)
+                                )
                             )
-                        )
-                        .error(R.drawable.pin_image)
-                        .into(markerViewIvImage)
+                            .error(R.drawable.pin_image)
+                            .into(markerViewIvImage)
+                    }
+
+//                    vm.postMarkerImages.value?.get(postMarker.id)?.into(markerViewIvImage)
                 }.root
             )
         }
@@ -486,7 +505,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     private fun clusterMarker(
         postMarkers: Collection<PostMarker>
     ): View {
-        Log.e(tag, "Make Cluster")
         val count = postMarkers.count()
         val thisPostMarker = postMarkers
             .filter { it.imageUrls?.size ?: 0 > 0 }
@@ -501,18 +519,29 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                 markerViewTvCount.setBackgroundResource(emotionToBackground(it))
             }
 
-            val url = thisPostMarker.imageUrls?.random()
-            Log.e(tag, "Cluster url $url")
-            Glide.with(this@MapActivity)
-                .load(url)
-                .apply(
-                    RequestOptions.bitmapTransform(
-                        MaskTransformation(R.drawable.pin_image)
+            thisPostMarker.imageUrls?.get(0)?.let {
+                Glide.with(this@MapActivity)
+                    .load(it)
+                    .override(64, 64)
+                    .centerCrop()
+                    .apply(
+                        RequestOptions.bitmapTransform(
+                            MaskTransformation(R.drawable.pin_image)
+                        )
                     )
-                )
-                .error(R.drawable.pin_image)
-                .into(markerViewIvImage)
+                    .error(R.drawable.pin_image)
+                    .into(markerViewIvImage)
+            }
+//            vm.postMarkerImages.value?.get(thisPostMarker.id)?.into(markerViewIvImage)
         }.root
+    }
+
+    private fun refreshCamera() {
+        val cameraUpdate = CameraUpdate.scrollAndZoomTo(
+            naverMap.cameraPosition.target,
+            naverMap.cameraPosition.zoom
+        ).animate(CameraAnimation.Fly, NaverCamera.REFRESH_ANIMATION_TIME)
+        naverMap.moveCamera(cameraUpdate)
     }
 
 }

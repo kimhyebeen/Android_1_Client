@@ -7,6 +7,7 @@ object NaverCamera {
     const val DEFAULT_ZOOM = 14.0
     const val DEFAULT_ANIMATION_TIME = 1000L
     const val START_ANIMATION_TIME = 300L
+    const val REFRESH_ANIMATION_TIME = 300L
 
     private const val START_LAT = 36.11169235719229
     private const val START_LNG = 127.78033862000188

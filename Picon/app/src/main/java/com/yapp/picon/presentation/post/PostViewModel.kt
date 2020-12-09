@@ -182,11 +182,11 @@ class PostViewModel(
 
     fun startCreatePost() {
         val emotion = getEmotion()
-
         if (emotion == null) {
             showToast("감정을 선택해주세요.")
             return
         }
+
         uploadImage()
     }
 

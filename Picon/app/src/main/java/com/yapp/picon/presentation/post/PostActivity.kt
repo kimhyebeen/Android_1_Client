@@ -5,6 +5,9 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
@@ -57,7 +60,11 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
     private fun setOnClickListeners() {
         binding.postIvBack.setOnClickListener { finish() }
-        binding.postTvSave.setOnClickListener { vm.startCreatePost() }
+        binding.postTvSave.setOnClickListener {
+            closeKeyboard()
+            startLoading()
+            vm.startCreatePost()
+        }
 
         binding.postEmotionLi1.setOnClickListener { vm.setClickEmotionNumber(1) }
         binding.postEmotionLi2.setOnClickListener { vm.setClickEmotionNumber(2) }
@@ -102,12 +109,32 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
             .startAlbum()
     }
 
+    private fun closeKeyboard() {
+        this@PostActivity.currentFocus?.let {
+            val imm: InputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
+    private fun startLoading() {
+        binding.postProgressBar.visibility = View.VISIBLE
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun stopLoading() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        binding.postProgressBar.visibility = View.GONE
+    }
+
     override fun initViewModel() {
         binding.setVariable(BR.postVM, vm)
 
         vm.toastMsg.observe(this, { showToast(it) })
         vm.finishYN.observe(this, {
             if (it) {
+                stopLoading()
+                setResult(Activity.RESULT_OK)
                 finish()
             }
         })
