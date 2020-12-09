@@ -1,5 +1,6 @@
 package com.yapp.picon.presentation.nav.manageFriend
 
+import android.content.Intent
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +9,7 @@ import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.ManageFriendSearchFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
+import com.yapp.picon.presentation.profile.FriendProfileActivity
 
 class ManageFriendSearchFragment: BaseFragment<ManageFriendSearchFragmentBinding, ManageFriendViewModel>(
     R.layout.manage_friend_search_fragment
@@ -31,7 +33,8 @@ class ManageFriendSearchFragment: BaseFragment<ManageFriendSearchFragmentBinding
             R.layout.manage_friend_tab_list_item,
             BR.followItem,
             {id -> requestFollow(id)},
-            {id -> requestUnFollow(id)}
+            {id -> requestUnFollow(id)},
+            {identity -> startFriendProfile(identity)}
         )
         binding.manageFriendSearchRv.apply {
             adapter = searchAdapter
@@ -55,5 +58,12 @@ class ManageFriendSearchFragment: BaseFragment<ManageFriendSearchFragmentBinding
         if (vm.token.isNotEmpty()) {
             vm.requestUnFollow(vm.token, id)
         } else vm.showToast("언팔로우 실패")
+    }
+
+    private fun startFriendProfile(identity: String) {
+        startActivity(
+            Intent(context, FriendProfileActivity::class.java)
+                .putExtra("identity", identity)
+        )
     }
 }

@@ -38,6 +38,7 @@
     <string name="nav_statistic_place">서울 강남구</string>
 
     <string name="manage_friend_edit_hint">닉네임 또는 이메일을 검색하세요</string>
+    <string name="friend_profile_empty_post_list">게시물이 존재하지 않습니다.</string>
 
     <string name="dialog_custom_remove_post_title">핀을 삭제하시겠습니까?</string>
     <string name="dialog_custom_emotion_title">색상에 어울리는 감정을 정해주세요.</string>

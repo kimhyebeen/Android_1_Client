@@ -61,6 +61,8 @@
 
         <activity android:name=".presentation.collect.CollectActivity" />
 
+        <activity android:name=".presentation.profile.FriendProfileActivity" />
+
     </application>
 
 </manifest>

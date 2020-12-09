@@ -77,6 +77,8 @@ class MyProfileViewModel(
                     _myProfileTitle.value = it.member.nickName
                     _profileImageUrl.value = it.member.profileImageUrl
                     _userInfoLoadYN.value = true
+                    _following.value = it.followInfo.followings
+                    _follower.value = it.followInfo.followers
                 }
             } catch (e: Exception) {
                 Log.e("MyProfileViewModel", "requestUserInfo Error - ${e.message}")
