@@ -75,8 +75,8 @@ class MyProfileViewModel(
             try {
                 getUserInfoUseCase().let {
                     _myProfileTitle.value = it.member.nickName
-                    _userInfoLoadYN.value = true
                     _profileImageUrl.value = it.member.profileImageUrl ?: ""
+                    _userInfoLoadYN.value = true
                     _following.value = it.followInfo.followings
                     _follower.value = it.followInfo.followers
                 }
