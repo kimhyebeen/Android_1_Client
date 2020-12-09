@@ -13,7 +13,8 @@ class ManageFriendFollowAdapter(
     @LayoutRes private val layoutRes: Int,
     bindingVariabledId: Int,
     private val requestFollow: (Int) -> Unit,
-    private val requestUnFollow: (Int) -> Unit
+    private val requestUnFollow: (Int) -> Unit,
+    private val startFriendProfile: (String) -> Unit
 ): BaseRecyclerView.BaseAdapter<FollowItem, ManageFriendTabListItemBinding>(
     layoutRes, bindingVariabledId
 ) {
@@ -23,6 +24,12 @@ class ManageFriendFollowAdapter(
     ) {
         super.onBindViewHolder(baseViewHolder, position)
 
+        baseViewHolder.itemView.friend_list_item_image.setOnClickListener {
+            startFriendProfile(items[position].email)
+        }
+        baseViewHolder.itemView.friend_list_item_email_tv.setOnClickListener {
+            startFriendProfile(items[position].email)
+        }
         setImageView(baseViewHolder, items[position])
         setFollowButton(baseViewHolder, items[position], position)
     }

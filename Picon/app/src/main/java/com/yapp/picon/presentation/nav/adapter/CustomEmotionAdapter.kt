@@ -41,11 +41,10 @@ class CustomEmotionAdapter(
             getResource(items[position].color)
         )
 
-        baseViewHolder.itemView.setOnLongClickListener {
+        baseViewHolder.itemView.setOnClickListener {
             setDialog(it.id)
             dialog.show()
             setDialogSize()
-            true
         }
     }
 
