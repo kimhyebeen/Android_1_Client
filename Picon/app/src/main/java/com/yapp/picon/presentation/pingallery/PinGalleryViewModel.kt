@@ -1,11 +1,10 @@
 package com.yapp.picon.presentation.pingallery
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.domain.usecase.DeletePostUseCase
 import com.yapp.picon.domain.usecase.GetRevGeoUseCase
+import com.yapp.picon.domain.usecase.RemovePostUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.Pin
 import com.yapp.picon.presentation.model.Post
@@ -13,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class PinGalleryViewModel(
     private val getRevGeoUseCase: GetRevGeoUseCase,
-    private val deletePostUseCase: DeletePostUseCase
+    private val removePostUseCase: RemovePostUseCase
 ) : BaseViewModel() {
 
     private val _items = MutableLiveData<List<Pin>>()
@@ -39,12 +38,16 @@ class PinGalleryViewModel(
     private val _showYN = MutableLiveData<Boolean>()
     val showYN: LiveData<Boolean> get() = _showYN
 
+    private val _deleteYN = MutableLiveData<Boolean>()
+    val deleteYN: LiveData<Boolean> get() = _deleteYN
+
     init {
         _items.value = mutableListOf()
         _posts.value = mutableListOf()
         _deleteCount.value = "삭제"
         _showYN.value = true
         _editYN.value = false
+        _deleteYN.value = false
     }
 
     private fun showToast(msg: String) {
@@ -77,7 +80,7 @@ class PinGalleryViewModel(
         _posts.value?.let {
             _items.value = it.map { post ->
                 val size = post.imageUrls?.size ?: 0
-                val showManyYN = size <= 1
+                val showManyYN = size > 1
 
                 Pin(
                     post.id,
@@ -136,8 +139,7 @@ class PinGalleryViewModel(
 
                 keys.forEach {
                     it?.let { id ->
-                        Log.e("aa12", "$it 을 삭제합니다.")
-                        deletePostUseCase(id.toString()).let { response ->
+                        removePostUseCase(id).let { response ->
                             if (response.status == 200) {
                                 deletedPinCount++
                             }
@@ -151,6 +153,7 @@ class PinGalleryViewModel(
                         deletedPinCount == deletingPinCount -> {
                             showToast("$deletedPinCount 개의 핀이 삭제되었습니다.")
                             setShowMode()
+                            _deleteYN.value = true
                         }
                         else -> {
                             showToast("삭제 중 오류가 발생했습니다.")

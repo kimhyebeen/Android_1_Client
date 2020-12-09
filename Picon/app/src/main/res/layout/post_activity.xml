@@ -10,17 +10,20 @@
             type="com.yapp.picon.presentation.post.PostViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_grey"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/post_li_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/post_iv_back"
@@ -60,7 +63,12 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/post_li_title"
+            app:layout_constraintVertical_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -113,14 +121,194 @@
                         android:textSize="16sp"
                         android:textStyle="normal" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/post_emotion_recycler_view"
+                    <LinearLayout
+                        android:id="@+id/post_emotion_li"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="2dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:setItems="@{postVM.emotions}" />
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/post_emotion_li_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber == 1}"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_two_circle_soft_blue"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber != 1}"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_custom_circle_soft_blue" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{postVM.emotions[0][`text`]}"
+                                android:textColor="@color/very_light_pink_two"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/post_emotion_li_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber == 2}"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_two_circle_cornflower"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber != 2}"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_custom_circle_cornflower" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{postVM.emotions[1][`text`]}"
+                                android:textColor="@color/very_light_pink_two"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/post_emotion_li_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber == 3}"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_two_circle_bluegrey"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber != 3}"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_custom_circle_bluegrey" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{postVM.emotions[2][`text`]}"
+                                android:textColor="@color/very_light_pink_two"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/post_emotion_li_4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber == 4}"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_two_circle_very_light_brown"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber != 4}"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_custom_circle_very_light_brown" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{postVM.emotions[3][`text`]}"
+                                android:textColor="@color/very_light_pink_two"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/post_emotion_li_5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginBottom="30dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber == 5}"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_two_circle_warm_grey"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                visibleOrGone="@{postVM.clickEmotionNumber != 5}"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="14dp"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_custom_circle_warm_grey" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{postVM.emotions[4][`text`]}"
+                                android:textColor="@color/very_light_pink_two"
+                                android:textSize="14sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -141,10 +329,11 @@
                         android:background="@color/black"
                         android:gravity="start|top"
                         android:hint="@string/post_et_memo_hint"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:letterSpacing="-0.01"
                         android:lineSpacingExtra="10sp"
                         android:padding="12dp"
+                        android:scrollHorizontally="false"
                         android:text="@={postVM.memo}"
                         android:textColor="@color/very_light_pink"
                         android:textColorHint="@color/brown_grey"
@@ -153,5 +342,17 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/post_progress_bar"
+            style="?android:attr/progressBarStyleSmallInverse"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

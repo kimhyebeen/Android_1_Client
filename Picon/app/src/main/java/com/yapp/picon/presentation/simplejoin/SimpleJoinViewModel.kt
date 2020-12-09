@@ -57,7 +57,7 @@ class SimpleJoinViewModel(
                 return@launch
             }
 
-            val loginNic = pwRe.value
+            val loginNic = nic.value
             if (loginNic.isNullOrEmpty()) {
                 showToast("닉네임을 재입력해주세요.")
                 return@launch

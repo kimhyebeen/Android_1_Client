@@ -10,10 +10,6 @@ import android.view.animation.AnimationUtils
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
@@ -21,38 +17,32 @@ import com.yapp.picon.databinding.NavStatisticFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.model.StatisticDate
 import com.yapp.picon.presentation.nav.adapter.MonthListAdapter
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
 class StatisticFragment(
     private val application: Application
-): BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
+) : BaseFragment<NavStatisticFragmentBinding, NavViewModel>(
     R.layout.nav_statistic_fragment
 ) {
     private lateinit var transaction: FragmentTransaction
     private lateinit var transrateUp: Animation
     private lateinit var transrateDown: Animation
     private lateinit var monthAdapter: MonthListAdapter
-    private val token = MutableLiveData<String>()
-    private val userVM: UserInfoViewModel by viewModel()
+
     private val todayDate = getTodayDate()
 
-    @Suppress("UNCHECKED_CAST")
-    override val vm: NavViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                NavViewModel() as T
-        }
-    }
+    override val vm: NavViewModel by sharedViewModel()
 
     override fun initBinding() {
     }
 
     private fun getTodayDate(): StatisticDate {
         Calendar.getInstance().let {
-            return StatisticDate(true,
+            return StatisticDate(
+                true,
                 it.get(Calendar.YEAR),
-                it.get(Calendar.MONTH)+1
+                it.get(Calendar.MONTH) + 1
             )
         }
     }
@@ -60,9 +50,10 @@ class StatisticFragment(
     override fun onStart() {
         super.onStart()
         transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment(application)).addToBackStack(
-            null
-        ).commit()
+        transaction.replace(R.id.nav_statistic_frame, StatisticContentViewFragment(application))
+            .addToBackStack(
+                null
+            ).commit()
 
         setTransrateUpDownAnimation()
         setMonthAdapter()
@@ -80,12 +71,9 @@ class StatisticFragment(
             vm.clickFinishButton(it)
         }
 
-        userVM.requestUserInfo()
-        token.observe(this, {
-            vm.requestUserInfo(it)
-            vm.requestStatistic(it, todayDate.year, todayDate.month)
-        })
 
+        vm.requestUserInfo()
+        vm.requestStatistic(todayDate.year, todayDate.month)
         observeVM()
     }
 
@@ -164,7 +152,7 @@ class StatisticFragment(
                 }
             }
             if (flag) {
-                vm.requestStatistic(token.value!!, year, month)
+                vm.requestStatistic(year, month)
             }
         }
     }
@@ -183,9 +171,6 @@ class StatisticFragment(
         vm.statisticRepository.title.observe(this, {
             binding.navStatisticAppBar.navStatisticTitleTv.text = it
         })
-        userVM.token.observe(this, {
-            token.value = it
-        })
     }
 
     private fun getLayoutParams(flag: Boolean): CoordinatorLayout.LayoutParams {
@@ -202,7 +187,7 @@ class StatisticFragment(
         }
 
         return layoutParams.apply {
-            setMargins(0, getPx(68f),0,0)
+            setMargins(0, getPx(68f), 0, 0)
             gravity = Gravity.CENTER_HORIZONTAL
         }
     }

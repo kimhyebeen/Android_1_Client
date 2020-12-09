@@ -50,7 +50,7 @@ interface YappApi {
     suspend fun removePost(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostsResponse
+    ): DefaultResponse
 
     @GET("/display/statistics/{year}/{month}")
     suspend fun requestStatistics(
@@ -62,6 +62,13 @@ interface YappApi {
     @GET("/display/member/")
     suspend fun requestUserInfo(
         @Header("AccessToken") AccessToken: String
+    ): UserResponse
+
+    @Headers("Content-Type: application/json;charset=UTF-8")
+    @POST("/display/member/profile")
+    suspend fun uploadProfile(
+        @Header("AccessToken") accessToken: String,
+        @Body profileUrl: String
     ): UserResponse
 
     @GET("/display/member/search")
@@ -84,11 +91,11 @@ interface YappApi {
     suspend fun requestFollow(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostResponse // todo - DefaultResponse로 바꾸기
+    ): DefaultResponse
 
     @POST("/display/member/unfollow/{id}")
     suspend fun requestUnFollow(
         @Header("AccessToken") accessToken: String,
         @Path("id") id: Int
-    ): PostResponse // todo - DefaultResponse로 바꾸기
+    ): DefaultResponse
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Picon</string>
+    <string name="app_name">PiCON</string>
 
     <string name="map_menu_manage_friend">친구 관리하기</string>
     <string name="map_menu_customize_emotion_name">감정 이름 커스텀하기</string>
@@ -88,4 +88,5 @@
     <string name="pw">비밀번호</string>
     <string name="join_membership">회원가입</string>
     <string name="pin_gallery">핀 갤러리</string>
+    <string name="collecting">모아보기</string>
 </resources>

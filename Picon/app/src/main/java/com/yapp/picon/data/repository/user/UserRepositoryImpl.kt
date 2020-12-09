@@ -1,9 +1,6 @@
 package com.yapp.picon.data.repository.user
 
-import com.yapp.picon.data.model.LoginRequest
-import com.yapp.picon.data.model.LoginResponse
-import com.yapp.picon.data.model.SimpleJoinRequest
-import com.yapp.picon.data.model.SimpleJoinResponse
+import com.yapp.picon.data.model.*
 import com.yapp.picon.data.source.searched.DataStoreDataSource
 import com.yapp.picon.data.source.yapp.YappDataSource
 
@@ -28,4 +25,10 @@ class UserRepositoryImpl(
 
     override suspend fun loadAccessToken(): String =
         dataStoreDataSource.loadAccessToken()
+
+    override suspend fun requestUserInfo(accessToken: String): UserResponse =
+        yappDataSource.requestUserInfo(accessToken)
+
+    override suspend fun uploadProfile(accessToken: String, imageUrl: String): UserResponse =
+        yappDataSource.uploadProfile(accessToken, imageUrl)
 }

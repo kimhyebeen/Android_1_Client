@@ -1,14 +1,15 @@
-package com.yapp.picon.presentation.post
+package com.yapp.picon.presentation.collect
 
 import androidx.annotation.LayoutRes
 import androidx.databinding.ViewDataBinding
 import com.yapp.picon.presentation.base.BaseRecyclerView
+import com.yapp.picon.presentation.model.Pin
 
-abstract class PostEmotionClickAdapter<B : ViewDataBinding>(
+abstract class CollectClickAdapter<B : ViewDataBinding>(
     @LayoutRes private val layoutRes: Int,
     bindingVariabledId: Int,
-    private val clickListener: (item: Map<String, String>?) -> Unit
-) : BaseRecyclerView.BaseAdapter<Map<String, String>, B>(
+    private val clickListener: (item: Pin) -> Unit
+) : BaseRecyclerView.BaseAdapter<Pin, B>(
     layoutRes,
     bindingVariabledId
 ) {
