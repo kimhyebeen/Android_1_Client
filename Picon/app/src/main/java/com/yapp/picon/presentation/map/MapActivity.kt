@@ -311,8 +311,13 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         naverMap.apply {
             mapType = NaverMap.MapType.Navi
             isNightModeEnabled = true
-            uiSettings.isZoomControlEnabled = false
-            uiSettings.isZoomGesturesEnabled = true
+            uiSettings.run {
+                isZoomControlEnabled = false
+                isZoomGesturesEnabled = true
+                isCompassEnabled = false
+                isScaleBarEnabled = false
+                isRotateGesturesEnabled = false
+            }
 
             lightness = -0.5f
 
