@@ -99,6 +99,7 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
     private fun startAlbum() {
         FishBun.with(this@PostActivity)
             .setImageAdapter(GlideAdapter())
+            .setMinCount(1)
             .setActionBarColor(
                 ResourcesCompat.getColor(resources, R.color.dark_grey, null),
                 ResourcesCompat.getColor(resources, R.color.dark_grey, null),
@@ -119,12 +120,24 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
     private fun startLoading() {
         binding.postProgressBar.visibility = View.VISIBLE
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
     }
 
     private fun stopLoading() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         binding.postProgressBar.visibility = View.GONE
+    }
+
+    private fun showToastAndFinish(msg: String) {
+        showToast(msg)
+        finish()
+    }
+
+    private fun showSelectPictureAndFinish() {
+        showToastAndFinish("사진을 1장이상 선택해주세요.")
     }
 
     override fun initViewModel() {
@@ -149,8 +162,10 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
                     data?.run {
                         getParcelableArrayListExtra<Uri>(INTENT_PATH)?.let {
                             vm.setPictureUris(it)
-                        }
-                    }
+                        } ?: showSelectPictureAndFinish()
+                    } ?: showSelectPictureAndFinish()
+                } else {
+                    showSelectPictureAndFinish()
                 }
             }
         }
