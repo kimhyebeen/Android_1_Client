@@ -43,15 +43,17 @@ class ManageFriendMainFragment(
     }
 
     private fun setPagerAdapter() {
-        pagerAdapter = ManageFriendPagerAdapter(application)
-        binding.manageFriendViewPager.adapter = pagerAdapter
+        if (binding.manageFriendViewPager.adapter == null) {
+            pagerAdapter = ManageFriendPagerAdapter(application)
+            binding.manageFriendViewPager.adapter = pagerAdapter
 
-        TabLayoutMediator(
-            binding.manageFriendTabLayout,
-            binding.manageFriendViewPager
-        ) { tab, position ->
-            if (position == 0) tab.text = getString(R.string.my_profile_following)
-            else tab.text = getString(R.string.my_profile_follower)
-        }.attach()
+            TabLayoutMediator(
+                binding.manageFriendTabLayout,
+                binding.manageFriendViewPager
+            ) { tab, position ->
+                if (position == 0) tab.text = getString(R.string.my_profile_following)
+                else tab.text = getString(R.string.my_profile_follower)
+            }.attach()
+        }
     }
 }

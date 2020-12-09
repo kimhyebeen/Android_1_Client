@@ -47,6 +47,9 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
         vm.postList.observe(this, {
             postAdapter.setItems(it)
             postAdapter.notifyDataSetChanged()
+
+            if (it.isEmpty()) binding.myProfileEmptyPostText.visibility = View.VISIBLE
+            else binding.myProfileEmptyPostText.visibility = View.GONE
         })
     }
 
@@ -101,6 +104,7 @@ class MyProfileActivity: BaseActivity<MyProfileActivityBinding, MyProfileViewMod
     private fun startPostDetailActivity(view: View, post: Post) {
         Intent(this, PostDetailActivity::class.java).apply {
             putExtra("post", post)
+            putExtra("isFriend", false)
         }.let {
             startActivity(it)
         }

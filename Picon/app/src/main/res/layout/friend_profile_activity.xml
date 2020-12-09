@@ -3,13 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="fpVM"
+            type="com.yapp.picon.presentation.profile.FriendProfileViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_grey">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/other_profile_tool_bar"
+            android:id="@+id/friend_profile_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="74dp"
             android:background="#00ffffff"
@@ -23,9 +29,10 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/other_profile_back_iv"
+                    android:id="@+id/friend_profile_back_iv"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:onClick="@{fpVM::clickBackButton}"
                     android:contentDescription="@string/image_description"
                     android:padding="18dp"
                     android:src="@drawable/ic_back"
@@ -33,15 +40,16 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
-                    android:id="@+id/other_profile_title_tv"
+                    android:id="@+id/friend_profile_title_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/very_light_pink"
                     android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/other_profile_back_iv"
+                    android:text="@{fpVM.nickname}"
+                    app:layout_constraintBottom_toBottomOf="@+id/friend_profile_back_iv"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/other_profile_back_iv" />
+                    app:layout_constraintTop_toTopOf="@+id/friend_profile_back_iv" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -49,17 +57,17 @@
         </androidx.appcompat.widget.Toolbar>
 
         <ImageView
-            android:id="@+id/other_profile_user_image"
+            android:id="@+id/friend_profile_user_image"
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_marginTop="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/other_profile_tool_bar"
+            app:layout_constraintTop_toBottomOf="@+id/friend_profile_tool_bar"
             app:srcCompat="@drawable/profile_pic" />
 
         <Button
-            android:id="@+id/other_profile_follow_button"
+            android:id="@+id/friend_profile_follow_button"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginTop="12dp"
@@ -71,10 +79,10 @@
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/other_profile_user_image" />
+            app:layout_constraintTop_toBottomOf="@+id/friend_profile_user_image" />
 
         <LinearLayout
-            android:id="@+id/other_profile_follow_linear_layout"
+            android:id="@+id/friend_profile_follow_linear_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -82,10 +90,10 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/other_profile_follow_button">
+            app:layout_constraintTop_toBottomOf="@+id/friend_profile_follow_button">
 
             <TextView
-                android:id="@+id/other_profile_following_text"
+                android:id="@+id/friend_profile_following_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
@@ -94,9 +102,10 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/other_profile_following_number"
+                android:id="@+id/friend_profile_following_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{fpVM.following.toString()}"
                 android:textColor="@color/pale_grey"
                 android:textSize="16sp" />
 
@@ -109,7 +118,7 @@
                 android:background="@color/brownish_grey" />
 
             <TextView
-                android:id="@+id/other_profile_follower_text"
+                android:id="@+id/friend_profile_follower_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
@@ -118,23 +127,35 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/other_profile_follower_number"
+                android:id="@+id/friend_profile_follower_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{fpVM.follower.toString()}"
                 android:textColor="@color/pale_grey"
                 android:textSize="16sp" />
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/friend_profile_empty_post_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friend_profile_empty_post_list"
+            android:textColor="@color/greyish_brown"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/friend_profile_follow_linear_layout" />
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/other_profile_post_rv"
+            android:id="@+id/friend_profile_post_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="31dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/other_profile_follow_linear_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/friend_profile_follow_linear_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

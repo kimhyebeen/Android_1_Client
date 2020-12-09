@@ -86,6 +86,10 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         super.onCreate(savedInstanceState)
         emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
+        val isFriend = intent.getBooleanExtra("isFriend", true)
+        if (isFriend) binding.postDetailEditIconButton.visibility = View.GONE
+        else binding.postDetailEditIconButton.visibility = View.VISIBLE
+
         window.run {
             sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
             sharedElementExitTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
