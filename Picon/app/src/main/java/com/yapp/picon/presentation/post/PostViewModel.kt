@@ -187,6 +187,10 @@ class PostViewModel(
             return
         }
 
+        if (memo.value == null) {
+            memo.value = ""
+        }
+
         uploadImage()
     }
 
