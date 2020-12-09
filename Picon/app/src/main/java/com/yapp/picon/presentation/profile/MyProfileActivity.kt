@@ -63,7 +63,6 @@ class MyProfileActivity : BaseActivity<MyProfileActivityBinding, MyProfileViewMo
 
         setAdapter()
         setListener()
-        vm.requestPosts()
         vm.requestUserInfo()
         vm.setContentResolver(contentResolver)
     }
@@ -71,6 +70,7 @@ class MyProfileActivity : BaseActivity<MyProfileActivityBinding, MyProfileViewMo
     override fun onResume() {
         super.onResume()
         vm.initFlags()
+        vm.requestPosts()
     }
 
     private fun setAdapter() {
