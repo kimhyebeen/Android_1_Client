@@ -5,8 +5,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
 import com.sangcomz.fishbun.define.Define.ALBUM_REQUEST_CODE
@@ -14,9 +16,9 @@ import com.sangcomz.fishbun.define.Define.INTENT_PATH
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.PostActivityBinding
-import com.yapp.picon.databinding.PostEmotionItemBinding
 import com.yapp.picon.databinding.PostPictureItemBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -40,29 +42,13 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
         }
     }
 
-    private val postEmotionClickAdapter =
-        object :
-            PostEmotionClickAdapter<PostEmotionItemBinding>(
-                R.layout.post_emotion_item,
-                BR.postEmotionItem,
-                { item: Map<String, String>? -> itemClicked(item) }
-            ) {}
-
-    private fun itemClicked(item: Map<String, String>?) {
-        item?.let {
-            it["color"]?.let { color ->
-                vm.setSelectedEmotion(color)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setAdapter()
         setOnClickListeners()
 
-        //todo reverse geoloaction 으로 받은 주소 ui에 표시
+        setEmotions()
         setData()
         setContentResolver()
         startAlbum()
@@ -70,16 +56,25 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
 
     private fun setAdapter() {
         binding.postPictureRecyclerView.adapter = postPictureClickAdapter
-        binding.postEmotionRecyclerView.adapter = postEmotionClickAdapter
     }
 
     private fun setOnClickListeners() {
         binding.postIvBack.setOnClickListener { finish() }
-
         binding.postTvSave.setOnClickListener {
-            //todo 세이브 포스트
-            vm.uploadImage()
+            closeKeyboard()
+            startLoading()
+            vm.startCreatePost()
         }
+
+        binding.postEmotionLi1.setOnClickListener { vm.setClickEmotionNumber(1) }
+        binding.postEmotionLi2.setOnClickListener { vm.setClickEmotionNumber(2) }
+        binding.postEmotionLi3.setOnClickListener { vm.setClickEmotionNumber(3) }
+        binding.postEmotionLi4.setOnClickListener { vm.setClickEmotionNumber(4) }
+        binding.postEmotionLi5.setOnClickListener { vm.setClickEmotionNumber(5) }
+    }
+
+    private fun setEmotions() {
+        EmotionDatabaseRepository(application).getAll().observe(this, { vm.setEmotions(it) })
     }
 
     private fun setData() {
@@ -104,6 +99,7 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
     private fun startAlbum() {
         FishBun.with(this@PostActivity)
             .setImageAdapter(GlideAdapter())
+            .setMinCount(1)
             .setActionBarColor(
                 ResourcesCompat.getColor(resources, R.color.dark_grey, null),
                 ResourcesCompat.getColor(resources, R.color.dark_grey, null),
@@ -114,20 +110,47 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
             .startAlbum()
     }
 
+    private fun closeKeyboard() {
+        this@PostActivity.currentFocus?.let {
+            val imm: InputMethodManager =
+                getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
+    private fun startLoading() {
+        binding.postProgressBar.visibility = View.VISIBLE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun stopLoading() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        binding.postProgressBar.visibility = View.GONE
+    }
+
+    private fun showToastAndFinish(msg: String) {
+        showToast(msg)
+        finish()
+    }
+
+    private fun showSelectPictureAndFinish() {
+        showToastAndFinish("사진을 1장이상 선택해주세요.")
+    }
+
     override fun initViewModel() {
         binding.setVariable(BR.postVM, vm)
 
-        val toastMsgObserver = Observer<String> {
-            showToast(it)
-        }
-        vm.toastMsg.observe(this, toastMsgObserver)
-
-        val finishYNObserver = Observer<Boolean> {
+        vm.toastMsg.observe(this, { showToast(it) })
+        vm.finishYN.observe(this, {
             if (it) {
+                stopLoading()
+                setResult(Activity.RESULT_OK)
                 finish()
             }
-        }
-        vm.finishYN.observe(this, finishYNObserver)
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -139,8 +162,10 @@ class PostActivity : BaseActivity<PostActivityBinding, PostViewModel>(
                     data?.run {
                         getParcelableArrayListExtra<Uri>(INTENT_PATH)?.let {
                             vm.setPictureUris(it)
-                        }
-                    }
+                        } ?: showSelectPictureAndFinish()
+                    } ?: showSelectPictureAndFinish()
+                } else {
+                    showSelectPictureAndFinish()
                 }
             }
         }

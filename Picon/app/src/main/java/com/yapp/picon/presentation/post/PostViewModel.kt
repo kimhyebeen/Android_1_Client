@@ -7,12 +7,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.R
 import com.yapp.picon.data.model.Coordinate
 import com.yapp.picon.data.model.Emotion
 import com.yapp.picon.domain.usecase.CreatePostUseCase
 import com.yapp.picon.domain.usecase.UploadImageUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.util.AddressUtil
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -41,7 +41,6 @@ class PostViewModel(
 
     private val _lat = MutableLiveData<Double>()
     private val _lng = MutableLiveData<Double>()
-    private val _selectedEmotion = MutableLiveData<Emotion>()
     private val _contentResolver = MutableLiveData<ContentResolver>()
 
     var memo = MutableLiveData<String>()
@@ -50,39 +49,14 @@ class PostViewModel(
     private val _finishYN = MutableLiveData<Boolean>()
     val finishYN: LiveData<Boolean> get() = _finishYN
 
+    private val _clickEmotionNumber = MutableLiveData<Int>()
+    val clickEmotionNumber: LiveData<Int> get() = _clickEmotionNumber
+
     init {
         _pictureUris.value = mutableListOf()
-
-        //todo emotions room database로 만들고 변경하기
-        _emotions.value = listOf(
-            mapOf(
-                "color" to "SOFT_BLUE",
-                "text" to "새벽 3",
-                "bg" to R.drawable.ic_custom_circle_soft_blue.toString()
-            ),
-            mapOf(
-                "color" to "CORN_FLOWER",
-                "text" to "구름없는 하늘",
-                "bg" to R.drawable.ic_custom_circle_cornflower.toString(),
-            ),
-            mapOf(
-                "color" to "BLUE_GRAY",
-                "text" to "아침 이",
-                "bg" to R.drawable.ic_custom_circle_bluegrey.toString(),
-            ),
-            mapOf(
-                "color" to "VERY_LIGHT_BROWN",
-                "text" to "창문 너머 노",
-                "bg" to R.drawable.ic_custom_circle_very_light_brown.toString(),
-            ),
-            mapOf(
-                "color" to "WARM_GRAY",
-                "text" to "잔잔한 ",
-                "bg" to R.drawable.ic_custom_circle_warm_grey.toString(),
-            )
-        )
-
+        _emotions.value = mutableListOf()
         _finishYN.value = false
+        _clickEmotionNumber.value = 0
     }
 
     private fun showToast(msg: String) {
@@ -106,10 +80,6 @@ class PostViewModel(
         _pictureUris.value = _pictureUris.value?.minus(uri)
     }
 
-    fun setSelectedEmotion(emotion: String) {
-        _selectedEmotion.value = Emotion.valueOf(emotion)
-    }
-
     private fun getPath(uri: Uri): String? {
         _contentResolver.value?.let {
             it.query(uri, arrayOf(MediaStore.Images.Media.DATA), null, null, null)?.run {
@@ -124,7 +94,7 @@ class PostViewModel(
         return null
     }
 
-    fun uploadImage() {
+    private fun uploadImage() {
         viewModelScope.launch {
             _pictureUris.value?.let {
                 val arrBody: MutableList<MultipartBody.Part> = ArrayList()
@@ -159,6 +129,19 @@ class PostViewModel(
         }
     }
 
+    private fun getEmotion() : Emotion? {
+        return _clickEmotionNumber.value?.let {
+            when(it) {
+                1 -> Emotion.SOFT_BLUE
+                2 -> Emotion.CORN_FLOWER
+                3 -> Emotion.BLUE_GRAY
+                4 -> Emotion.VERY_LIGHT_BROWN
+                5 -> Emotion.WARM_GRAY
+                else -> null
+            }
+        }
+    }
+
     private fun createPost(imageUrls: List<String>?) {
         viewModelScope.launch {
             val lat = _lat.value ?: return@launch
@@ -172,7 +155,7 @@ class PostViewModel(
                 imageUrls,
                 address = AddressUtil.getAddress(address.value.toString()),
                 memo = memo.value,
-                emotion = _selectedEmotion.value
+                emotion = getEmotion()
             ).let {
                 if (it.status == 200) {
                     showToast("새로운 핀이 작성되었습니다.")
@@ -183,4 +166,32 @@ class PostViewModel(
             }
         }
     }
+
+    fun setEmotions(list: List<EmotionEntity>) {
+        _emotions.value = list.map {
+            mapOf(
+                "color" to it.color,
+                "text" to it.emotion
+            )
+        }
+    }
+
+    fun setClickEmotionNumber(clickEmotionNumber: Int) {
+        _clickEmotionNumber.value = clickEmotionNumber
+    }
+
+    fun startCreatePost() {
+        val emotion = getEmotion()
+        if (emotion == null) {
+            showToast("감정을 선택해주세요.")
+            return
+        }
+
+        if (memo.value == null) {
+            memo.value = ""
+        }
+
+        uploadImage()
+    }
+
 }

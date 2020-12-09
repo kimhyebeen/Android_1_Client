@@ -1,10 +1,8 @@
 package com.yapp.picon.presentation.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.domain.usecase.LoginUseCase
 import com.yapp.picon.domain.usecase.SaveAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
@@ -12,8 +10,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val saveAccessTokenUseCase: SaveAccessTokenUseCase,
-    private val loadAccessTokenUseCase: LoadAccessTokenUseCase
+    private val saveAccessTokenUseCase: SaveAccessTokenUseCase
 ) : BaseViewModel() {
 
     private val _toastMsg = MutableLiveData<String>()
@@ -54,17 +51,6 @@ class LoginViewModel(
                     _loginYN.value = true
                 } else {
                     showToast(it.errorMessage)
-                }
-            }
-        }
-    }
-
-    fun checkLogin() {
-        viewModelScope.launch {
-            loadAccessTokenUseCase().let {
-                if (it.isNotEmpty()) {
-                    _loginYN.value = true
-                    Log.e("aa12", "자동으로 로그인이 됩니다.")
                 }
             }
         }

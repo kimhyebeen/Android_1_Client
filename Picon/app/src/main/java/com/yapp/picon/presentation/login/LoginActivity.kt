@@ -22,16 +22,7 @@ class LoginActivity : BaseActivity<LoginActivityBinding, LoginViewModel>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*
-        todo
-            1. 앱 처음 시작은 인트로 페이지
-            1-1 첫 시작 시 뷰페이져 띄우기
-            2. 자동로그인 체크 (완료) (이동필요)
-            3. 로그인 성공 실패 (완료) (서버메세지 점검필요)
-         */
-
         setListeners()
-        checkLogin()
     }
 
     private fun setListeners() {
@@ -48,11 +39,6 @@ class LoginActivity : BaseActivity<LoginActivityBinding, LoginViewModel>(
 
     private fun startMapActivity() {
         startActivity(Intent(this, MapActivity::class.java))
-    }
-
-    private fun checkLogin() {
-        //todo 향후 인트로 쪽으로 빼기
-        vm.checkLogin()
     }
 
     override fun initViewModel() {

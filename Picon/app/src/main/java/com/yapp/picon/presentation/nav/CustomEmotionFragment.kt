@@ -13,25 +13,22 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogCustomFinishBinding
 import com.yapp.picon.databinding.NavCustomEmotionFragmentBinding
 import com.yapp.picon.presentation.base.BaseFragment
-import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.nav.adapter.CustomEmotionAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class CustomEmotionFragment(
     application: Application
-): BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
+) : BaseFragment<NavCustomEmotionFragmentBinding, NavViewModel>(
     R.layout.nav_custom_emotion_fragment
 ) {
     private lateinit var customAdapter: CustomEmotionAdapter
@@ -39,13 +36,7 @@ class CustomEmotionFragment(
     private lateinit var finishBuilder: AlertDialog.Builder
     private val emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
-    @Suppress("UNCHECKED_CAST")
-    override val vm: NavViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                NavViewModel() as T
-        }
-    }
+    override val vm: NavViewModel by sharedViewModel()
 
     override fun initBinding() {
         binding.setVariable(BR.navVM, vm)
@@ -145,7 +136,9 @@ class CustomEmotionFragment(
     }
 
     private fun setRecyclerView() {
-        context?.let { customAdapter = CustomEmotionAdapter(it, R.layout.custom_emotion_view, BR.emotion) }
+        context?.let {
+            customAdapter = CustomEmotionAdapter(it, R.layout.custom_emotion_view, BR.emotion)
+        }
             ?: throw Exception("CustomEmotionFragment - setRecyclerView - context is null")
 
         binding.navEmotionRecyclerView.apply {

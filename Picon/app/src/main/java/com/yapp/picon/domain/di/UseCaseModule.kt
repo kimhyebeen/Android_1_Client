@@ -50,6 +50,15 @@ val useCaseModule = module {
         GetRevGeoUseCase(get())
     }
     single {
-        DeletePostUseCase(get(), get())
+        RemovePostUseCase(get(), get())
+    }
+    single {
+        GetUserInfoUseCase(get())
+    }
+    single {
+        UploadProfileUseCase(get())
+    }
+    single {
+        GetStatisticUseCase(get(), get())
     }
 }

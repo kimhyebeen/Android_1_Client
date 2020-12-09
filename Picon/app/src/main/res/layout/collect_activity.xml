@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="collectVM"
+            type="com.yapp.picon.presentation.collect.CollectViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_grey">
+
+        <ImageButton
+            android:id="@+id/collect_ib_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="18dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/image_description"
+            android:paddingStart="18dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="24dp"
+            android:src="@drawable/ic_back_shadow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/collect_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:gravity="center_horizontal"
+            android:text="@string/collecting"
+            android:textColor="@color/very_light_pink"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/collect_iv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/ic_collect_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collect_tv_title" />
+
+        <TextView
+            android:id="@+id/collect_tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@{collectVM.locationCount}"
+            android:textColor="@color/very_light_pink"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/collect_iv_location"
+            app:layout_constraintTop_toTopOf="@id/collect_iv_location"
+            tools:text="위치(3)" />
+
+        <ImageView
+            android:id="@+id/collect_iv_emotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/ic_collect_emotion"
+            app:layout_constraintStart_toEndOf="@id/collect_tv_location"
+            app:layout_constraintTop_toTopOf="@id/collect_tv_location" />
+
+        <TextView
+            android:id="@+id/collect_tv_emotion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@{collectVM.emotionCount}"
+            android:textColor="@color/very_light_pink"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/collect_iv_emotion"
+            app:layout_constraintTop_toTopOf="@id/collect_iv_emotion"
+            tools:text="감정(3)" />
+
+        <ImageButton
+            android:id="@+id/collect_ib_filter"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/image_description"
+            android:padding="12dp"
+            android:src="@drawable/ic_collect_filter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collect_tv_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/collect_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/collect_iv_location"
+            app:setPinItems="@{collectVM.items}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

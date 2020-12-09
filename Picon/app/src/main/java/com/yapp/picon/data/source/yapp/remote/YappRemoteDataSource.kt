@@ -26,6 +26,19 @@ class YappRemoteDataSource(
     override suspend fun requestPosts(accessToken: String): PostsResponse =
         retrofitService.requestPosts(accessToken)
 
-    override suspend fun deletePost(accessToken: String, id: String): DefaultResponse =
-        retrofitService.deletePost(accessToken, id)
+    override suspend fun removePost(accessToken: String, id: Int): DefaultResponse =
+        retrofitService.removePost(accessToken, id)
+
+    override suspend fun requestUserInfo(accessToken: String): UserResponse =
+        retrofitService.requestUserInfo(accessToken)
+
+    override suspend fun uploadProfile(accessToken: String, imageUrl: String): UserResponse =
+        retrofitService.uploadProfile(accessToken, imageUrl)
+
+    override suspend fun requestStatistic(
+        accessToken: String,
+        year: String,
+        month: String
+    ): Statistics =
+        retrofitService.requestStatistics(accessToken, year, month)
 }

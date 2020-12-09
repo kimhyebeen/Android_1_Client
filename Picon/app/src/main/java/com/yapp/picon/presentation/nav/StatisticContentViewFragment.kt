@@ -2,9 +2,6 @@ package com.yapp.picon.presentation.nav
 
 import android.annotation.SuppressLint
 import android.app.Application
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
@@ -12,10 +9,11 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.NavStatisticContentViewBinding
 import com.yapp.picon.presentation.base.BaseFragment
 import com.yapp.picon.presentation.nav.adapter.EmotionGraphAdapter
-import com.yapp.picon.presentation.nav.adapter.EmotionViewAdapter
 import com.yapp.picon.presentation.nav.adapter.EmotionTextAdapter
+import com.yapp.picon.presentation.nav.adapter.EmotionViewAdapter
 import com.yapp.picon.presentation.nav.adapter.PlaceGraphAdapter
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class StatisticContentViewFragment(
     application: Application
@@ -29,13 +27,7 @@ class StatisticContentViewFragment(
     private lateinit var colorList: List<String>
     private val emotionDatabaseRepository = EmotionDatabaseRepository(application)
 
-    @Suppress("UNCHECKED_CAST")
-    override val vm: NavViewModel by activityViewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                NavViewModel() as T
-        }
-    }
+    override val vm: NavViewModel by sharedViewModel()
 
     override fun initBinding() {
     }
