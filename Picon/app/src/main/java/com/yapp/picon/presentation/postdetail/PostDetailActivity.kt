@@ -22,6 +22,7 @@ import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
+import com.yapp.picon.presentation.post.EditPostActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
@@ -31,6 +32,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
     private lateinit var removeDialog: Dialog
     private lateinit var removeBuilder: AlertDialog.Builder
+    private var post: Post? = null
     private var totalImage = 0
     private var id = -1
     private var emotionColor = ""
@@ -56,8 +58,8 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         })
         vm.editButtonFlag.observe(this, {
             if (it) {
-                // todo - 편집 화면 띄우기
                 vm.clickEditIcon(binding.postDetailEditIconButton)
+                startEditPostActivity()
             }
         })
         vm.removeButtonFlag.observe(this, {
@@ -106,6 +108,19 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         vm.initFlag()
     }
 
+    private fun startEditPostActivity() {
+        post?.let {
+            Intent(this, EditPostActivity::class.java).apply {
+                putExtra("post", it)
+            }.let { startActivity(it) }
+        } ?: showToast("게시물이 존재하지 않습니다.")
+
+        /** Warning
+        원래 편집 화면을 띄우고 다시 돌아오는 과정에서 게시물 내용이 갱신되도록 해야 하는데,
+        서버에 게시글 조회 요청할 때, id로 조회하는 게 없어서 갱신이 불가합니다.
+        */
+    }
+
     private fun setImagePager() {
         imagePagerAdapter = ImagePagerAdapter(this) { img ->
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
@@ -131,13 +146,13 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     }
 
     private fun getPostFromIntent() {
-        val post = intent.getParcelableExtra<Post>("post")
+        post = intent.getParcelableExtra<Post>("post")
         post?.let {
             totalImage = it.imageUrls?.size ?: 0
             id = it.id ?: -1
 
             setViewModel(it)
-            emotionColor = post.emotion?.name ?: ""
+            emotionColor = it.emotion?.name ?: ""
             setEmotionCircleImage(it.emotion?.name ?: "")
             setBackgroundColor(it.emotion?.name ?: "")
         }
