@@ -79,8 +79,8 @@ class MapViewModel(
         viewModelScope.launch {
             try {
                 NetworkModule.yappApi.requestUserInfo(token).let {
-                    _profileNickname.value = it.member.nickName
-                    _profileImageUrl.value = it.member.profileImageUrl ?: ""
+                    _profileNickname.value = it.memberDetailDto.member.nickName
+                    _profileImageUrl.value = it.memberDetailDto.member.profileImageUrl ?: ""
                 }
             } catch (e: Exception) {
                 Log.e("MyProfileViewModel", "requestUserInfo Error - ${e.message}")

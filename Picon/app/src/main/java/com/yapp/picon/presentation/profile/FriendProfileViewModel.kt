@@ -5,7 +5,8 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.yapp.picon.data.model.Members
+import com.yapp.picon.data.model.Member
+import com.yapp.picon.data.model.MemberDetail
 import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.domain.usecase.LoadAccessTokenUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
@@ -21,8 +22,8 @@ class FriendProfileViewModel(
     private val _backButton = MutableLiveData<Boolean>()
     val backButton: LiveData<Boolean> get() =  _backButton
 
-    private val _member = MutableLiveData<Members>()
-    val member: LiveData<Members> get() =  _member
+    private val _member = MutableLiveData<Member>()
+    val member: LiveData<Member> get() =  _member
 
     private val _nickname = MutableLiveData<String>()
     val nickname: LiveData<String> get() =  _nickname
@@ -43,12 +44,16 @@ class FriendProfileViewModel(
     val postList: LiveData<List<Post>> get() = _postList
 
     init {
-        // todo - following, follower 수 받아오기
-        _following.value = 0
-        _follower.value = 0
-
         _backButton.value = false
         _postList.value = listOf()
+    }
+
+    fun setUserInfo(detail: MemberDetail) {
+        _nickname.value = detail.member.nickName
+        _image.value = detail.member.profileImageUrl ?: ""
+        _isFollowing.value = detail.member.isFollowing ?: false
+        _following.value = detail.followInfo.followings
+        _follower.value = detail.followInfo.followers
     }
 
     fun requestFriendProfile(input: String) {
@@ -57,12 +62,8 @@ class FriendProfileViewModel(
                 loadAccessTokenUseCase().let { token ->
                     if (token.isNotEmpty()) {
                         NetworkModule.yappApi.requestAllUser(token, input).let {
-                            it.members[0].run {
-                                _member.value = this
-                                _nickname.value = this.nickName
-                                _image.value = this.profileImageUrl ?: ""
-                                _isFollowing.value = this.isFollowing ?: false
-                            }
+                            _member.value = it.members[0].member
+                            setUserInfo(it.members[0])
                         }
                     } else Log.e("FriendProfileViewModel","requestFriendProfile - token is empty")
                 }

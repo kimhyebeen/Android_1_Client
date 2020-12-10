@@ -80,12 +80,12 @@ interface YappApi {
     @GET("/display/member/following")
     suspend fun requestFollowingList(
         @Header("AccessToken") accessToken: String
-    ): SearchUserResponse
+    ): FollowListResponse
 
     @GET("/display/member/follower")
     suspend fun requestFollowerList(
         @Header("AccessToken") accessToken: String
-    ): SearchUserResponse
+    ): FollowListResponse
 
     @POST("/display/member/follow/{id}")
     suspend fun requestFollow(

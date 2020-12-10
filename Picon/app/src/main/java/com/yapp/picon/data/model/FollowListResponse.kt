@@ -1,9 +1,10 @@
 package com.yapp.picon.data.model
 
-data class UserResponse (
+data class FollowListResponse(
     val status: Int,
     val errors: String,
     val errorCode: String,
     val errorMessage: String,
-    val memberDetailDto: MemberDetail
+    val members: List<Member>,
+    val followInfo: FollowInfo
 )

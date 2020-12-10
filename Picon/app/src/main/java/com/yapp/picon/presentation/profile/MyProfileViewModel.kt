@@ -73,7 +73,7 @@ class MyProfileViewModel(
     fun requestUserInfo() {
         viewModelScope.launch {
             try {
-                getUserInfoUseCase().let {
+                getUserInfoUseCase().memberDetailDto.let {
                     _myProfileTitle.value = it.member.nickName
                     _userInfoLoadYN.value = true
                     _profileImageUrl.value = it.member.profileImageUrl ?: ""
@@ -128,14 +128,6 @@ class MyProfileViewModel(
         _backButton.value?.let {
             _backButton.value = !it
         }
-    }
-
-    fun setFollowing(value: Int) {
-        _following.value = value
-    }
-
-    fun setFollower(value: Int) {
-        _follower.value = value
     }
 
     private fun getPath(uri: Uri): String? {
