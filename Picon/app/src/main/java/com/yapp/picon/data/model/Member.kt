@@ -7,5 +7,5 @@ data class Member (
     val role: String,
     val createdDate: String,
     val profileImageUrl: String?,
-    val isFollowing: Boolean?
+    var isFollowing: Boolean?
 )

@@ -46,7 +46,7 @@ class NavViewModel(
         viewModelScope.launch {
             try {
                 getUserInfoUseCase().let {
-                    val date = it.member.createdDate.split('.')
+                    val date = it.memberDetailDto.member.createdDate.split('.')
                     statisticRepository.setSignUpDate(date[0].toInt(), date[1].toInt())
                 }
             } catch (e: Exception) {

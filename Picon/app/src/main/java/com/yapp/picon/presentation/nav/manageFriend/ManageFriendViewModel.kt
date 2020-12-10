@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.yapp.picon.data.model.Member
 import com.yapp.picon.data.network.NetworkModule
 import com.yapp.picon.presentation.base.BaseViewModel
 import com.yapp.picon.presentation.model.FollowItem
@@ -35,18 +36,22 @@ class ManageFriendViewModel: BaseViewModel() {
         searchText.value = ""
     }
 
+    fun getFollowItem(member: Member): FollowItem {
+        return FollowItem(
+            member.id,
+            member.profileImageUrl ?: "",
+            member.identity,
+            member.nickName,
+            member.isFollowing ?: false
+        )
+    }
+
     fun requestSearch(token: String, input: String) {
         viewModelScope.launch {
             try {
                 NetworkModule.yappApi.requestAllUser(token, input).members.let {  list ->
                     list.map {
-                        FollowItem(
-                            it.id,
-                            it.profileImageUrl ?: "",
-                            it.identity,
-                            it.nickName,
-                            it.isFollowing ?: false
-                        )
+                        getFollowItem(it.member)
                     }.let { _searchList.value = it }
                 }
             } catch (e: Exception) {
@@ -60,13 +65,7 @@ class ManageFriendViewModel: BaseViewModel() {
             try {
                 NetworkModule.yappApi.requestFollowingList(token).members.let { list ->
                     list.map {
-                        FollowItem(
-                            it.id,
-                            it.profileImageUrl ?: "",
-                            it.identity,
-                            it.nickName,
-                            it.isFollowing ?: false
-                        )
+                        getFollowItem(it)
                     }.let { _followingList.value = it }
                 }
             } catch (e: Exception) {
@@ -80,13 +79,7 @@ class ManageFriendViewModel: BaseViewModel() {
             try {
                 NetworkModule.yappApi.requestFollowerList(token).members.let { list ->
                     list.map {
-                        FollowItem(
-                            it.id,
-                            it.profileImageUrl ?: "",
-                            it.identity,
-                            it.nickName,
-                            it.isFollowing ?: false
-                        )
+                        getFollowItem(it)
                     }.let { _followerList.value = it }
                 }
             } catch (e: Exception) {
