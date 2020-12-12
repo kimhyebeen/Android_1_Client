@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogEditPostFinishBinding
+import com.yapp.picon.databinding.DialogEditPostRemoveBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Post
@@ -22,6 +23,8 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
 ) {
     private lateinit var finishDialog: Dialog
     private lateinit var finishBuilder: AlertDialog.Builder
+    private lateinit var removeDialog: Dialog
+    private lateinit var removeBuilder: AlertDialog.Builder
     private var post: Post? = null
 
     override val vm: EditPostViewModel by viewModel()
@@ -37,13 +40,39 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
             }
         }
 
+        vm.removePinButton.observe(this) {
+            if (it) {
+                setRemoveDialog()
+                removeDialog.show()
+                setDialogSize(removeDialog)
+            }
+        }
+
         vm.finishDialogConfirmButton.observe(this) {
-            if (it) finish()
+            if (it) {
+                finishDialog.dismiss()
+                finish()
+            }
         }
 
         vm.finishDialogCancelButton.observe(this) {
             if (it) {
                 finishDialog.dismiss()
+                vm.initialize()
+            }
+        }
+
+        vm.removeDialogDeleteButton.observe(this) {
+            if (it) {
+                post?.id?.let { id -> vm.removePost(id) }
+                removeDialog.dismiss()
+                finish()
+            }
+        }
+
+        vm.removeDialogCancelButton.observe(this) {
+            if (it) {
+                removeDialog.dismiss()
                 vm.initialize()
             }
         }
@@ -67,6 +96,21 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
         finishDialog = finishBuilder.create()
         finishDialog.setCancelable(false)
         finishDialog.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+    }
+
+    private fun setRemoveDialog() {
+        val dialogRemoveView: DialogEditPostRemoveBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(this), R.layout.dialog_edit_post_remove, null, false
+        )
+        dialogRemoveView.setVariable(BR.depVM, vm)
+        removeBuilder = AlertDialog.Builder(this)
+        removeBuilder.setView(dialogRemoveView.root)
+
+        removeDialog = removeBuilder.create()
+        removeDialog.setCancelable(false)
+        removeDialog.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }
