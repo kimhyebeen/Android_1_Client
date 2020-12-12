@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
@@ -13,6 +14,7 @@ import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogEditPostFinishBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Post
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>(
@@ -20,6 +22,7 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
 ) {
     private lateinit var finishDialog: Dialog
     private lateinit var finishBuilder: AlertDialog.Builder
+    private var post: Post? = null
 
     override val vm: EditPostViewModel by viewModel()
 
@@ -44,6 +47,13 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
                 vm.initialize()
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        post = intent.getParcelableExtra("post")
+        post?.let { vm.setPostContents(it) }
     }
 
     private fun setFinishDialog() {
