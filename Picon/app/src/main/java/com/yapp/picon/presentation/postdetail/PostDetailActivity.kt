@@ -28,6 +28,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(
     R.layout.post_detail_activity
 ) {
+    companion object {
+        const val DELETE_PIN: Int = 400
+        const val SAVE_PIN: Int = 300
+    }
+
     private lateinit var imagePagerAdapter: ImagePagerAdapter
     private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
     private lateinit var removeDialog: Dialog
@@ -36,6 +41,17 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
     private var totalImage = 0
     private var id = -1
     private var emotionColor = ""
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 100) {
+            if (resultCode == DELETE_PIN) finish()
+            else if (resultCode == SAVE_PIN) {
+                // todo - 전달받은 data로 게시글 내용 재설정
+            }
+        }
+    }
 
     override val vm: PostDetailViewModel by viewModel()
 
@@ -112,7 +128,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         post?.let {
             Intent(this, EditPostActivity::class.java).apply {
                 putExtra("post", it)
-            }.let { startActivity(it) }
+            }.let { startActivityForResult(it, 100) }
         } ?: showToast("게시물이 존재하지 않습니다.")
 
         /** Warning

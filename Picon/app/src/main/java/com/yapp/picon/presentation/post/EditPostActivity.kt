@@ -16,6 +16,7 @@ import com.yapp.picon.databinding.DialogEditPostRemoveBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Post
+import com.yapp.picon.presentation.postdetail.PostDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>(
@@ -66,6 +67,7 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
             if (it) {
                 post?.id?.let { id -> vm.removePost(id) }
                 removeDialog.dismiss()
+                setResult(PostDetailActivity.DELETE_PIN)
                 finish()
             }
         }
