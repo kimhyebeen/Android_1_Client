@@ -6,11 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -25,10 +23,8 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.MapActivityBinding
-import com.yapp.picon.databinding.MarkerViewBinding
 import com.yapp.picon.presentation.base.BaseMapActivity
 import com.yapp.picon.presentation.collect.CollectActivity
-import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.EmotionEntity
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.model.PostMarker
@@ -43,7 +39,6 @@ import com.yapp.picon.presentation.post.PostActivity
 import com.yapp.picon.presentation.profile.MyProfileActivity
 import com.yapp.picon.presentation.search.SearchActivity
 import com.yapp.picon.presentation.util.*
-import jp.wasabeef.glide.transformations.MaskTransformation
 import kotlinx.android.synthetic.main.map_nav_head.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -365,7 +360,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     private fun requestPosts() {
-        vm.requestPosts()
+        vm.requestPosts(this@MapActivity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -415,7 +410,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     //todo 디자인 수정 필요
     private fun showCluster() {
-        vm.postMarkers.value?.let {
+        vm.postMarkers.value?.let { postMarkers ->
             Log.e(tag, "initCluster")
             cluster = TedNaverClustering.with<PostMarker>(this, naverMap)
                 .customMarker { pinMarker(it) }
@@ -428,7 +423,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                         ActivityCode.REFRESH_MAP_CODE.code
                     )
                 }
-                .customCluster { clusterMarker(it.items) }
+                .customCluster { vm.getCluster(it.items, this@MapActivity) }
                 .clusterClickListener {
                     val items = arrayListOf<Post>()
                     it.items.forEach { postMarker ->
@@ -441,7 +436,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                         ActivityCode.REFRESH_MAP_CODE.code
                     )
                 }
-                .items(it)
+                .items(postMarkers)
                 .make()
 
             refreshCamera()
@@ -453,92 +448,17 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         cluster.clearItems()
     }
 
-    private fun emotionToDrawable(emotion: Emotion): Int {
-        return when (emotion) {
-            Emotion.SOFT_BLUE -> R.drawable.pin_soft_blue
-            Emotion.CORN_FLOWER -> R.drawable.pin_cornflower
-            Emotion.BLUE_GRAY -> R.drawable.pin_blue_grey
-            Emotion.VERY_LIGHT_BROWN -> R.drawable.pin_very_light_brown
-            Emotion.WARM_GRAY -> R.drawable.pin_warm_grey
-        }
-    }
-
-    private fun emotionToBackground(emotion: Emotion): Int {
-        return when (emotion) {
-            Emotion.SOFT_BLUE -> R.drawable.bg_soft_blue_radius_1dp
-            Emotion.CORN_FLOWER -> R.drawable.bg_cornflower_radius_1dp
-            Emotion.BLUE_GRAY -> R.drawable.bg_blue_grey_radius_1dp
-            Emotion.VERY_LIGHT_BROWN -> R.drawable.bg_very_light_brown_radius_1dp
-            Emotion.WARM_GRAY -> R.drawable.bg_warm_grey_radius_1dp
-        }
-    }
-
     private fun pinMarker(
         postMarker: PostMarker
     ): Marker {
         val latLng =
             LatLng(postMarker.coordinate.lat.toDouble(), postMarker.coordinate.lng.toDouble())
-        val emotion = postMarker.emotion
 
         return Marker(latLng).apply {
-            icon = OverlayImage.fromView(
-                MarkerViewBinding.inflate(layoutInflater).apply {
-                    emotion?.let {
-                        markerViewCl.setBackgroundResource(emotionToDrawable(it))
-                    }
-
-                    postMarker.imageUrls?.get(0)?.let {
-                        Glide.with(this@MapActivity)
-                            .load(it)
-                            .override(64, 64)
-                            .centerCrop()
-                            .apply(
-                                RequestOptions.bitmapTransform(
-                                    MaskTransformation(R.drawable.pin_image)
-                                )
-                            )
-                            .error(R.drawable.pin_image)
-                            .into(markerViewIvImage)
-                    }
-
-//                    vm.postMarkerImages.value?.get(postMarker.id)?.into(markerViewIvImage)
-                }.root
-            )
+            vm.mapMarkerView.value?.get(postMarker.id)?.let {
+                icon = OverlayImage.fromView(it)
+            }
         }
-    }
-
-    private fun clusterMarker(
-        postMarkers: Collection<PostMarker>
-    ): View {
-        val count = postMarkers.count()
-        val thisPostMarker = postMarkers
-            .filter { it.imageUrls?.size ?: 0 > 0 }
-            .random()
-
-        return MarkerViewBinding.inflate(layoutInflater).apply {
-            markerViewTvCount.text = count.toString()
-            markerViewTvCount.visibility = View.VISIBLE
-
-            thisPostMarker.emotion?.let {
-                markerViewCl.setBackgroundResource(emotionToDrawable(it))
-                markerViewTvCount.setBackgroundResource(emotionToBackground(it))
-            }
-
-            thisPostMarker.imageUrls?.get(0)?.let {
-                Glide.with(this@MapActivity)
-                    .load(it)
-                    .override(64, 64)
-                    .centerCrop()
-                    .apply(
-                        RequestOptions.bitmapTransform(
-                            MaskTransformation(R.drawable.pin_image)
-                        )
-                    )
-                    .error(R.drawable.pin_image)
-                    .into(markerViewIvImage)
-            }
-//            vm.postMarkerImages.value?.get(thisPostMarker.id)?.into(markerViewIvImage)
-        }.root
     }
 
     private fun refreshCamera() {

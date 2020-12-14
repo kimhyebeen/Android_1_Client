@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/marker_view_cl"
         android:layout_width="46dp"
-        android:layout_height="46dp"
+        android:layout_height="62dp"
         android:paddingStart="1dp"
         android:paddingTop="2dp"
         android:paddingEnd="1dp"
@@ -20,27 +20,11 @@
         <ImageView
             android:id="@+id/marker_view_iv_image"
             android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_height="62dp"
             android:contentDescription="@string/image_description"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/marker_view_tv_count"
-            android:layout_width="wrap_content"
-            android:layout_height="16dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:minWidth="16dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:textColor="@color/pale_grey"
-            android:textSize="11dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:background="@drawable/bg_cornflower_radius_1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
