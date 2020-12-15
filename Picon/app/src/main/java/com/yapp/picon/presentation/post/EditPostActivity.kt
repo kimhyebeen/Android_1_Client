@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
 import com.yapp.picon.databinding.DialogEditPostFinishBinding
@@ -26,12 +27,18 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
     private lateinit var finishBuilder: AlertDialog.Builder
     private lateinit var removeDialog: Dialog
     private lateinit var removeBuilder: AlertDialog.Builder
+    private lateinit var imageAdapter: EditPostImageAdapter
     private var post: Post? = null
 
     override val vm: EditPostViewModel by viewModel()
 
     override fun initViewModel() {
         binding.setVariable(BR.epVM, vm)
+
+        vm.postImageList.observe(this) {
+            imageAdapter.setItems(it)
+            imageAdapter.notifyDataSetChanged()
+        }
 
         vm.backButton.observe(this) {
             if (it) {
@@ -82,6 +89,17 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        imageAdapter = EditPostImageAdapter(
+            this,
+            R.layout.post_edit_image_item,
+            BR.peitem
+        )
+        binding.editPostImageRv.apply {
+            adapter = imageAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+        }
 
         post = intent.getParcelableExtra("post")
         post?.let { vm.setPostContents(it) }
