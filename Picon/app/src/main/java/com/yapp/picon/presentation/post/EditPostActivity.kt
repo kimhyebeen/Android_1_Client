@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yapp.picon.BR
 import com.yapp.picon.R
+import com.yapp.picon.presentation.model.Address
 import com.yapp.picon.databinding.DialogEditPostFinishBinding
 import com.yapp.picon.databinding.DialogEditPostRemoveBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
@@ -56,11 +57,18 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
         vm.saveButton.observe(this) { isClicked ->
             if (isClicked) {
                 post?.let {
+                    val address = vm.postAddress.value?.split(" ") ?: listOf()
+
                     Post(
                         it.id,
                         it.coordinate,
                         vm.postImageList.value,
-                        it.address,
+                        Address(
+                            vm.postAddress.value ?: "",
+                            address[0],
+                            address[1],
+                            address[2]
+                        ),
                         getSelectedEmotion(emotionAdapter.selectedIndex),
                         vm.postMemo.value,
                         it.createdDate

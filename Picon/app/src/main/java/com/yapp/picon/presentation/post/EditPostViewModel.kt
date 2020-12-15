@@ -43,8 +43,7 @@ class EditPostViewModel(
     private val _postImageList = MutableLiveData<List<String>>()
     val postImageList: LiveData<List<String>> get() =  _postImageList
 
-    private val _postAddress = MutableLiveData<String>()
-    val postAddress: LiveData<String> get() =  _postAddress
+    var postAddress = MutableLiveData<String>()
 
     private val _postEmotion = MutableLiveData<Emotion>()
     val postEmotion: LiveData<Emotion> get() =  _postEmotion
@@ -67,8 +66,8 @@ class EditPostViewModel(
 
     fun setPostContents(post: Post) {
         _postImageList.value = post.imageUrls ?: listOf()
-        _postAddress.value = post.address.address
         _postEmotion.value = post.emotion ?: throw Exception("EditPostViewModel - setPostContents - this post has not emotion.")
+        postAddress.value = post.address.address
         postMemo.value = post.memo ?: ""
     }
 
