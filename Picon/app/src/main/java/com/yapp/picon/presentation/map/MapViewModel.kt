@@ -1,17 +1,32 @@
 package com.yapp.picon.presentation.map
 
+import android.app.Activity
 import android.util.Log
+import android.util.TypedValue
+import android.view.View
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.yapp.picon.R
+import com.yapp.picon.data.model.PostsResponse
 import com.yapp.picon.data.network.NetworkModule
+import com.yapp.picon.databinding.MarkerViewBinding
 import com.yapp.picon.domain.usecase.GetRevGeoUseCase
 import com.yapp.picon.domain.usecase.RequestPostsUseCase
 import com.yapp.picon.presentation.base.BaseViewModel
+import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.PostMarker
 import com.yapp.picon.presentation.util.toPostMarker
 import com.yapp.picon.presentation.util.toPresentation
+import jp.wasabeef.glide.transformations.MaskTransformation
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MapViewModel(
     private val requestPostsUseCase: RequestPostsUseCase,
@@ -45,6 +60,9 @@ class MapViewModel(
 
     var address = MutableLiveData<String>()
 
+    private val _mapMarkerView = MutableLiveData<MutableMap<Int, View>>()
+    val mapMarkerView: LiveData<MutableMap<Int, View>> get() = _mapMarkerView
+
     init {
         _showBtnYN.value = false
         _showPinYN.value = false
@@ -53,6 +71,7 @@ class MapViewModel(
         _showAddressYN.value = false
         _profileNickname.value = ""
         _profileImageUrl.value = ""
+        _mapMarkerView.value = mutableMapOf()
     }
 
     private fun showToast(msg: String) {
@@ -88,20 +107,144 @@ class MapViewModel(
         }
     }
 
-    fun requestPosts() {
-        viewModelScope.launch {
-            requestPostsUseCase().let { postsResponse ->
-                Log.e(tag, "requestPosts FINISH")
-                if (postsResponse.status == 200) {
-                    _postMarkers.value = postsResponse.posts.map { post ->
-                        toPostMarker(toPresentation(post))
-                    }
+    private fun emotionToDrawable(emotion: Emotion): Int {
+        return when (emotion) {
+            Emotion.SOFT_BLUE -> R.drawable.pin_soft_blue
+            Emotion.CORN_FLOWER -> R.drawable.pin_cornflower
+            Emotion.BLUE_GRAY -> R.drawable.pin_blue_grey
+            Emotion.VERY_LIGHT_BROWN -> R.drawable.pin_very_light_brown
+            Emotion.WARM_GRAY -> R.drawable.pin_warm_grey
+        }
+    }
 
-                    _postLoadYN.value = true
-                } else {
-                    showToast("Error : ${postsResponse.errorMessage}")
+    private fun emotionToBackground(emotion: Emotion): Int {
+        return when (emotion) {
+            Emotion.SOFT_BLUE -> R.drawable.bg_soft_blue_radius_1dp
+            Emotion.CORN_FLOWER -> R.drawable.bg_cornflower_radius_1dp
+            Emotion.BLUE_GRAY -> R.drawable.bg_blue_grey_radius_1dp
+            Emotion.VERY_LIGHT_BROWN -> R.drawable.bg_very_light_brown_radius_1dp
+            Emotion.WARM_GRAY -> R.drawable.bg_warm_grey_radius_1dp
+        }
+    }
+
+    fun requestPosts(activity: Activity) {
+        viewModelScope.launch {
+            val posts = requestPostsUseCase()
+
+            setMarkers(posts)
+            setImages(activity)
+        }
+    }
+
+    private suspend fun setMarkers(postsResponse: PostsResponse) =
+        withContext(Dispatchers.Main) {
+            if (postsResponse.status == 200) {
+                _postMarkers.value = postsResponse.posts.map { post ->
+                    toPostMarker(toPresentation(post))
                 }
             }
+        }
+
+    private suspend fun setImages(activity: Activity) = withContext(Dispatchers.IO) {
+        _postMarkers.value?.forEach { postMarker ->
+            postMarker.id?.let { id ->
+                postMarker.imageUrls?.get(0)?.let { url ->
+                    Glide.with(activity)
+                        .load(url)
+                        .override(64, 64)
+                        .centerCrop()
+                        .apply(
+                            RequestOptions.bitmapTransform(
+                                MaskTransformation(R.drawable.pin_image)
+                            )
+                        )
+                        .error(R.drawable.pin_image)
+                        .submit()
+                        .get()?.let {
+                            withContext(Dispatchers.Main) {
+                                val markerView = MarkerViewBinding.inflate(activity.layoutInflater)
+                                    .apply {
+                                        postMarker.emotion?.let { emotion ->
+                                            markerViewCl.setBackgroundResource(
+                                                emotionToDrawable(emotion)
+                                            )
+                                        }
+
+                                        markerViewIvImage.setImageDrawable(it)
+                                    }.root
+
+                                _mapMarkerView.value?.put(id, markerView)
+
+                                Log.e(tag, "markerImages SIZE : ${_mapMarkerView.value?.size}")
+                            }
+                        }
+                }
+            }
+        }
+
+        _postLoadYN.postValue(true)
+    }
+
+    private fun dpToPxInt(activity: Activity, dp: Int): Int {
+        val displayMetrics = activity.resources.displayMetrics
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), displayMetrics)
+            .toInt()
+    }
+
+    //todo 포스트 개수 정확하지 않음
+    fun getCluster(
+        postMarkers: Collection<PostMarker>,
+        activity: Activity
+    ): View {
+        val thisPostMarker = postMarkers
+            .filter { it.imageUrls?.size ?: 0 > 0 }
+            .random()
+
+        val clusterConstraintLayout = ConstraintLayout(activity)
+
+        val clusterLayoutParams = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            marginStart = dpToPxInt(activity, 8)
+        }
+
+        val clusterTextView = TextView(activity).apply {
+            layoutParams = ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                topMargin = dpToPxInt(activity, 12)
+                minWidth = dpToPxInt(activity, 16)
+                setPadding(dpToPxInt(activity, 4), 0, dpToPxInt(activity, 4), 0)
+            }
+
+            text = postMarkers.count().toString()
+            setTextColor(ResourcesCompat.getColor(activity.resources, R.color.pale_grey, null))
+            textSize = 11F
+
+            thisPostMarker.emotion?.let {
+                setBackgroundResource(emotionToBackground(it))
+            }
+        }
+
+        return clusterConstraintLayout.apply {
+            _mapMarkerView.value?.get(thisPostMarker.id)?.apply {
+                layoutParams = clusterLayoutParams
+                try {
+                    clusterConstraintLayout.addView(this)
+                } catch (e: IllegalStateException) {
+                    clusterConstraintLayout.removeAllViews()
+                    clusterConstraintLayout.addView(this)
+                }
+            }
+            clusterConstraintLayout.addView(clusterTextView)
         }
     }
 
@@ -138,5 +281,4 @@ class MapViewModel(
             }
         }
     }
-
 }
