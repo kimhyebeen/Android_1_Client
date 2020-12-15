@@ -17,6 +17,8 @@ import com.yapp.picon.databinding.DialogEditPostRemoveBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Post
+import com.yapp.picon.presentation.model.PostEditEmotion
+import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
 import com.yapp.picon.presentation.postdetail.PostDetailActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -28,6 +30,8 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
     private lateinit var removeDialog: Dialog
     private lateinit var removeBuilder: AlertDialog.Builder
     private lateinit var imageAdapter: EditPostImageAdapter
+    private lateinit var emotionAdapter: EditPostEmotionAdapter
+    private lateinit var emotionDatabaseRepository: EmotionDatabaseRepository
     private var post: Post? = null
 
     override val vm: EditPostViewModel by viewModel()
@@ -90,6 +94,18 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setImageRecyclerView()
+        setEmotionRecyclerView()
+        getColorFromDatabase()
+        vm.postEmotion.observe(this) {
+            emotionAdapter.selectedIndex = getPostEmotionIndex(it.name)
+        }
+
+        post = intent.getParcelableExtra("post")
+        post?.let { vm.setPostContents(it) }
+    }
+
+    private fun setImageRecyclerView() {
         imageAdapter = EditPostImageAdapter(
             this,
             R.layout.post_edit_image_item,
@@ -100,9 +116,44 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
         }
+    }
 
-        post = intent.getParcelableExtra("post")
-        post?.let { vm.setPostContents(it) }
+    private fun setEmotionRecyclerView() {
+        emotionAdapter = EditPostEmotionAdapter(
+            R.layout.post_edit_emotion_item,
+            BR.peeItem
+        )
+        binding.editPostEmotionRv.apply {
+            adapter = emotionAdapter
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun getColorFromDatabase() {
+        emotionDatabaseRepository = EmotionDatabaseRepository(application)
+        emotionDatabaseRepository.getAll().observe(this) { list ->
+            list.map {
+                PostEditEmotion(
+                    it.color,
+                    it.emotion
+                )
+            }.let {
+                emotionAdapter.setItems(it)
+                emotionAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    private fun getPostEmotionIndex(emotion: String): Int {
+        return when (emotion) {
+            "SOFT_BLUE" -> 0
+            "CORN_FLOWER" -> 1
+            "BLUE_GRAY" -> 2
+            "VERY_LIGHT_BROWN" -> 3
+            "WARM_GRAY" -> 4
+            else -> throw Exception("EditPostActivity - getPostEmotionIndex - emotion string is wrong.")
+        }
     }
 
     private fun setFinishDialog() {
