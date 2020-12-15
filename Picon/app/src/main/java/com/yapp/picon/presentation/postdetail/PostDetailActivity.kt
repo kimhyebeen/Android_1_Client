@@ -48,7 +48,18 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
         if (requestCode == 100) {
             if (resultCode == DELETE_PIN) finish()
             else if (resultCode == SAVE_PIN) {
-                // todo - 전달받은 data로 게시글 내용 재설정
+                data?.let {
+                    it.getParcelableExtra<Post>("resultPost")?.let { rPost ->
+                        post = rPost
+                        totalImage = rPost.imageUrls?.size ?: 0
+                        id = rPost.id ?: -1
+
+                        setViewModel(rPost)
+                        emotionColor = rPost.emotion?.name ?: ""
+                        setEmotionCircleImage(rPost.emotion?.name ?: "")
+                        setBackgroundColor(rPost.emotion?.name ?: "")
+                    }
+                }
             }
         }
     }

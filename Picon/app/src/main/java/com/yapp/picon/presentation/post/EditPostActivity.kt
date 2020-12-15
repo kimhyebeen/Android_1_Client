@@ -16,6 +16,7 @@ import com.yapp.picon.databinding.DialogEditPostFinishBinding
 import com.yapp.picon.databinding.DialogEditPostRemoveBinding
 import com.yapp.picon.databinding.EditPostActivityBinding
 import com.yapp.picon.presentation.base.BaseActivity
+import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.model.PostEditEmotion
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
@@ -49,6 +50,30 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
                 setFinishDialog()
                 finishDialog.show()
                 setDialogSize(finishDialog)
+            }
+        }
+
+        vm.saveButton.observe(this) { isClicked ->
+            if (isClicked) {
+                post?.let {
+                    Post(
+                        it.id,
+                        it.coordinate,
+                        vm.postImageList.value,
+                        it.address,
+                        getSelectedEmotion(emotionAdapter.selectedIndex),
+                        vm.postMemo.value,
+                        it.createdDate
+                    )
+                }?.let {
+                    vm.savePost(it)
+
+                    val resultIntent = intent.apply {
+                        putExtra("resultPost", it)
+                    }
+                    setResult(PostDetailActivity.SAVE_PIN, resultIntent)
+                    finish()
+                }
             }
         }
 
@@ -143,6 +168,18 @@ class EditPostActivity: BaseActivity<EditPostActivityBinding, EditPostViewModel>
                 emotionAdapter.notifyDataSetChanged()
             }
         }
+    }
+
+    private fun getSelectedEmotion(index: Int): Emotion {
+        val eList: List<Emotion> = listOf(
+            Emotion.SOFT_BLUE,
+            Emotion.CORN_FLOWER,
+            Emotion.BLUE_GRAY,
+            Emotion.VERY_LIGHT_BROWN,
+            Emotion.WARM_GRAY
+        )
+
+        return eList[index]
     }
 
     private fun getPostEmotionIndex(emotion: String): Int {
