@@ -33,5 +33,5 @@ val viewModelModule = module {
     viewModel { ManageFriendViewModel() }
     viewModel { NavViewModel(get(), get(), get()) }
     viewModel { FriendProfileViewModel(get()) }
-    viewModel { EditPostViewModel(get()) }
+    viewModel { EditPostViewModel(get(), get()) }
 }

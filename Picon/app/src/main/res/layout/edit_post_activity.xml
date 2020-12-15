@@ -44,6 +44,7 @@
                     style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="60dp"
+                    android:onClick="@{epVM::clickSaveButton}"
                     android:minWidth="0dp"
                     android:paddingStart="18dp"
                     android:paddingLeft="0dp"
@@ -109,7 +110,8 @@
                     android:id="@+id/edit_post_emotion_rv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"/>
+                    android:layout_marginTop="1dp"
+                    android:overScrollMode="never" />
 
                 <TextView
                     android:layout_width="wrap_content"
