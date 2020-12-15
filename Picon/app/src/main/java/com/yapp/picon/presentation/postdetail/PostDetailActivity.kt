@@ -176,7 +176,7 @@ class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailView
 
     private fun setViewModel(post: Post) {
         val dateList = post.createdDate?.split('.')
-            ?: throw Exception("PostDetailActivity - setViewModel - createdDate is null")
+            ?: listOf("2020", "00", "00")
 
         vm.setImageList(post.imageUrls ?: listOf())
         vm.setImageNumber(1, totalImage)
