@@ -22,7 +22,7 @@ import com.yapp.picon.presentation.base.BaseActivity
 import com.yapp.picon.presentation.model.Emotion
 import com.yapp.picon.presentation.model.Post
 import com.yapp.picon.presentation.nav.repository.EmotionDatabaseRepository
-import com.yapp.picon.presentation.post.EditPostActivity
+import com.yapp.picon.presentation.postedit.EditPostActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PostDetailActivity: BaseActivity<PostDetailActivityBinding, PostDetailViewModel>(

@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.post
+package com.yapp.picon.presentation.postedit
 
 import android.util.Log
 import android.view.View

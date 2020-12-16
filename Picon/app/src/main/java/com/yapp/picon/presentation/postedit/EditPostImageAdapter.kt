@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.post
+package com.yapp.picon.presentation.postedit
 
 import android.content.Context
 import android.util.TypedValue

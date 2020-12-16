@@ -7,7 +7,7 @@
     <data>
         <variable
             name="depVM"
-            type="com.yapp.picon.presentation.post.EditPostViewModel" />
+            type="com.yapp.picon.presentation.postedit.EditPostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

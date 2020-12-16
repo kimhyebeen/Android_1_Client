@@ -1,4 +1,4 @@
-package com.yapp.picon.presentation.post
+package com.yapp.picon.presentation.postedit
 
 import android.view.View
 import androidx.annotation.LayoutRes
