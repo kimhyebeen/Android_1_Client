@@ -2,10 +2,14 @@ package com.yapp.picon.presentation.map
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.MenuItem
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -83,6 +87,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         super.onResume()
 
         setNavHeader()
+        setSharedButton()
     }
 
     override fun initViewModel() {
@@ -99,6 +104,34 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
                 vm.completeLoadPost()
             }
         })
+
+        vm.sharedMapYN.observe(this) {
+            if (it) {
+                val locationLayoutParams = ConstraintLayout.LayoutParams(
+                    dpToPx(this, 60f).toInt(),
+                    dpToPx(this, 60f).toInt()
+                )
+                locationLayoutParams.setMargins(0,0,18,0)
+                locationLayoutParams.endToEnd = R.id.map_constraint_layout
+                locationLayoutParams.topToTop = R.id.map_shared_button
+                locationLayoutParams.bottomToBottom = R.id.map_shared_button
+                binding.mapIbCurrentLocation.layoutParams = locationLayoutParams
+
+                binding.mapSharedButton.visibility = View.VISIBLE
+                binding.mapDrawerLayout.closeDrawer(GravityCompat.START)
+            } else {
+                val locationLayoutParams = ConstraintLayout.LayoutParams(
+                    dpToPx(this, 60f).toInt(),
+                    dpToPx(this, 60f).toInt()
+                )
+                locationLayoutParams.startToStart = R.id.map_ib_add
+                locationLayoutParams.endToEnd = R.id.map_ib_add
+                locationLayoutParams.bottomToTop = R.id.map_ib_add
+                binding.mapIbCurrentLocation.layoutParams = locationLayoutParams
+
+                binding.mapSharedButton.visibility = View.GONE
+            }
+        }
     }
 
     private fun setToolBar() {
@@ -133,6 +166,14 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         binding.mapIbCurrentLocation.setOnClickListener {
             setCurrentLocation()
         }
+    }
+
+    private fun setSharedButton() {
+        /* todo
+            1. 지도 공유하기 버튼 활성화
+            2. 현재 화면 캡쳐 -> 아이콘 없이
+            3. 공유하기 기능 띄우기
+         */
     }
 
     private fun setNavHeader() {
@@ -289,15 +330,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.map_nav_collect_picture -> startCollectActivity()
             R.id.map_nav_manage_friend -> startActivity(
                 Intent(
                     this,
                     ManageFriendActivity::class.java
                 )
             )
-            R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
             R.id.map_nav_view_travel_statistic -> startNavActivity(NavTypeStringSet.Statistic.type)
-            R.id.map_nav_collect_picture -> startCollectActivity()
+            R.id.map_nav_share_map -> vm.setSharedMenuButton(true)
+            R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
         }
         return true
     }
@@ -398,6 +440,10 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             binding.mapDrawerLayout.closeDrawer(GravityCompat.START)
             return
         }
+        if (binding.mapSharedButton.visibility == View.VISIBLE) {
+            vm.setSharedMenuButton(false)
+            return
+        }
         vm.showPinYN.value?.let {
             if (it) {
                 vm.toggleShowPinYN()
@@ -467,6 +513,12 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             naverMap.cameraPosition.zoom
         ).animate(CameraAnimation.Fly, NaverCamera.REFRESH_ANIMATION_TIME)
         naverMap.moveCamera(cameraUpdate)
+    }
+
+    private fun dpToPx(context: Context, dp: Float): Float {
+        val displayMetrics = context.resources.displayMetrics
+
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
     }
 
 }
