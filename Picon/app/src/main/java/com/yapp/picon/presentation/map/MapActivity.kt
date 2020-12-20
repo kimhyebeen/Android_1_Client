@@ -169,11 +169,13 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     private fun setSharedButton() {
-        /* todo
-            1. 지도 공유하기 버튼 활성화
-            2. 현재 화면 캡쳐 -> 아이콘 없이
-            3. 공유하기 기능 띄우기
-         */
+        binding.mapSharedButton.setOnClickListener {
+            vm.setToggleShowBtnYN(false)
+            vm.setSharedMenuButton(false)
+
+            // todo - 현재 화면 캡쳐 -> 아이콘 없이
+            // todo - 공유하기 기능 띄우기
+        }
     }
 
     private fun setNavHeader() {

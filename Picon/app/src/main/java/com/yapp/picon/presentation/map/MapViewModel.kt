@@ -82,6 +82,10 @@ class MapViewModel(
         _toastMsg.value = msg
     }
 
+    fun setToggleShowBtnYN(value: Boolean) {
+        _showBtnYN.value = value
+    }
+
     fun toggleShowBtnYN() {
         _showBtnYN.value = _showBtnYN.value?.let {
             !it
