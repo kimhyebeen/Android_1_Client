@@ -341,7 +341,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             R.id.map_nav_share_map -> vm.setSharedMenuButton(true)
             R.id.map_nav_setting -> startNavActivity(NavTypeStringSet.Setting.type)
         }
-        return true
+        return false
     }
 
     private fun settingOptionToMap() {
