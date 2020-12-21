@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
+import com.jraska.falcon.Falcon
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.geometry.Tm128
@@ -49,6 +51,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ted.gun0912.clustering.naver.TedNaverClustering
+import java.io.File
 
 class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     R.layout.map_activity,
@@ -173,9 +176,17 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             vm.setToggleShowBtnYN(false)
             vm.setSharedMenuButton(false)
 
-            // todo - 현재 화면 캡쳐 -> 아이콘 없이
-            // todo - 공유하기 기능 띄우기
+            saveBitmapToJPEG()
         }
+    }
+
+    private fun saveBitmapToJPEG() {
+        val storage: File = cacheDir
+        val fileName = "capture.jpg"
+
+        val tempFile = File(storage, fileName) // 저장할 파일 인스턴스 생성
+
+        Falcon.takeScreenshot(this, tempFile)
     }
 
     private fun setNavHeader() {
