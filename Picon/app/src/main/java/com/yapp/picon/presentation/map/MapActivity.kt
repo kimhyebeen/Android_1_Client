@@ -189,6 +189,17 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         Falcon.takeScreenshot(this, tempFile)
     }
 
+    private fun getBitmapFromFile(): File? {
+        val files = File(cacheDir.toString()).listFiles()
+
+        files?.let { list ->
+            for (file in list) {
+                if (file.name == "capture.jpg") return file
+            }
+        }
+        return null
+    }
+
     private fun setNavHeader() {
         observeUserToken()
 
