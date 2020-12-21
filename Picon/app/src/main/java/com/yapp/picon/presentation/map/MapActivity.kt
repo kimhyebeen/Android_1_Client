@@ -177,6 +177,9 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             vm.setSharedMenuButton(false)
 
             saveBitmapToJPEG()
+            getBitmapFromFile()?.let { imageFile ->
+                shareTheScreenShot(imageFile)
+            }
         }
     }
 
@@ -198,6 +201,16 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
             }
         }
         return null
+    }
+
+    private fun shareTheScreenShot(file: File) {
+        val imageUri = Uri.fromFile(file)
+        Intent(Intent.ACTION_SEND).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_STREAM, imageUri)
+        }.let { sharingIntent ->
+            startActivity(Intent.createChooser(sharingIntent, "Share The ScreenShot"))
+        }
     }
 
     private fun setNavHeader() {
