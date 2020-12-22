@@ -189,7 +189,7 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
         val tempFile = File(storage, fileName) // 저장할 파일 인스턴스 생성
 
-        Falcon.takeScreenshot(this, tempFile)
+        Falcon.takeScreenshot(this, tempFile) // 스크린샷 파일 저장
     }
 
     private fun getBitmapFromFile(): File? {
@@ -204,13 +204,17 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
     }
 
     private fun shareTheScreenShot(file: File) {
-        val imageUri = Uri.fromFile(file)
-        Intent(Intent.ACTION_SEND).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_STREAM, imageUri)
-        }.let { sharingIntent ->
-            startActivity(Intent.createChooser(sharingIntent, "Share The ScreenShot"))
-        }
+        /* todo - 사진파일 공유하는 기능 띄우기
+            아래처럼 구현했었는데 오류가 나는 것 같아요.
+            혹시 몰라서 주석으로 처리해둔 거라 지우셔도 괜찮습니다.
+        */
+//        val imageUri = Uri.fromFile(file)
+//        Intent(Intent.ACTION_SEND).apply {
+//            type = "image/*"
+//            putExtra(Intent.EXTRA_STREAM, imageUri)
+//        }.let { sharingIntent ->
+//            startActivity(Intent.createChooser(sharingIntent, "Share The ScreenShot"))
+//        }
     }
 
     private fun setNavHeader() {
