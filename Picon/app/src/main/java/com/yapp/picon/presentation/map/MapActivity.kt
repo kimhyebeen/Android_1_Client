@@ -140,7 +140,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
 
         setUserCircleImage()
         setUserNameText()
-        setAlarmImageEvent()
         setEmotionActivityStart()
         setHeadEmotionAdapter()
     }
@@ -177,11 +176,6 @@ class MapActivity : BaseMapActivity<MapActivityBinding, MapViewModel>(
         vm.profileNickname.observe(this, {
             binding.navView.getHeaderView(0).nav_head_user_name_text.text = it
         })
-    }
-
-    private fun setAlarmImageEvent() {
-        // todo - 알람 아이콘 맞는 걸로 변경
-        // todo - 알람 아이콘 기능 설정
     }
 
     private fun setEmotionActivityStart() {
