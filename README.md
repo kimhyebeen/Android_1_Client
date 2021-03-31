@@ -1,5 +1,5 @@
 # PiCON - YAPP Android team 1
-<p align="center"><img src="app_combination_logo.png" width="450" /></p>
+<p align="center"> <img src="app_combination_logo.png" width="450" /> </p>
 
 **PiCON, 지도 위에 픽한 나의 여행 다이어리.**
 
@@ -11,11 +11,11 @@
 
 화면 스크린샷이나 더 자세한 내용을 보고 싶다면? 👉 [PiCON](./PiCON.pdf)
 
- 
+<br />
 
 > 본 레포지토리는 [Yapp-17th/Android_1_Client](https://github.com/Yapp-17th/Android_1_Client)를 `fork`한 것으로, 이 README는 제가 맡은 역할과 개발한 기능 및 기술 위주로 작성되었습니다.
 
- 
+<br />
 
 ## 👥 Members
 | Part | Name |
