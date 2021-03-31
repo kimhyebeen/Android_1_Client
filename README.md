@@ -1,6 +1,6 @@
 # PiCON - YAPP Android team 1
 
-<center><img src="./image/app_combination_logo.png" width="450" /></center>
+<p align="center"><img src="./image/app_combination_logo.png" width="450" /></p>
 
 **PiCON, 지도 위에 픽한 나의 여행 다이어리.**
 
