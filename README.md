@@ -14,6 +14,10 @@
 
 <br />
 
+<img src="./image/app_logo.png" width="130" />
+
+<br />
+
 > 본 레포지토리는 [Yapp-17th/Android_1_Client](https://github.com/Yapp-17th/Android_1_Client)를 `fork`한 것으로, 이 README는 제가 맡은 역할과 개발한 기능 및 기술 위주로 작성되었습니다.
 
 <br />
